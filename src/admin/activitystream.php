@@ -1,6 +1,6 @@
 <?php
 /**
- * @package     com_activitystream
+ * @package     Com_Activitystream
  * @subpackage  com_activitystream
  *
  * @copyright   Copyright (C) 2005 - 2016 Open Source Matters, Inc. All rights reserved.

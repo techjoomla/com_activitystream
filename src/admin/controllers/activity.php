@@ -1,6 +1,6 @@
 <?php
 /**
- * @package     com_activitystream
+ * @package     Com_Activitystream
  * @subpackage  com_activitystream
  *
  * @copyright   Copyright (C) 2005 - 2016 Open Source Matters, Inc. All rights reserved.
@@ -12,7 +12,7 @@ defined('_JEXEC') or die;
 /**
  * HelloWorld Controller
  *
- * @package     com_activitystream
+ * @package     Com_Activitystream
  * @subpackage  com_activitystream
  * @since       0.0.9
  */
