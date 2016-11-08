@@ -21,13 +21,18 @@ class ActivityStreamTableActivity extends JTable
 	 *
 	 * @param   JDatabaseDriver  &$db  A database connector object
 	 */
-	function __construct(&$db)
+	public function __construct(&$db)
 	{
 		$this->setColumnAlias('published', 'state');
 		parent::__construct('#__tj_activities', 'id', $db);
 	}
 
-	function check()
+	/**
+	 * Function to check data
+	 *
+	 * @return  boolean
+	 */
+	public function check()
 	{
 		$db = JFactory::getDbo();
 		$errors = array();
@@ -70,6 +75,7 @@ class ActivityStreamTableActivity extends JTable
 		if (count($errors))
 		{
 			$this->setError(implode($errors, ', '));
+
 			return false;
 		}
 

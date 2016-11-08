@@ -85,9 +85,4 @@ class ActivityStreamModelActivity extends JModelAdmin
 
 		return $data;
 	}
-
-	function hit($id)
-	{
-		$this->getTable()->hit($id);
-	}
 }

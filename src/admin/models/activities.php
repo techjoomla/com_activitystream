@@ -64,6 +64,7 @@ class ActivityStreamModelActivities extends JModelList
 
 		// Filter by published state
 		$published = $this->getState('filter.state');
+
 		if (is_numeric($published))
 		{
 			$query->where('state = ' . (int) $published);
