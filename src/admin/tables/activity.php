@@ -37,33 +37,19 @@ class ActivityStreamTableActivity extends JTable
 		$db = JFactory::getDbo();
 		$errors = array();
 
-		// If there is data in actor then actor_id should not be empty
-		if (!empty($this->actor))
+		// Actor and actor_id should not be empty
+		if (empty($this->actor_id) || empty($this->actor))
 		{
-			if (empty($this->actor_id))
-			{
-				$errors['actor_id'] = "Actor Id can't be empty";
-			}
-		}
-		else
-		{
-			$errors['actor'] = "Actor can't be empty";
+			$errors['actor'] = $errors['actor_id'] = 'Both actor & actor_id are mandatory';
 		}
 
-		// If there is data in object then object_id should not be empty
-		if (!empty($this->object))
+		// Object and object_id should not be empty
+		if (empty($this->object_id) || empty($this->object))
 		{
-			if (empty($this->object_id))
-			{
-				$errors['object_id'] = "Object Id can't be empty";
-			}
-		}
-		else
-		{
-			$errors['object'] = "Object can't be empty";
+			$errors['object'] = $errors['object_id'] = 'Both object & object_id are mandatory';
 		}
 
-		// If there is data in actor then actor_id should not be empty
+		// If there is data in target then target_id should not be empty
 		if (!empty($this->target))
 		{
 			if (empty($this->target_id))

@@ -1,7 +1,7 @@
-DROP TABLE IF EXISTS `#__tj_activities`;
-
-CREATE TABLE `#__tj_activities` (
+CREATE TABLE IF NOT EXISTS `#__tj_activities` (
 	`id`       INT(11)     NOT NULL AUTO_INCREMENT,
+	`created_date` datetime DEFAULT NULL,
+	`updated_date` datetime DEFAULT NULL,
 	`actor` text(900),
 	`actor_id` int(12),
 	`object` text(900),

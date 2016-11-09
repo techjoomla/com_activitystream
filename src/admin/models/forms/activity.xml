@@ -6,6 +6,20 @@
 				type="hidden"
 				/>
 		<field
+				name="created_date"
+				type="calendar"
+				label="Created Date"
+				size="22"
+				format="%Y-%m-%d %H:%M:%S"
+				filter="user_utc" />
+		<field
+				name="updated_date"
+				type="calendar"
+				label="Updated Date"
+				size="22"
+				format="%Y-%m-%d %H:%M:%S"
+				filter="user_utc" />
+		<field
 				name="actor"
 				type="text"
 				label="Actor"
