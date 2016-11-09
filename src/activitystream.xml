@@ -1,18 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension type="component" version="3.2.0" method="upgrade">
-
-	<name>activitystream</name>
+	<name>com_activitystream</name>
 	<!-- The following elements are optional and free of formatting constraints -->
-	<creationDate>January 2014</creationDate>
-	<author>John Doe</author>
-	<authorEmail>john.doe@example.org</authorEmail>
-	<authorUrl>http://www.example.org</authorUrl>
-	<copyright>Copyright Info</copyright>
-	<license>License Info</license>
+	<creationDate>8th November 2016</creationDate>
+	<author>TechJoomla</author>
+	<authorEmail>extensions@techjoomla.com</authorEmail>
+	<authorUrl>www.techjoomla.com</authorUrl>
+	<copyright>Copyright(C)2012-16 TechJoomla</copyright>
+	<license>http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL</license>
 	<!--  The version string is recorded in the components table -->
-	<version>0.0.10</version>
+	<version>0.0.1</version>
 	<!-- The description is optional and defaults to the name -->
-	<description>COM_HELLOWORLD_DESCRIPTION</description>
+	<description>COM_ACTIVITYSTREAM_DESCRIPTION</description>
 
 	<install> <!-- Runs on install -->
 		<sql>

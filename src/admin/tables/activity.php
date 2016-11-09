@@ -40,13 +40,13 @@ class ActivityStreamTableActivity extends JTable
 		// Actor and actor_id should not be empty
 		if (empty($this->actor_id) || empty($this->actor))
 		{
-			$errors['actor'] = $errors['actor_id'] = 'Both actor & actor_id are mandatory';
+			$errors['actor'] = $errors['actor_id'] = JText::_('COM_ACTIVITYSTREAM_ACTIVITY_ERROR_ACTOR_REQUIRED');
 		}
 
 		// Object and object_id should not be empty
 		if (empty($this->object_id) || empty($this->object))
 		{
-			$errors['object'] = $errors['object_id'] = 'Both object & object_id are mandatory';
+			$errors['object'] = $errors['object_id'] = JText::_('COM_ACTIVITYSTREAM_ACTIVITY_ERROR_OBJECT_REQUIRED');
 		}
 
 		// If there is data in target then target_id should not be empty
@@ -54,7 +54,7 @@ class ActivityStreamTableActivity extends JTable
 		{
 			if (empty($this->target_id))
 			{
-				$errors['target_id'] = "Target Id can't be empty";
+				$errors['target_id'] = JText::_('COM_ACTIVITYSTREAM_ACTIVITY_ERROR_TARGET_REQUIRED');
 			}
 		}
 
