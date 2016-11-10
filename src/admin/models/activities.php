@@ -70,12 +70,64 @@ class ActivityStreamModelActivities extends JModelList
 			$query->where('state = ' . (int) $published);
 		}
 
+		$jinput = JFactory::getApplication()->input;
+		$type = $jinput->get('type', '', 'STRING');
+		$actor_id = $jinput->get('actor_id', '', 'INT');
+		$object_id = $jinput->get('object_id', '', 'INT');
+		$target_id = $jinput->get('target_id', '', 'INT');
+		$from_date = $jinput->get('from_date', '', '');
+		$result_arr = array();
+
+		// Return result related to specified activity type
+		if (!empty($type))
+		{
+			$query->where($db->quoteName('type') . ' = ' . $type);
+		}
+
+		// Return result related to specified actor
+		if (!empty($actor_id))
+		{
+			$query->where($db->quoteName('actor_id') . ' = ' . $actor_id);
+		}
+
+		// Return result related to specified object
+		if (!empty($object_id))
+		{
+			$query->where($db->quoteName('object_id') . ' = ' . $object_id);
+		}
+
+		// Return result related to specified target
+		if (!empty($target_id))
+		{
+			$query->where($db->quoteName('target_id') . ' = ' . $target_id);
+		}
+
+		// Return results from specified date
+		if (!empty($from_date))
+		{
+			$query->where($db->quoteName('created_date') . ' >= ' . $from_date);
+		}
+
 		// Add the list ordering clause.
-		$orderCol	= $this->state->get('list.ordering', 'id');
-		$orderDirn 	= $this->state->get('list.direction', 'asc');
+		$orderCol = $this->state->get('list.ordering', 'id');
+		$orderDirn = $this->state->get('list.direction', 'asc');
 
 		$query->order($db->escape($orderCol) . ' ' . $db->escape($orderDirn));
 
 		return $query;
+	}
+
+	/**
+	 * Method to get a list of activities.
+	 *
+	 * @return  mixed  An array of data items on success, false on failure.
+	 *
+	 * @since   1.6.1
+	 */
+	public function getItems()
+	{
+		$items = parent::getItems();
+
+		return $items;
 	}
 }
