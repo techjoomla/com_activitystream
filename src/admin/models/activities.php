@@ -76,6 +76,9 @@ class ActivityStreamModelActivities extends JModelList
 		$object_id = $jinput->get('object_id', '', 'INT');
 		$target_id = $jinput->get('target_id', '', 'INT');
 		$from_date = $jinput->get('from_date', '', '');
+		$access = $jinput->get('access', '', 'INT');
+		$state = $jinput->get('state', '1', 'INT');
+
 		$result_arr = array();
 
 		// Return result related to specified activity type
@@ -107,6 +110,15 @@ class ActivityStreamModelActivities extends JModelList
 		{
 			$query->where($db->quoteName('created_date') . ' >= ' . $from_date);
 		}
+
+		// Return results from specified access
+		if (isset($access))
+		{
+			$query->where($db->quoteName('access') . ' = ' . $access);
+		}
+
+		// Return published activities only
+		$query->where($db->quoteName('state') . ' = 1');
 
 		// Add the list ordering clause.
 		$orderCol = $this->state->get('list.ordering', 'id');
