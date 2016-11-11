@@ -30,6 +30,10 @@ $listDirn      = $this->escape($this->state->get('list.direction'));
 		<thead>
 		<?php if (!empty($this->items) && empty($this->items['error'])) : ?>
 			<tr>
+				<th width="1%" class="hidden-phone">
+					<input type="checkbox" name="checkall-toggle" value=""
+					title="<?php echo JText::_('JGLOBAL_CHECK_ALL'); ?>" onclick="Joomla.checkAll(this)"/>
+				</th>
 				<th width="2%">
 					<?php echo JHtml::_('grid.sort', 'Activity ID', 'id', $listDirn, $listOrder); ?>
 				</th>
@@ -56,6 +60,9 @@ $listDirn      = $this->escape($this->state->get('list.direction'));
 					$link = JRoute::_('index.php?option=com_activitystream&task=activity.edit&id=' . $row->id);
 				?>
 					<tr>
+						<td>
+							<?php echo JHtml::_('grid.id', $i, $row->id); ?>
+						</td>
 						<td align="center">
 							<?php echo $row->id; ?>
 						</td>
