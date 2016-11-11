@@ -85,4 +85,63 @@ class ActivityStreamModelActivity extends JModelAdmin
 
 		return $data;
 	}
+
+	/**
+	 * Method to save activity data through API.
+	 *
+	 * @param   ARRAY  $data  activity data
+	 *
+	 * @return  mixed  status.
+	 *
+	 * @since   1.6
+	 */
+	public function saveActivity($data)
+	{
+		$result_arr = array();
+
+		if (parent::save($data))
+		{
+			$result_arr['success'] = 'success';
+			$result_arr['message'] = JText::_("COM_ACTIVITYSTREAM_ACTIVITY_ADDED");
+		}
+		else
+		{
+			$error = $this->getError();
+
+			if (!empty($error))
+			{
+				$result_arr['error'] = '201';
+				$result_arr['message'] = $error;
+			}
+		}
+
+		return $result_arr;
+	}
+
+	/**
+	 * Method to delete activity through API.
+	 *
+	 * @param   ARRAY  $id  activity id
+	 *
+	 * @return  mixed  status
+	 *
+	 * @since   1.6
+	 */
+	public function deleteActivity($id)
+	{
+		$result_arr = array();
+
+		if (parent::delete($id))
+		{
+			$result_arr['success'] = "success";
+			$result_arr['message'] = JText::_("COM_ACTIVITYSTREAM_ACTIVITY_DELETED");
+		}
+		else
+		{
+			$result_arr['error'] = "301";
+			$result_arr['message'] = JText::_("COM_ACTIVITYSTREAM_ACTIVITY_NOT_DELETED");
+		}
+
+		return $result_arr;
+	}
 }

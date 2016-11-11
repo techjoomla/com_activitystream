@@ -44,8 +44,6 @@ class TjactivityApiResourceActivities extends ApiResource
 	 */
 	public function post()
 	{
-		$result_arr = array();
-
 		$jinput = JFactory::getApplication()->input;
 
 		$post = $jinput->post->getArray();
@@ -66,21 +64,9 @@ class TjactivityApiResourceActivities extends ApiResource
 
 		$ActivityStreamModelActivity = new ActivityStreamModelActivity;
 
-		$result = $ActivityStreamModelActivity->save($post);
-		$error = $ActivityStreamModelActivity->getError();
+		$result = $ActivityStreamModelActivity->saveActivity($post);
 
-		if (!empty($error))
-		{
-			$result_arr['error'] = '201';
-			$result_arr['message'] = $error;
-		}
-		else
-		{
-			$result_arr['success'] = 'success';
-			$result_arr['message'] = JText::_("COM_ACTIVITYSTREAM_ACTIVITY_ADDED");
-		}
-
-		$this->plugin->setResponse($result_arr);
+		$this->plugin->setResponse($result);
 	}
 
 	/**
@@ -98,19 +84,8 @@ class TjactivityApiResourceActivities extends ApiResource
 
 		$ActivityStreamModelActivity = new ActivityStreamModelActivity;
 
-		$result = $ActivityStreamModelActivity->delete($id);
+		$result = $ActivityStreamModelActivity->deleteActivity($id);
 
-		if (!empty($result))
-		{
-			$result_arr['success'] = "success";
-			$result_arr['message'] = JText::_("COM_ACTIVITYSTREAM_ACTIVITY_DELETED");
-		}
-		else
-		{
-			$result_arr['error'] = "301";
-			$result_arr['message'] = JText::_("COM_ACTIVITYSTREAM_ACTIVITY_NOT_DELETED");
-		}
-
-		$this->plugin->setResponse($result_arr);
+		$this->plugin->setResponse($result);
 	}
 }
