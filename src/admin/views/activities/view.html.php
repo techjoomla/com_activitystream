@@ -30,7 +30,7 @@ class ActivityStreamViewActivities extends JViewLegacy
 		$application = JFactory::getApplication();
 		$jinput = $application->input;
 
-		// To show all types of activity in list view		
+		// To show all types of activity in list view
 		$jinput->set('type', 'all');
 		$this->items = $this->get('Items');
 
