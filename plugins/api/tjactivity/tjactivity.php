@@ -8,6 +8,7 @@
  */
 defined('_JEXEC') or die( 'Restricted access');
 jimport('joomla.plugin.plugin');
+jimport('joomla.application.component.model');
 
 $lang = JFactory::getLanguage();
 $lang->load('com_activitystream', JPATH_ADMINISTRATOR);
@@ -41,21 +42,8 @@ class PlgAPITjactivity extends ApiPlugin
 			return;
 		}
 
-		$ActivityStreamModelActivitiesPath = JPATH_ADMINISTRATOR . '/components/com_activitystream/models/activities.php';
-
-		if (!class_exists('ActivityStreamModelActivities'))
-		{
-			JLoader::register('ActivityStreamModelActivities', $ActivityStreamModelActivitiesPath);
-			JLoader::load('ActivityStreamModelActivities');
-		}
-
-		$ActivityStreamModelActivityPath = JPATH_ADMINISTRATOR . '/components/com_activitystream/models/activity.php';
-
-		if (!class_exists('ActivityStreamModelActivity'))
-		{
-			JLoader::register('ActivityStreamModelActivity', $ActivityStreamModelActivityPath);
-			JLoader::load('ActivityStreamModelActivity');
-		}
+		// Load component models
+		JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_activitystream/models');
 
 		$ActivityStreamTableActivityPath = JPATH_ADMINISTRATOR . '/components/com_activitystream/tables/activity.php';
 

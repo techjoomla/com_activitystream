@@ -28,7 +28,7 @@ class TjactivityApiResourceActivities extends ApiResource
 	 */
 	public function get()
 	{
-		$ActivityStreamModelActivities = new ActivityStreamModelActivities;
+		$ActivityStreamModelActivities = JModelLegacy::getInstance('Activities', 'ActivityStreamModel');
 
 		$result = $ActivityStreamModelActivities->getItems();
 
@@ -62,7 +62,7 @@ class TjactivityApiResourceActivities extends ApiResource
 
 		$post['updated_date'] = $cdate->toSQL();
 
-		$ActivityStreamModelActivity = new ActivityStreamModelActivity;
+		$ActivityStreamModelActivity = JModelLegacy::getInstance('Activity', 'ActivityStreamModel');
 
 		$result = $ActivityStreamModelActivity->saveActivity($post);
 
@@ -82,7 +82,7 @@ class TjactivityApiResourceActivities extends ApiResource
 		$result_arr = array();
 		$id = $jinput->get('id', '', "CMD");
 
-		$ActivityStreamModelActivity = new ActivityStreamModelActivity;
+		$ActivityStreamModelActivity = JModelLegacy::getInstance('Activity', 'ActivityStreamModel');
 
 		$result = $ActivityStreamModelActivity->deleteActivity($id);
 

@@ -124,8 +124,8 @@ class ActivityStreamModelActivities extends JModelList
 		}
 
 		// Add the list ordering clause.
-		$orderCol = $this->state->get('list.ordering', 'id');
-		$orderDirn = $this->state->get('list.direction', 'asc');
+		$orderCol = $this->state->get('list.ordering', 'created_date');
+		$orderDirn = $this->state->get('list.direction', 'desc');
 
 		$query->order($db->escape($orderCol) . ' ' . $db->escape($orderDirn));
 
