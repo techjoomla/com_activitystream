@@ -18,7 +18,6 @@ $listDirn      = $this->escape($this->state->get('list.direction'));
 <form action="index.php?option=com_activitystream&view=activities" method="post" id="adminForm" name="adminForm">
 	<div class="row-fluid">
 		<div class="span6">
-			<?php echo JText::_('Search Activity'); ?>
 			<?php
 				echo JLayoutHelper::render(
 					'joomla.searchtools.default',
@@ -29,17 +28,19 @@ $listDirn      = $this->escape($this->state->get('list.direction'));
 	</div>
 	<table class="table table-striped table-hover">
 		<thead>
-		<tr>
-			<th width="2%">
-				<?php echo JHtml::_('grid.sort', 'Activity ID', 'id', $listDirn, $listOrder); ?>
-			</th>
-			<th width="60%">
-				<?php echo JHtml::_('grid.sort', 'Activity Type', 'Type', $listDirn, $listOrder);?>
-			</th>
-			<th width="5%">
-				<?php echo JHtml::_('grid.sort', 'State', 'published', $listDirn, $listOrder); ?>
-			</th>
-		</tr>
+		<?php if (!empty($this->items) && empty($this->items['error'])) : ?>
+			<tr>
+				<th width="2%">
+					<?php echo JHtml::_('grid.sort', 'Activity ID', 'id', $listDirn, $listOrder); ?>
+				</th>
+				<th width="60%">
+					<?php echo JHtml::_('grid.sort', 'Activity Type', 'Type', $listDirn, $listOrder);?>
+				</th>
+				<th width="5%">
+					<?php echo JHtml::_('grid.sort', 'State', 'published', $listDirn, $listOrder); ?>
+				</th>
+			</tr>
+		<?php endif;?>
 		</thead>
 		<tfoot>
 			<tr>
@@ -50,7 +51,7 @@ $listDirn      = $this->escape($this->state->get('list.direction'));
 			</tr>
 		</tfoot>
 		<tbody>
-			<?php if (!empty($this->items)) : ?>
+			<?php if (!empty($this->items) && empty($this->items['error'])) : ?>
 				<?php foreach ($this->items as $i => $row) :
 					$link = JRoute::_('index.php?option=com_activitystream&task=activity.edit&id=' . $row->id);
 				?>
@@ -68,7 +69,19 @@ $listDirn      = $this->escape($this->state->get('list.direction'));
 						</td>
 					</tr>
 				<?php endforeach; ?>
-			<?php endif; ?>
+			<?php else: ?>
+				<div>&nbsp;</div>
+				<div class="alert alert-error">
+					<div>
+						<?php
+						if (!empty($this->items['message']))
+						{
+							echo $this->items['message'];
+						}
+						?>
+					</div>
+				</div>
+			<?php endif;?>
 		</tbody>
 	</table>
 	<input type="hidden" name="task" value=""/>

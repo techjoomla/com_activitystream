@@ -27,7 +27,13 @@ class ActivityStreamViewActivities extends JViewLegacy
 	public function display($tpl = null)
 	{
 		// Get data from the model
-		$this->items		= $this->get('Items');
+		$application = JFactory::getApplication();
+		$jinput = $application->input;
+
+		// To show all types of activity in list view		
+		$jinput->set('type', 'all');
+		$this->items = $this->get('Items');
+
 		$this->pagination	= $this->get('Pagination');
 		$this->state		= $this->get('State');
 		$this->filterForm    = $this->get('FilterForm');

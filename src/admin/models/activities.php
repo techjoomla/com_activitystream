@@ -76,13 +76,13 @@ class ActivityStreamModelActivities extends JModelList
 		$object_id = $jinput->get('object_id', '', 'INT');
 		$target_id = $jinput->get('target_id', '', 'INT');
 		$from_date = $jinput->get('from_date', '', '');
-		$access = $jinput->get('access', '', 'INT');
-		$state = $jinput->get('state', '1', 'INT');
+		$access = $jinput->get('access', null, 'INT');
+		$state = $jinput->get('state', null, 'INT');
 
 		$result_arr = array();
 
 		// Return result related to specified activity type
-		if (!empty($type))
+		if (!empty($type) && $type != 'all')
 		{
 			$query->where($db->quoteName('type') . ' = ' . $type);
 		}
@@ -118,7 +118,10 @@ class ActivityStreamModelActivities extends JModelList
 		}
 
 		// Return published activities only
-		$query->where($db->quoteName('state') . ' = 1');
+		if (isset($state))
+		{
+			$query->where($db->quoteName('state') . ' = ' . $state);
+		}
 
 		// Add the list ordering clause.
 		$orderCol = $this->state->get('list.ordering', 'id');
@@ -138,8 +141,33 @@ class ActivityStreamModelActivities extends JModelList
 	 */
 	public function getItems()
 	{
+		$jinput = JFactory::getApplication()->input;
+		$type = $jinput->get('type', '', 'STRING');
+
+		$result_arr = array();
+
+		// Return result related to specified activity type
+		if (empty($type))
+		{
+			$result_arr['error'] = "101";
+			$result_arr['message'] = JText::_("COM_ACTIVITYSTREAM_ERROR_ACTIVITY_TYPE");
+
+			return $result_arr;
+		}
+
 		$items = parent::getItems();
 
-		return $items;
+		// If no activities found then return the error message
+		if (empty($items))
+		{
+			$result_arr['error'] = "102";
+			$result_arr['message'] = JText::_("COM_ACTIVITYSTREAM_NO_ACTIVITY");
+
+			return $result_arr;
+		}
+		else
+		{
+			return $items;
+		}
 	}
 }

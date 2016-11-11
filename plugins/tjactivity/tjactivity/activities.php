@@ -28,37 +28,11 @@ class TjactivityApiResourceActivities extends ApiResource
 	 */
 	public function get()
 	{
-		$jinput = JFactory::getApplication()->input;
-		$type = $jinput->get('type', '', 'STRING');
-		$result_arr = array();
-
-		// Return result related to specified activity type
-		if (empty($type))
-		{
-			$result_arr['status'] = "101";
-			$result_arr['message'] = JText::_("COM_ACTIVITYSTREAM_ERROR_ACTIVITY_TYPE");
-			$this->plugin->setResponse(json_encode($result_arr));
-
-			return false;
-		}
-
 		$ActivityStreamModelActivities = new ActivityStreamModelActivities;
 
 		$result = $ActivityStreamModelActivities->getItems();
 
-		// If no activities found then return the error message
-		if (empty($result))
-		{
-			$result_arr['status'] = "100";
-			$result_arr['message'] = JText::_("COM_ACTIVITYSTREAM_NO_ACTIVITY");
-		}
-		else
-		{
-			$result_arr['status'] = "success";
-			$result_arr['result'] = $result;
-		}
-
-		$this->plugin->setResponse($result_arr);
+		$this->plugin->setResponse($result);
 	}
 
 	/**
@@ -70,54 +44,40 @@ class TjactivityApiResourceActivities extends ApiResource
 	 */
 	public function post()
 	{
-		$jinput = JFactory::getApplication()->input;
 		$result_arr = array();
-		$activityData = array();
 
-		$id = $jinput->get('id', '', "INT");
+		$jinput = JFactory::getApplication()->input;
 
-		// If id is provided then update the activity
-		if (!empty($id))
+		$post = $jinput->post->getArray();
+
+		if (!empty($post['id']))
 		{
-			$activityData['id'] = $jinput->get('id');
+			$id = $post['id'];
 		}
-
-		$activityData['actor'] = $jinput->get('actor');
-		$activityData['actor_id'] = $jinput->get('actor_id');
-		$activityData['object'] = $jinput->get('object');
-		$activityData['object_id'] = $jinput->get('object_id');
-		$activityData['target'] = $jinput->get('target');
-		$activityData['target_id'] = $jinput->get('target_id');
-		$activityData['type'] = $jinput->get('type');
-		$activityData['template'] = $jinput->get('template');
-		$activityData['access'] = $jinput->get('access');
-		$activityData['state'] = $jinput->get('state');
-		$activityData['location'] = $jinput->get('location');
-		$activityData['latitude'] = $jinput->get('latitude');
-		$activityData['longitude'] = $jinput->get('longitude');
 
 		$cdate = JFactory::getDate('now');
 
 		if (empty($id))
 		{
-			$activityData['created_date'] = $cdate->toSQL();
+			$post['created_date'] = $cdate->toSQL();
 		}
 
-		$activityData['updated_date'] = $cdate->toSQL();
+		$post['updated_date'] = $cdate->toSQL();
 
 		$ActivityStreamModelActivity = new ActivityStreamModelActivity;
 
-		$result = $ActivityStreamModelActivity->save($activityData);
+		$result = $ActivityStreamModelActivity->save($post);
+		$error = $ActivityStreamModelActivity->getError();
 
-		if ($result == true)
+		if (!empty($error))
 		{
-			$result_arr['status'] = "200";
-			$result_arr['message'] = JText::_("COM_ACTIVITYSTREAM_ACTIVITY_ADDED");
+			$result_arr['error'] = '201';
+			$result_arr['message'] = $error;
 		}
 		else
 		{
-			$result_arr['status'] = "201";
-			$result_arr['message'] = JText::_("COM_ACTIVITYSTREAM_ACTIVITY_NOT_ADDED");
+			$result_arr['success'] = 'success';
+			$result_arr['message'] = JText::_("COM_ACTIVITYSTREAM_ACTIVITY_ADDED");
 		}
 
 		$this->plugin->setResponse($result_arr);
@@ -134,19 +94,20 @@ class TjactivityApiResourceActivities extends ApiResource
 	{
 		$jinput = JFactory::getApplication()->input;
 		$result_arr = array();
-		$ids = $jinput->get('id', '', "ARRAY");
+		$id = $jinput->get('id', '', "CMD");
+
 		$ActivityStreamModelActivity = new ActivityStreamModelActivity;
 
-		$result = $ActivityStreamModelActivity->delete($ids);
+		$result = $ActivityStreamModelActivity->delete($id);
 
-		if ($result == true)
+		if (!empty($result))
 		{
-			$result_arr['status'] = "300";
+			$result_arr['success'] = "success";
 			$result_arr['message'] = JText::_("COM_ACTIVITYSTREAM_ACTIVITY_DELETED");
 		}
 		else
 		{
-			$result_arr['status'] = "301";
+			$result_arr['error'] = "301";
 			$result_arr['message'] = JText::_("COM_ACTIVITYSTREAM_ACTIVITY_NOT_DELETED");
 		}
 
