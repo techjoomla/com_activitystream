@@ -101,7 +101,7 @@ class ActivityStreamModelActivity extends JModelAdmin
 
 		if (parent::save($data))
 		{
-			$result_arr['success'] = 'success';
+			$result_arr['success'] = true;
 			$result_arr['message'] = JText::_("COM_ACTIVITYSTREAM_ACTIVITY_ADDED");
 		}
 		else
@@ -110,7 +110,7 @@ class ActivityStreamModelActivity extends JModelAdmin
 
 			if (!empty($error))
 			{
-				$result_arr['error'] = '201';
+				$result_arr['success'] = false;
 				$result_arr['message'] = $error;
 			}
 		}
@@ -133,12 +133,12 @@ class ActivityStreamModelActivity extends JModelAdmin
 
 		if (parent::delete($id))
 		{
-			$result_arr['success'] = "success";
+			$result_arr['success'] = true;
 			$result_arr['message'] = JText::_("COM_ACTIVITYSTREAM_ACTIVITY_DELETED");
 		}
 		else
 		{
-			$result_arr['error'] = "301";
+			$result_arr['success'] = false;
 			$result_arr['message'] = JText::_("COM_ACTIVITYSTREAM_ACTIVITY_NOT_DELETED");
 		}
 

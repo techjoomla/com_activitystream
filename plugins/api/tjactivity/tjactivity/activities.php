@@ -30,6 +30,22 @@ class TjactivityApiResourceActivities extends ApiResource
 	{
 		$ActivityStreamModelActivities = JModelLegacy::getInstance('Activities', 'ActivityStreamModel');
 
+		$jinput = JFactory::getApplication()->input;
+		$type = $jinput->get("type", '', 'ARRAY');
+		$actor_id = $jinput->get('actor_id', '', 'INT');
+		$object_id = $jinput->get('object_id', '', 'INT');
+		$target_id = $jinput->get('target_id', '', 'INT');
+		$from_date = $jinput->get('from_date', '', '');
+
+		// Set model state
+		$ActivityStreamModelActivities->setState("type", $type);
+		$ActivityStreamModelActivities->setState("actor_id", $actor_id);
+		$ActivityStreamModelActivities->setState("object_id", $object_id);
+		$ActivityStreamModelActivities->setState("target_id", $target_id);
+		$ActivityStreamModelActivities->setState("from_date", $from_date);
+		$ActivityStreamModelActivities->setState("access", "1");
+		$ActivityStreamModelActivities->setState("state", '1');
+
 		$result = $ActivityStreamModelActivities->getItems();
 
 		$this->plugin->setResponse($result);

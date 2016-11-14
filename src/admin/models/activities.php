@@ -70,21 +70,20 @@ class ActivityStreamModelActivities extends JModelList
 			$query->where('state = ' . (int) $published);
 		}
 
-		$jinput = JFactory::getApplication()->input;
-		$type = $jinput->get('type', '', 'STRING');
-		$actor_id = $jinput->get('actor_id', '', 'INT');
-		$object_id = $jinput->get('object_id', '', 'INT');
-		$target_id = $jinput->get('target_id', '', 'INT');
-		$from_date = $jinput->get('from_date', '', '');
-		$access = $jinput->get('access', null, 'INT');
-		$state = $jinput->get('state', null, 'INT');
+		$type = $this->getState('type');
+		$actor_id = $this->getState('actor_id');
+		$object_id = $this->getState('object_id');
+		$target_id = $this->getState('target_id');
+		$from_date = $this->getState('from_date');
+		$access = $this->getState('access');
+		$state = $this->getState('state');
 
 		$result_arr = array();
 
 		// Return result related to specified activity type
 		if (!empty($type) && $type != 'all')
 		{
-			$query->where($db->quoteName('type') . ' = ' . $type);
+			$query->where($db->quoteName('type') . ' IN (' . implode(',', $type) . ')');
 		}
 
 		// Return result related to specified actor
@@ -141,33 +140,33 @@ class ActivityStreamModelActivities extends JModelList
 	 */
 	public function getItems()
 	{
-		$jinput = JFactory::getApplication()->input;
-		$type = $jinput->get('type', '', 'STRING');
+		$type = $this->getState('type');
 
 		$result_arr = array();
 
 		// Return result related to specified activity type
 		if (empty($type))
 		{
-			$result_arr['error'] = "101";
+			$result_arr['success'] = false;
 			$result_arr['message'] = JText::_("COM_ACTIVITYSTREAM_ERROR_ACTIVITY_TYPE");
 
 			return $result_arr;
 		}
 
-		$items = parent::getItems();
+		$items['results'] = parent::getItems();
 
 		// If no activities found then return the error message
 		if (empty($items))
 		{
-			$result_arr['error'] = "102";
+			$result_arr['success'] = false;
 			$result_arr['message'] = JText::_("COM_ACTIVITYSTREAM_NO_ACTIVITY");
-
-			return $result_arr;
 		}
 		else
 		{
-			return $items;
+			$result_arr['success'] = true;
+			$result_arr['data'] = $items;
 		}
+
+		return $result_arr;
 	}
 }
