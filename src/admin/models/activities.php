@@ -32,9 +32,12 @@ class ActivityStreamModelActivities extends JModelList
 				'id',
 				'state',
 				'access',
+				'type',
 				'actor_id',
 				'object_id',
-				'target_id'
+				'target_id',
+				'created_date',
+				'updated_date'
 			);
 		}
 
@@ -53,7 +56,7 @@ class ActivityStreamModelActivities extends JModelList
 		$query = $db->getQuery(true);
 
 		// Create the base select statement.
-		$query->select('*')
+		$query->select($this->getState('list.select', '*'))
 			->from($db->quoteName('#__tj_activities'));
 
 		// Filter: like / search
@@ -89,7 +92,7 @@ class ActivityStreamModelActivities extends JModelList
 
 		foreach ($filters as $filter)
 		{
-			if (!empty($this->getState($filter)))
+			if (!empty($this->getState($filter) && $filter != 'type'))
 			{
 				$query->where($db->quoteName($filter) . ' = ' . $db->quote($this->getState($filter)));
 			}

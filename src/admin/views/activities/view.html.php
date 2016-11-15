@@ -75,4 +75,20 @@ class ActivityStreamViewActivities extends JViewLegacy
 		JToolBarHelper::unpublish('activity.publish');
 		JToolBarHelper::save2copy('activity.save2copy');
 	}
+
+	/**
+	 * Method to order fields
+	 *
+	 * @return void
+	 */
+	protected function getSortFields()
+	{
+		return array(
+			'id' => JText::_('COM_ACTIVITYSTREAM_ACTIVITY_ID'),
+			'state' => JText::_('COM_ACTIVITYSTREAM_ACTIVITY_STATE'),
+			'type' => JText::_('COM_ACTIVITYSTREAM_ACTIVITY_TYPE'),
+			'created_date' => JText::_('COM_ACTIVITYSTREAM_ACTIVITY_CREATED_DATE'),
+			'updated_date' => JText::_('COM_ACTIVITYSTREAM_ACTIVITY_UPDATED_DATE')
+		);
+	}
 }
