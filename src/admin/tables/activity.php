@@ -38,6 +38,12 @@ class ActivityStreamTableActivity extends JTable
 		$db = JFactory::getDbo();
 		$errors = array();
 
+		// Activity type should not be empty
+		if (empty($this->type))
+		{
+			$errors['type'] = JText::_('COM_ACTIVITYSTREAM_ACTIVITY_ERROR_TYPE_REQUIRED');
+		}
+
 		// Actor and actor_id should not be empty
 		if (empty($this->actor_id) || empty($this->actor))
 		{

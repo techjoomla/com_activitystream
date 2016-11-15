@@ -45,13 +45,8 @@ class PlgAPITjactivity extends ApiPlugin
 		// Load component models
 		JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_activitystream/models');
 
-		$ActivityStreamTableActivityPath = JPATH_ADMINISTRATOR . '/components/com_activitystream/tables/activity.php';
-
-		if (!class_exists('ActivityStreamTableActivity'))
-		{
-			JLoader::register('ActivityStreamTableActivity', $ActivityStreamTableActivityPath);
-			JLoader::load('ActivityStreamTableActivity');
-		}
+		// Load component tables
+		JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_activitystream/tables');
 
 		ApiResource::addIncludePath(dirname(__FILE__) . '/tjactivity');
 	}

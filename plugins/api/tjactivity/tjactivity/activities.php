@@ -15,7 +15,7 @@ jimport('joomla.plugin.plugin');
  *
  * @package     Com_ActivityStream
  * @subpackage  component
- * @since       1.0
+ * @since       0.0.1
  */
 class TjactivityApiResourceActivities extends ApiResource
 {
@@ -24,18 +24,36 @@ class TjactivityApiResourceActivities extends ApiResource
 	 *
 	 * @return  void
 	 *
-	 * @since   1.0
+	 * @since   0.0.1
 	 */
 	public function get()
 	{
+		// Variable to store activity data fetched
+		$result = array();
+
+		// Variable to store request response
+		$result_arr = array();
+
 		$ActivityStreamModelActivities = JModelLegacy::getInstance('Activities', 'ActivityStreamModel');
 
 		$jinput = JFactory::getApplication()->input;
 		$type = $jinput->get("type", '', 'ARRAY');
-		$actor_id = $jinput->get('actor_id', '', 'INT');
-		$object_id = $jinput->get('object_id', '', 'INT');
-		$target_id = $jinput->get('target_id', '', 'INT');
-		$from_date = $jinput->get('from_date', '', '');
+
+		// Return result related to specified activity type
+		if (empty($type))
+		{
+			$result_arr['success'] = false;
+			$result_arr['message'] = JText::_("COM_ACTIVITYSTREAM_ERROR_ACTIVITY_TYPE");
+
+			$this->plugin->setResponse($result_arr);
+
+			return false;
+		}
+
+		$actor_id = $jinput->get('actor_id', '', 'CMD');
+		$object_id = $jinput->get('object_id', '', 'CMD');
+		$target_id = $jinput->get('target_id', '', 'CMD');
+		$from_date = $jinput->get('from_date', '');
 
 		// Set model state
 		$ActivityStreamModelActivities->setState("type", $type);
@@ -46,9 +64,22 @@ class TjactivityApiResourceActivities extends ApiResource
 		$ActivityStreamModelActivities->setState("access", "1");
 		$ActivityStreamModelActivities->setState("state", '1');
 
-		$result = $ActivityStreamModelActivities->getItems();
+		$result['results'] = $ActivityStreamModelActivities->getItems();
 
-		$this->plugin->setResponse($result);
+		// If no activities found then return the error message
+		if (empty($result['results']))
+		{
+			$result_arr['success'] = false;
+			$result_arr['message'] = JText::_("COM_ACTIVITYSTREAM_NO_ACTIVITY");
+		}
+		else
+		{
+			$result_arr['success'] = true;
+			$result_arr['data'] = $result;
+			$result_arr['data']['total'] = $ActivityStreamModelActivities->getTotal();
+		}
+
+		$this->plugin->setResponse($result_arr);
 	}
 
 	/**
@@ -56,41 +87,40 @@ class TjactivityApiResourceActivities extends ApiResource
 	 *
 	 * @return  json ActivityStream details
 	 *
-	 * @since   1.0
+	 * @since   0.0.1
 	 */
 	public function post()
 	{
+		$result_arr = array();
 		$jinput = JFactory::getApplication()->input;
-
 		$post = $jinput->post->getArray();
-
-		if (!empty($post['id']))
-		{
-			$id = $post['id'];
-		}
-
-		$cdate = JFactory::getDate('now');
-
-		if (empty($id))
-		{
-			$post['created_date'] = $cdate->toSQL();
-		}
-
-		$post['updated_date'] = $cdate->toSQL();
 
 		$ActivityStreamModelActivity = JModelLegacy::getInstance('Activity', 'ActivityStreamModel');
 
-		$result = $ActivityStreamModelActivity->saveActivity($post);
+		$result = $ActivityStreamModelActivity->save($post);
 
-		$this->plugin->setResponse($result);
+		if ($result)
+		{
+			$result_arr['success'] = true;
+			$result_arr['message'] = JText::_("COM_ACTIVITYSTREAM_ACTIVITY_ADDED");
+		}
+		else
+		{
+			$error = $ActivityStreamModelActivity->getError();
+
+			$result_arr['success'] = false;
+			$result_arr['message'] = $error;
+		}
+
+		$this->plugin->setResponse($result_arr);
 	}
 
 	/**
 	 * Delete ActivityStream Data
 	 *
-	 * @return  json ActivityStream details
+	 * @return  boolean
 	 *
-	 * @since   1.0
+	 * @since   0.0.1
 	 */
 	public function delete()
 	{
@@ -100,8 +130,19 @@ class TjactivityApiResourceActivities extends ApiResource
 
 		$ActivityStreamModelActivity = JModelLegacy::getInstance('Activity', 'ActivityStreamModel');
 
-		$result = $ActivityStreamModelActivity->deleteActivity($id);
+		$result = $ActivityStreamModelActivity->delete($id);
 
-		$this->plugin->setResponse($result);
+		if ($result)
+		{
+			$result_arr['success'] = true;
+			$result_arr['message'] = JText::_("COM_ACTIVITYSTREAM_ACTIVITY_DELETED");
+		}
+		else
+		{
+			$result_arr['success'] = false;
+			$result_arr['message'] = JText::_("COM_ACTIVITYSTREAM_ACTIVITY_NOT_DELETED");
+		}
+
+		$this->plugin->setResponse($result_arr);
 	}
 }

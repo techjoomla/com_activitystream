@@ -26,7 +26,7 @@ class ActivityStreamModelActivity extends JModelAdmin
 	 *
 	 * @return  JTable  A JTable object
 	 *
-	 * @since   1.6
+	 * @since   0.0.1
 	 */
 	public function getTable($type = 'activity', $prefix = 'ActivityStreamTable', $config = array())
 	{
@@ -41,7 +41,7 @@ class ActivityStreamModelActivity extends JModelAdmin
 	 *
 	 * @return  mixed    A JForm object on success, false on failure
 	 *
-	 * @since   1.6
+	 * @since   0.0.1
 	 */
 	public function getForm($data = array(), $loadData = true)
 	{
@@ -68,7 +68,7 @@ class ActivityStreamModelActivity extends JModelAdmin
 	 *
 	 * @return  mixed  The data for the form.
 	 *
-	 * @since   1.6
+	 * @since   0.0.1
 	 */
 	protected function loadFormData()
 	{
@@ -91,57 +91,28 @@ class ActivityStreamModelActivity extends JModelAdmin
 	 *
 	 * @param   ARRAY  $data  activity data
 	 *
-	 * @return  mixed  status.
+	 * @return  boolean
 	 *
-	 * @since   1.6
+	 * @since   0.0.1
 	 */
-	public function saveActivity($data)
+	public function save($data)
 	{
-		$result_arr = array();
+		$cdate = JFactory::getDate('now');
+
+		if (empty($data['id']))
+		{
+			$data['created_date'] = $cdate->toSQL();
+		}
+
+		$data['updated_date'] = $cdate->toSQL();
 
 		if (parent::save($data))
 		{
-			$result_arr['success'] = true;
-			$result_arr['message'] = JText::_("COM_ACTIVITYSTREAM_ACTIVITY_ADDED");
+			return true;
 		}
 		else
 		{
-			$error = $this->getError();
-
-			if (!empty($error))
-			{
-				$result_arr['success'] = false;
-				$result_arr['message'] = $error;
-			}
+			return false;
 		}
-
-		return $result_arr;
-	}
-
-	/**
-	 * Method to delete activity through API.
-	 *
-	 * @param   ARRAY  $id  activity id
-	 *
-	 * @return  mixed  status
-	 *
-	 * @since   1.6
-	 */
-	public function deleteActivity($id)
-	{
-		$result_arr = array();
-
-		if (parent::delete($id))
-		{
-			$result_arr['success'] = true;
-			$result_arr['message'] = JText::_("COM_ACTIVITYSTREAM_ACTIVITY_DELETED");
-		}
-		else
-		{
-			$result_arr['success'] = false;
-			$result_arr['message'] = JText::_("COM_ACTIVITYSTREAM_ACTIVITY_NOT_DELETED");
-		}
-
-		return $result_arr;
 	}
 }
