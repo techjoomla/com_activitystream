@@ -30,10 +30,7 @@ class ActivityStreamViewActivities extends JViewLegacy
 		$activitiesModel = $this->getModel();
 		$activitiesModel->setState("type", 'all');
 
-		$activities = $this->get('Items');
-
-		$this->items = !empty($activities['data']['results'])?$activities['data']['results']:'';
-
+		$this->items = $this->get('Items');
 		$this->pagination	= $this->get('Pagination');
 		$this->state		= $this->get('State');
 		$this->filterForm    = $this->get('FilterForm');
