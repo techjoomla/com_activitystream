@@ -124,6 +124,14 @@ class ActivityStreamModelActivities extends JModelList
 	{
 		$items = parent::getItems();
 
+		if (!empty($items))
+		{
+			foreach ($items as $k => $item)
+			{
+				$items[$k]->actor = json_decode($items[$k]->actor);
+			}
+		}
+
 		return $items;
 	}
 }

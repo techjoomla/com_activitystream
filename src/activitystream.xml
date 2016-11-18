@@ -56,5 +56,11 @@
 			<!-- controllers files section -->
 			<folder>controllers</folder>
 		</files>
+		<!-- Media files -->
+		<media folder="media" destination="com_activitystream">
+			<filename>com_example_logo.png</filename>
+			<folder>css</folder>
+			<folder>js</folder>
+		</media>
 	</administration>
 </extension>
