@@ -8,6 +8,7 @@ CREATE TABLE IF NOT EXISTS `#__tj_activities` (
 	`target_id` int(12),
 	`type` text(900),
 	`template` text(900),
+	`formatted_text` text(900),
 	`access` tinyint(2),
 	`state` tinyint(2),
 	`location` text(900),

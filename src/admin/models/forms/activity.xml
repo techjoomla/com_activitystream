@@ -79,6 +79,13 @@
 				default=""
 				/>
 		<field
+				name="formatted_text"
+				type="text"
+				label="COM_ACTIVITYSTREAM_ACTIVITY_FORMATTED_TEXT"
+				class="inputbox"
+				default=""
+				/>
+		<field
 				name="access"
 				type="text"
 				label="COM_ACTIVITYSTREAM_ACTIVITY_ACCESS"
