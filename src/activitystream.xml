@@ -58,9 +58,8 @@
 		</files>
 		<!-- Media files -->
 		<media folder="media" destination="com_activitystream">
-			<filename>com_example_logo.png</filename>
-			<folder>css</folder>
-			<folder>js</folder>
+			<folder>scripts</folder>
+			<folder>themes</folder>
 		</media>
 	</administration>
 </extension>
