@@ -56,10 +56,10 @@
 			<!-- controllers files section -->
 			<folder>controllers</folder>
 		</files>
-		<!-- Media files -->
-		<media folder="media" destination="com_activitystream">
-			<folder>scripts</folder>
-			<folder>themes</folder>
-		</media>
 	</administration>
+	<!-- Media files -->
+	<media folder="media" destination="com_activitystream">
+		<folder>scripts</folder>
+		<folder>themes</folder>
+	</media>
 </extension>
