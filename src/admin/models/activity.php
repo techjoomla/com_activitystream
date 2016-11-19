@@ -26,7 +26,7 @@ class ActivityStreamModelActivity extends JModelAdmin
 	 *
 	 * @return  JTable  A JTable object
 	 *
-	 * @since   1.6
+	 * @since   0.0.1
 	 */
 	public function getTable($type = 'activity', $prefix = 'ActivityStreamTable', $config = array())
 	{
@@ -41,7 +41,7 @@ class ActivityStreamModelActivity extends JModelAdmin
 	 *
 	 * @return  mixed    A JForm object on success, false on failure
 	 *
-	 * @since   1.6
+	 * @since   0.0.1
 	 */
 	public function getForm($data = array(), $loadData = true)
 	{
@@ -68,7 +68,7 @@ class ActivityStreamModelActivity extends JModelAdmin
 	 *
 	 * @return  mixed  The data for the form.
 	 *
-	 * @since   1.6
+	 * @since   0.0.1
 	 */
 	protected function loadFormData()
 	{
@@ -84,5 +84,35 @@ class ActivityStreamModelActivity extends JModelAdmin
 		}
 
 		return $data;
+	}
+
+	/**
+	 * Method to save activity data through API.
+	 *
+	 * @param   ARRAY  $data  activity data
+	 *
+	 * @return  boolean
+	 *
+	 * @since   0.0.1
+	 */
+	public function save($data)
+	{
+		$cdate = JFactory::getDate('now');
+
+		if (empty($data['id']))
+		{
+			$data['created_date'] = $cdate->toSQL();
+		}
+
+		$data['updated_date'] = $cdate->toSQL();
+
+		if (parent::save($data))
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
 }

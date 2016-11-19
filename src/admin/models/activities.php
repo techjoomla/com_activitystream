@@ -22,7 +22,7 @@ class ActivityStreamModelActivities extends JModelList
 	 * @param   array  $config  An optional associative array of configuration settings.
 	 *
 	 * @see     JController
-	 * @since   1.6
+	 * @since   0.0.1
 	 */
 	public function __construct($config = array())
 	{
@@ -30,8 +30,14 @@ class ActivityStreamModelActivities extends JModelList
 		{
 			$config['filter_fields'] = array(
 				'id',
+				'state',
+				'access',
 				'type',
-				'state'
+				'actor_id',
+				'object_id',
+				'target_id',
+				'created_date',
+				'updated_date'
 			);
 		}
 
@@ -50,7 +56,7 @@ class ActivityStreamModelActivities extends JModelList
 		$query = $db->getQuery(true);
 
 		// Create the base select statement.
-		$query->select('*')
+		$query->select($this->getState('list.select', '*'))
 			->from($db->quoteName('#__tj_activities'));
 
 		// Filter: like / search
@@ -70,12 +76,62 @@ class ActivityStreamModelActivities extends JModelList
 			$query->where('state = ' . (int) $published);
 		}
 
+		$type = $this->getState('type');
+		$from_date = $this->getState('from_date');
+
+		$result_arr = array();
+
+		// Return result related to specified activity type
+		if (!empty($type) && $type != 'all')
+		{
+			$query->where($db->quoteName('type') . ' IN (' . implode(',', $type) . ')');
+		}
+
+		// Get all filters
+		$filters = $this->get('filter_fields');
+
+		foreach ($filters as $filter)
+		{
+			if (!empty($this->getState($filter) && $filter != 'type'))
+			{
+				$query->where($db->quoteName($filter) . ' = ' . $db->quote($this->getState($filter)));
+			}
+		}
+
+		// Return results from specified date
+		if (!empty($from_date))
+		{
+			$query->where($db->quoteName('created_date') . ' >= ' . $from_date);
+		}
+
 		// Add the list ordering clause.
-		$orderCol	= $this->state->get('list.ordering', 'id');
-		$orderDirn 	= $this->state->get('list.direction', 'asc');
+		$orderCol = $this->state->get('list.ordering', 'created_date');
+		$orderDirn = $this->state->get('list.direction', 'desc');
 
 		$query->order($db->escape($orderCol) . ' ' . $db->escape($orderDirn));
 
 		return $query;
+	}
+
+	/**
+	 * Method to get a list of activities.
+	 *
+	 * @return  mixed  An array of data items on success, false on failure.
+	 *
+	 * @since   0.0.1
+	 */
+	public function getItems()
+	{
+		$items = parent::getItems();
+
+		if (!empty($items))
+		{
+			foreach ($items as $k => $item)
+			{
+				$items[$k]->actor = json_decode($items[$k]->actor);
+			}
+		}
+
+		return $items;
 	}
 }

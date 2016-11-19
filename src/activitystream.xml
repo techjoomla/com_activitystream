@@ -38,8 +38,8 @@
 		     to copy FROM in the package to install therefore files copied
 		     in this section are copied from /admin/ in the package -->
 		<languages folder="admin/language">
-			<language tag="en-GB">en-GB/en-GB.com_activitystream.ini</language>
 			<language tag="en-GB">en-GB/en-GB.com_activitystream.sys.ini</language>
+			<language tag="en-GB">en-GB/en-GB.com_activitystream.ini</language>
 		</languages>
 		<files folder="admin">
 			<!-- Admin Main File Copy Section -->
@@ -57,4 +57,9 @@
 			<folder>controllers</folder>
 		</files>
 	</administration>
+	<!-- Media files -->
+	<media folder="media" destination="com_activitystream">
+		<folder>scripts</folder>
+		<folder>themes</folder>
+	</media>
 </extension>
