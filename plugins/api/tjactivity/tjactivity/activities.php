@@ -37,7 +37,7 @@ class TjactivityApiResourceActivities extends ApiResource
 		$ActivityStreamModelActivities = JModelLegacy::getInstance('Activities', 'ActivityStreamModel');
 
 		$jinput = JFactory::getApplication()->input;
-		$type = $jinput->get("type", '', 'ARRAY');
+		$type = $jinput->get("type", '', 'STRING');
 
 		// Return result related to specified activity type
 		if (empty($type))

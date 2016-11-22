@@ -84,7 +84,7 @@ class ActivityStreamModelActivities extends JModelList
 		// Return result related to specified activity type
 		if (!empty($type) && $type != 'all')
 		{
-			$query->where($db->quoteName('type') . ' IN (' . implode(',', $type) . ')');
+			$query->where($db->quoteName('type') . ' IN (' . $type . ')');
 		}
 
 		// Get all filters
@@ -129,6 +129,8 @@ class ActivityStreamModelActivities extends JModelList
 			foreach ($items as $k => $item)
 			{
 				$items[$k]->actor = json_decode($items[$k]->actor);
+				$items[$k]->object = json_decode($items[$k]->object);
+				$items[$k]->target = json_decode($items[$k]->target);
 			}
 		}
 
