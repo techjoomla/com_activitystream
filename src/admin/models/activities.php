@@ -26,6 +26,8 @@ class ActivityStreamModelActivities extends JModelList
 	 */
 	public function __construct($config = array())
 	{
+		require_once JPATH_ADMINISTRATOR . '/components/com_activitystream/helpers/activities.php';
+
 		if (empty($config['filter_fields']))
 		{
 			$config['filter_fields'] = array(
@@ -124,16 +126,34 @@ class ActivityStreamModelActivities extends JModelList
 	{
 		$items = parent::getItems();
 
+		$activities = array();
+
+		$activityStreamActivitiesHelper = new ActivityStreamHelperActivities;
+
 		if (!empty($items))
 		{
 			foreach ($items as $k => $item)
 			{
-				$items[$k]->actor = json_decode($items[$k]->actor);
-				$items[$k]->object = json_decode($items[$k]->object);
-				$items[$k]->target = json_decode($items[$k]->target);
+				// Convert item data into array
+				$itemArray = (array) $item;
+
+				// Convet all the json data to array
+				$itemArray = $activityStreamActivitiesHelper->json_to_array($itemArray, true);
+
+				foreach ($itemArray as $key => $itemSubArray)
+				{
+					if (is_array($itemSubArray))
+					{
+						// Convet all the json data to array
+						$itemArray[$key] = $activityStreamActivitiesHelper->json_to_array($itemSubArray, true);
+					}
+				}
+
+				// Create array of item objects
+				$activities[] = (object) $itemArray;
 			}
 		}
 
-		return $items;
+		return $activities;
 	}
 }
