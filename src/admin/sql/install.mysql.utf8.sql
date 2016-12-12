@@ -1,11 +1,11 @@
 CREATE TABLE IF NOT EXISTS `#__tj_activities` (
 	`id`       INT(11)     NOT NULL AUTO_INCREMENT,
 	`actor` text(900),
-	`actor_id` int(12),
+	`actor_id` text(900),
 	`object` text(900),
-	`object_id` int(12),
+	`object_id` text(900),
 	`target` text(900),
-	`target_id` int(12),
+	`target_id` text(900),
 	`type` text(900),
 	`template` text(900),
 	`formatted_text` text(900),
@@ -18,5 +18,5 @@ CREATE TABLE IF NOT EXISTS `#__tj_activities` (
 	`updated_date` datetime DEFAULT NULL,
 	PRIMARY KEY (`id`)
 )
-	AUTO_INCREMENT =0
-	DEFAULT CHARSET =utf8;
+	DEFAULT CHARSET =utf8 AUTO_INCREMENT =1;
+
