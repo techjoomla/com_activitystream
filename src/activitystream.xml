@@ -55,6 +55,8 @@
 			<folder>views</folder>
 			<!-- controllers files section -->
 			<folder>controllers</folder>
+			<!-- Helpers files section -->
+			<folder>helpers</folder>
 		</files>
 	</administration>
 	<!-- Media files -->
