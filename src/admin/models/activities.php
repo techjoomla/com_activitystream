@@ -134,6 +134,10 @@ class ActivityStreamModelActivities extends JModelList
 		{
 			foreach ($items as $k => $item)
 			{
+				// Get extra date info
+				$items[$k]->created_day = date_format(date_create($item->created_date),"D");
+				$items[$k]->created_date_month = date_format(date_create($item->created_date),"d, M");
+
 				// Convert item data into array
 				$itemArray = (array) $item;
 
