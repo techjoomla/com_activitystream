@@ -24,7 +24,8 @@ function initActivities(ele)
 	var object_id= jQuery(ele).attr("tj-activitystream-object-id");
 	var target_id= jQuery(ele).attr("tj-activitystream-target-id");
 	var from_date= jQuery(ele).attr("tj-activitystream-from-date");
-	var url = root_url+"index.php?option=com_api&app=tjactivity&resource=activities&format=raw";
+	var theme= jQuery(ele).attr("tj-activitystream-theme");
+	var url = root_url+"administrator/index.php?option=com_activitystream&task=activities.getActivities";
 
 	if (typeof type != 'undefined')
 	{
@@ -60,7 +61,19 @@ function initActivities(ele)
 		{
 			var itemsProcessed = 0;
 			jQuery.each(result.data.results, function(i, val){
-				jQuery("#tj-activitystream").load(root_url+"media/com_activitystream/themes/textfeed/templates/default.mustache #template",function(){
+
+				var templatePath = '';
+
+				if (!val.template)
+				{
+					templatePath = root_url+"media/com_activitystream/themes/"+theme+"/templates/default.mustache";
+				}
+				else
+				{
+					templatePath = root_url+"media/com_activitystream/themes/"+theme+"/templates/"+val.template;
+				}
+
+				jQuery("#tj-activitystream").load(templatePath+" #template",function(){
 
 					if (!val.template)
 					{
