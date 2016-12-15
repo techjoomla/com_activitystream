@@ -31,12 +31,6 @@
 		</schemas>
 	</update>
 	<administration>
-		<!-- Administration Menu Section -->
-		<menu img="../media/com_activitystream/images/tux-16x16.png">COM_ACTIVITYSTREAM_MENU</menu>
-		<!-- Administration Main File Copy Section -->
-		<!-- Note the folder attribute: This attribute describes the folder
-		     to copy FROM in the package to install therefore files copied
-		     in this section are copied from /admin/ in the package -->
 		<languages folder="admin/language">
 			<language tag="en-GB">/en-GB/en-GB.com_activitystream.sys.ini</language>
 			<language tag="en-GB">/en-GB/en-GB.com_activitystream.ini</language>
