@@ -66,11 +66,11 @@ function initActivities(ele)
 
 				if (!val.template)
 				{
-					templatePath = root_url+"media/com_activitystream/themes/"+theme+"/templates/default.mustache";
+					templatePath = root_url+"media/com_activitystream/themes/"+theme+"/templates/bs3/default.mustache";
 				}
 				else
 				{
-					templatePath = root_url+"media/com_activitystream/themes/"+theme+"/templates/"+val.template;
+					templatePath = root_url+"media/com_activitystream/themes/"+theme+"/templates/bs3/"+val.template;
 				}
 
 				jQuery("#tj-activitystream").load(templatePath+" #template",function(){
