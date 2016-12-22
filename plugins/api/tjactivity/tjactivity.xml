@@ -15,7 +15,7 @@
 	</languages>
 	<files>
 		<filename plugin="tjactivity">tjactivity.php</filename>
-		<filename>tjactivity/getactivitystream.php</filename>
+		<filename>tjactivity/activities.php</filename>
 		<folder>tjactivity</folder>
 	</files>
 </extension>

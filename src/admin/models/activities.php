@@ -26,6 +26,8 @@ class ActivityStreamModelActivities extends JModelList
 	 */
 	public function __construct($config = array())
 	{
+		require_once JPATH_ADMINISTRATOR . '/components/com_activitystream/helpers/activities.php';
+
 		if (empty($config['filter_fields']))
 		{
 			$config['filter_fields'] = array(
@@ -84,7 +86,7 @@ class ActivityStreamModelActivities extends JModelList
 		// Return result related to specified activity type
 		if (!empty($type) && $type != 'all')
 		{
-			$query->where($db->quoteName('type') . ' IN (' . implode(',', $type) . ')');
+			$query->where($db->quoteName('type') . ' IN (' . $type . ')');
 		}
 
 		// Get all filters
@@ -124,14 +126,38 @@ class ActivityStreamModelActivities extends JModelList
 	{
 		$items = parent::getItems();
 
+		$activities = array();
+
+		$activityStreamActivitiesHelper = new ActivityStreamHelperActivities;
+
 		if (!empty($items))
 		{
 			foreach ($items as $k => $item)
 			{
-				$items[$k]->actor = json_decode($items[$k]->actor);
+				// Get extra date info
+				$items[$k]->created_day = date_format(date_create($item->created_date), "D");
+				$items[$k]->created_date_month = date_format(date_create($item->created_date), "d, M");
+
+				// Convert item data into array
+				$itemArray = (array) $item;
+
+				// Convet all the json data to array
+				$itemArray = $activityStreamActivitiesHelper->json_to_array($itemArray, true);
+
+				foreach ($itemArray as $key => $itemSubArray)
+				{
+					if (is_array($itemSubArray))
+					{
+						// Convet all the json data to array
+						$itemArray[$key] = $activityStreamActivitiesHelper->json_to_array($itemSubArray, true);
+					}
+				}
+
+				// Create array of item objects
+				$activities[] = (object) $itemArray;
 			}
 		}
 
-		return $items;
+		return $activities;
 	}
 }
