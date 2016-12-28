@@ -20,12 +20,13 @@ var outputData = "";
 function initActivities(ele)
 {
 	var type = jQuery(ele).attr("tj-activitystream-type");
-	var actor_id= jQuery(ele).attr("tj-activitystream-actor-id");
-	var object_id= jQuery(ele).attr("tj-activitystream-object-id");
-	var target_id= jQuery(ele).attr("tj-activitystream-target-id");
-	var from_date= jQuery(ele).attr("tj-activitystream-from-date");
-	var theme= jQuery(ele).attr("tj-activitystream-theme");
-	var url = root_url+"administrator/index.php?option=com_activitystream&task=activities.getActivities";
+	var actor_id = jQuery(ele).attr("tj-activitystream-actor-id");
+	var object_id = jQuery(ele).attr("tj-activitystream-object-id");
+	var target_id = jQuery(ele).attr("tj-activitystream-target-id");
+	var from_date = jQuery(ele).attr("tj-activitystream-from-date");
+	var view = jQuery(ele).attr("tj-activitystream-views");
+	var theme = jQuery(ele).attr("tj-activitystream-theme");
+	var url = root_url+"index.php?option=com_activitystream&task=activities.getActivities";
 
 	if (typeof type != 'undefined')
 	{
@@ -66,11 +67,11 @@ function initActivities(ele)
 
 				if (!val.template)
 				{
-					templatePath = root_url+"media/com_activitystream/themes/"+theme+"/templates/bs3/default.mustache";
+					templatePath = root_url+"media/com_activitystream/themes/"+theme+"/templates/"+view+"/default.mustache";
 				}
 				else
 				{
-					templatePath = root_url+"media/com_activitystream/themes/"+theme+"/templates/bs3/"+val.template;
+					templatePath = root_url+"media/com_activitystream/themes/"+theme+"/templates/"+view+"/"+val.template;
 				}
 
 				jQuery("#tj-activitystream").load(templatePath+" #template",function(){

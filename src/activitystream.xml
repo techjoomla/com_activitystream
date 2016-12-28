@@ -30,6 +30,14 @@
 			<schemapath type="mysql">sql/updates/mysql</schemapath>
 		</schemas>
 	</update>
+	<files folder="site">
+		<filename>index.html</filename>
+		<filename>activitystream.php</filename>
+		<filename>controller.php</filename>
+		<filename>router.php</filename>
+		<folder>models</folder>
+		<folder>controllers</folder>
+	</files>
 	<administration>
 		<languages folder="admin/language">
 			<language tag="en-GB">/en-GB/en-GB.com_activitystream.sys.ini</language>
