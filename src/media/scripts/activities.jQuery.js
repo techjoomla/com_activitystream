@@ -24,7 +24,7 @@ function initActivities(ele)
 	var object_id = jQuery(ele).attr("tj-activitystream-object-id");
 	var target_id = jQuery(ele).attr("tj-activitystream-target-id");
 	var from_date = jQuery(ele).attr("tj-activitystream-from-date");
-	var view = jQuery(ele).attr("tj-activitystream-views");
+	var view = jQuery(ele).attr("tj-activitystream-bs");
 	var theme = jQuery(ele).attr("tj-activitystream-theme");
 	var url = root_url+"index.php?option=com_activitystream&task=activities.getActivities";
 
