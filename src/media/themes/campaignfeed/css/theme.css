@@ -61,3 +61,16 @@
   padding-top:20px;
   padding-left:20px;
 }
+
+.todays-activity
+{
+  border: 1px dashed #c0c3c6;
+  padding-top: 15px;
+}
+
+.feed-item-cover .feed-item-text
+{
+  font-size: 18px;
+  color: #5c5f63;
+  padding-left: 85px;
+}
