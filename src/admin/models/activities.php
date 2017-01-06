@@ -96,7 +96,7 @@ class ActivityStreamModelActivities extends JModelList
 		{
 			if (!empty($this->getState($filter) && $filter != 'type'))
 			{
-				$query->where($db->quoteName($filter) . ' = ' . $db->quote($this->getState($filter)));
+				$query->where($db->quoteName($filter) . ' IN (' . $this->getState($filter) . ')');
 			}
 		}
 
