@@ -26,6 +26,7 @@ function initActivities(ele)
 	var from_date = jQuery(ele).attr("tj-activitystream-from-date");
 	var view = jQuery(ele).attr("tj-activitystream-bs");
 	var theme = jQuery(ele).attr("tj-activitystream-theme");
+	var limit = jQuery(ele).attr("tj-activitystream-limit");
 	var url = root_url+"index.php?option=com_activitystream&task=activities.getActivities";
 
 	if (typeof type != 'undefined')
@@ -46,6 +47,11 @@ function initActivities(ele)
 	if (typeof target_id != 'undefined')
 	{
 		url += "&target_id="+target_id;
+	}
+
+	if (typeof limit != 'undefined')
+	{
+		url += "&limit="+limit;
 	}
 
 	if (typeof from_date != 'undefined')
