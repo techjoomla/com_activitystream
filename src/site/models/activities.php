@@ -80,6 +80,7 @@ class ActivityStreamModelActivities extends JModelList
 
 		$type = $this->getState('type');
 		$from_date = $this->getState('from_date');
+		$limit = $this->getState('limit');
 
 		$result_arr = array();
 
@@ -96,7 +97,7 @@ class ActivityStreamModelActivities extends JModelList
 		{
 			if (!empty($this->getState($filter) && $filter != 'type'))
 			{
-				$query->where($db->quoteName($filter) . ' = ' . $db->quote($this->getState($filter)));
+				$query->where($db->quoteName($filter) . ' IN (' . $this->getState($filter) . ')');
 			}
 		}
 
@@ -104,6 +105,11 @@ class ActivityStreamModelActivities extends JModelList
 		if (!empty($from_date))
 		{
 			$query->where($db->quoteName('created_date') . ' >= ' . $from_date);
+		}
+
+		if ($limit != 0)
+		{
+			$query->setLimit($limit);
 		}
 
 		// Add the list ordering clause.
@@ -125,7 +131,6 @@ class ActivityStreamModelActivities extends JModelList
 	public function getItems()
 	{
 		$items = parent::getItems();
-
 		$activities = array();
 
 		$activityStreamActivitiesHelper = new ActivityStreamHelperActivities;

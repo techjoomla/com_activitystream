@@ -1,0 +1,20 @@
+<div id="template">
+	<div class="feed-item-cover campaigns">
+		<div class="date col-xs-3 col-sm-1 col-lg-1">{{created_day}} </br> {{created_date_month}}</div>
+		<div class="feed-item col-xs-9 col-sm-11 col-lg-11">
+			<div class="feed-item-inner">
+				<span><i class="fa fa-video-camera fa-lg"></i></span>
+				<span><img class="feed-item-image" src="{{actor.image.avatar}}" /></span>
+				<span><a href='{{actor.url}}'>{{actor.name}}</a> added {{object.count}} video(s) to the campaign</span>
+				<div class="feed-item-video-upload">
+				{{#object.url}}
+				<video width="100%" controls>
+				  <source src="{{.}}" type="video/mp4">
+				</video>
+				{{/object.url}}
+				</div>
+				<hr />
+			</div>
+		</div>
+	</div>
+</div>

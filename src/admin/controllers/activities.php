@@ -70,7 +70,7 @@ class ActivityStreamControllerActivities extends JControllerAdmin
 
 		$actor_id = $jinput->get('actor_id', '', 'CMD');
 		$object_id = $jinput->get('object_id', '', 'CMD');
-		$target_id = $jinput->get('target_id', '', 'CMD');
+		$target_id = $jinput->get('target_id', '', 'STRING');
 		$from_date = $jinput->get('from_date', '');
 
 		// Set model state
