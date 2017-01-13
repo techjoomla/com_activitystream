@@ -15,8 +15,6 @@ $.fn.getActivities = function(){
 
 })( jQuery );
 
-var outputData = "";
-
 function initActivities(ele)
 {
 	var type = jQuery(ele).attr("tj-activitystream-type");
@@ -66,6 +64,7 @@ function initActivities(ele)
 		async:false,
 		success: function(result)
 		{
+			var outputData = "";
 			var itemsProcessed = 0;
 			jQuery.each(result.data.results, function(i, val){
 
@@ -101,15 +100,10 @@ function initActivities(ele)
 
 					if(itemsProcessed === result.data.results.length)
 					{
-						printData();
+						jQuery("#tj-activitystream").html(outputData);
 					}
 				});
 			});
 		}
 	});
-}
-
-function printData()
-{
-	jQuery("#tj-activitystream").html(outputData);
-}
+}	

@@ -95,9 +95,11 @@ class ActivityStreamModelActivities extends JModelList
 
 		foreach ($filters as $filter)
 		{
-			if (!empty($this->getState($filter) && $filter != 'type'))
+			$filterValue = $this->getState($filter);
+
+			if (!empty($filterValue) && $filter != 'type')
 			{
-				$query->where($db->quoteName($filter) . ' IN (' . $this->getState($filter) . ')');
+				$query->where($db->quoteName($filter) . ' IN (' . $filterValue . ')');
 			}
 		}
 
