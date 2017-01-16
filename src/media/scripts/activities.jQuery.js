@@ -26,6 +26,8 @@ function initActivities(ele)
 	var from_date = jQuery(ele).attr("tj-activitystream-from-date");
 	var view = jQuery(ele).attr("tj-activitystream-bs");
 	var theme = jQuery(ele).attr("tj-activitystream-theme");
+	var lang = jQuery(ele).attr("tj-activitystream-language");
+	
 	var url = root_url+"index.php?option=com_activitystream&task=activities.getActivities";
 
 	if (typeof type != 'undefined')
@@ -60,25 +62,25 @@ function initActivities(ele)
 		async:false,
 		success: function(result)
 		{
-			replaceTemplate(result.data.results,theme,view);
+			replaceTemplate(result.data.results, theme, view, lang);
 		}
 	});
 }
 
-function replaceTemplate(activitiesData,theme,view)
+function replaceTemplate(activitiesData,theme,view, lang)
 {
-	val = activitiesData[i];
+	activityData = activitiesData[i];
 	var html = '';
 	
 	var templatePath = '';
 
-	if (!val.template)
+	if (!activityData.template)
 	{
 		templatePath = root_url+"media/com_activitystream/themes/"+theme+"/templates/"+view+"/default.mustache";
 	}
 	else
 	{
-		templatePath = root_url+"media/com_activitystream/themes/"+theme+"/templates/"+view+"/"+val.template;
+		templatePath = root_url+"media/com_activitystream/themes/"+theme+"/templates/"+view+"/"+activityData.template;
 	}
 
 	jQuery.ajax({
@@ -86,26 +88,28 @@ function replaceTemplate(activitiesData,theme,view)
 	url: templatePath,
 	success: function(res,stat,xhr)
 		{
-			if (!val.template)
+			if (!activityData.template)
 			{
-				var formatted_text = Mustache.render(val.formatted_text, {actor : val.actor, object: val.object, target: val.target});
-				val.formatted_text = formatted_text;
-				html = Mustache.render(res, val);
+				var formatted_text = Mustache.render(activityData.formatted_text, {actor : activityData.actor, object: activityData.object, target: activityData.target});
+				activityData.formatted_text = formatted_text;
+				html = Mustache.render(res, activityData);
 			}
 			else
 			{
-				html = Mustache.render(res, val);
+				html = Mustache.render(res, activityData);
 			}
 		}
 	}).done( function(){
 		
 		jQuery("#tj-activitystream").append(html);
+
+		jQuery("#tj-activitystream .language").not('.'+lang).remove();
 		
 		i++;
 		
 		if(i < activitiesData.length)
 		{
-			replaceTemplate(activitiesData,theme,view);
+			replaceTemplate(activitiesData,theme,view, lang);
 		}
 	}
 	);
