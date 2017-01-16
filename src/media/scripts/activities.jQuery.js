@@ -15,6 +15,8 @@ $.fn.getActivities = function(){
 
 })( jQuery );
 
+var i = 0;
+
 function initActivities(ele)
 {
 	var type = jQuery(ele).attr("tj-activitystream-type");
@@ -24,7 +26,6 @@ function initActivities(ele)
 	var from_date = jQuery(ele).attr("tj-activitystream-from-date");
 	var view = jQuery(ele).attr("tj-activitystream-bs");
 	var theme = jQuery(ele).attr("tj-activitystream-theme");
-	var limit = jQuery(ele).attr("tj-activitystream-limit");
 	var url = root_url+"index.php?option=com_activitystream&task=activities.getActivities";
 
 	if (typeof type != 'undefined')
@@ -47,11 +48,6 @@ function initActivities(ele)
 		url += "&target_id="+target_id;
 	}
 
-	if (typeof limit != 'undefined')
-	{
-		url += "&limit="+limit;
-	}
-
 	if (typeof from_date != 'undefined')
 	{
 		url += "&from_date="+from_date;
@@ -64,46 +60,55 @@ function initActivities(ele)
 		async:false,
 		success: function(result)
 		{
-			var outputData = "";
-			var itemsProcessed = 0;
-			jQuery.each(result.data.results, function(i, val){
-
-				var templatePath = '';
-
-				if (!val.template)
-				{
-					templatePath = root_url+"media/com_activitystream/themes/"+theme+"/templates/"+view+"/default.mustache";
-				}
-				else
-				{
-					templatePath = root_url+"media/com_activitystream/themes/"+theme+"/templates/"+view+"/"+val.template;
-				}
-
-				jQuery("#tj-activitystream").load(templatePath+" #template",function(){
-
-					if (!val.template)
-					{
-						var template = document.getElementById('template').innerHTML;
-						var formatted_text = Mustache.render(val.formatted_text, {actor : val.actor, object: val.object, target: val.target});
-						val.formatted_text = formatted_text;
-						var html = Mustache.render(template, val);
-					}
-					else
-					{
-						var template = document.getElementById('template').innerHTML;
-						var html = Mustache.render(template, val);
-					}
-
-					outputData += html;
-
-					itemsProcessed++;
-
-					if(itemsProcessed === result.data.results.length)
-					{
-						jQuery("#tj-activitystream").html(outputData);
-					}
-				});
-			});
+			replaceTemplate(result.data.results,theme,view);
 		}
 	});
-}	
+}
+
+function replaceTemplate(activitiesData,theme,view)
+{
+	val = activitiesData[i];
+	var html = '';
+	
+	var templatePath = '';
+
+	if (!val.template)
+	{
+		templatePath = root_url+"media/com_activitystream/themes/"+theme+"/templates/"+view+"/default.mustache";
+	}
+	else
+	{
+		templatePath = root_url+"media/com_activitystream/themes/"+theme+"/templates/"+view+"/"+val.template;
+	}
+
+	jQuery.ajax({
+	method: 'GET',
+	url: templatePath,
+	success: function(res,stat,xhr)
+		{
+			if (!val.template)
+			{
+				var formatted_text = Mustache.render(val.formatted_text, {actor : val.actor, object: val.object, target: val.target});
+				val.formatted_text = formatted_text;
+				html = Mustache.render(res, val);
+			}
+			else
+			{
+				html = Mustache.render(res, val);
+			}
+		}
+	}).done( function(){
+		
+		jQuery("#tj-activitystream").append(html);
+		
+		i++;
+		
+		if(i < activitiesData.length)
+		{
+			replaceTemplate(activitiesData,theme,view);
+		}
+	}
+	);
+
+	return html;
+}
