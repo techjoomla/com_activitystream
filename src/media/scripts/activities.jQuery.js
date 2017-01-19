@@ -27,7 +27,8 @@ function initActivities(ele)
 	var view = jQuery(ele).attr("tj-activitystream-bs");
 	var theme = jQuery(ele).attr("tj-activitystream-theme");
 	var lang = jQuery(ele).attr("tj-activitystream-language");
-	
+	var limit = jQuery(ele).attr("tj-activitystream-limit");
+
 	var url = root_url+"index.php?option=com_activitystream&task=activities.getActivities";
 
 	if (typeof type != 'undefined')
@@ -54,6 +55,10 @@ function initActivities(ele)
 	{
 		url += "&from_date="+from_date;
 	}
+	if (typeof limit != 'undefined')
+	{
+		url += "&limit="+limit;
+	}
 
 	jQuery.ajax({
 		url: url,
@@ -71,7 +76,7 @@ function replaceTemplate(activitiesData,theme,view, lang)
 {
 	activityData = activitiesData[i];
 	var html = '';
-	
+
 	var templatePath = '';
 
 	if (!activityData.template)
@@ -100,13 +105,13 @@ function replaceTemplate(activitiesData,theme,view, lang)
 			}
 		}
 	}).done( function(){
-		
+
 		jQuery("#tj-activitystream").append(html);
 
 		jQuery("#tj-activitystream .language").not('.'+lang).remove();
-		
+
 		i++;
-		
+
 		if(i < activitiesData.length)
 		{
 			replaceTemplate(activitiesData,theme,view, lang);
