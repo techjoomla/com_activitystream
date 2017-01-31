@@ -10,10 +10,11 @@
   top:10px;
   position: relative;
   text-transform: uppercase;
-  font-size: 16px;
+  font-size: 12px;
   text-align: right;
   color: #5c5f63;
   padding-left:8px;
+  font-family: inherit;
 }
 .feed-item-cover:last-child  .feed-item{
   border-color: transparent;
