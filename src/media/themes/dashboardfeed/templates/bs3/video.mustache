@@ -3,11 +3,13 @@
 	<span><img class="feed-item-image img-circle" src="{{actor.image.avatar}}" /></span>
 	<span class="language en-GB"><a href='{{actor.url}}'>{{actor.name}}</a> added {{object.count}} video(s) to the {{target.name}}</span>
 	<div class="feed-item-video-upload">
-		{{#object.url}}
-		<video width="100%" controls>
-		  <source src="{{.}}" type="video/mp4">
-		</video>
-		{{/object.url}}
+		<a rel='{handler: 'iframe', size: {x: 600, y: 600}}' href='{{object.playURL}}'>
+			{{#object.url}}
+			<video width="100%" controls>
+			  <source src="{{object.playURL}}" type="video/mp4">
+			</video>
+			{{/object.url}}
+		</a>
 	</div>
 	<hr style="margin-top:10px; margin-bottom:10px;">
 </div>
