@@ -5,9 +5,9 @@
 	<div class="feed-item-video-upload">
 		<a rel='{handler: 'iframe', size: {x: 600, y: 600}}' href='{{object.playURL}}'>
 			{{#object.url}}
-			<video width="100%" controls>
-			  <source src="{{object.playURL}}" type="video/mp4">
-			</video>
+			<div width="100%" controls>
+				<img src="{{object.thumbSrc}}" width="50%"/>
+			</div>
 			{{/object.url}}
 		</a>
 	</div>
