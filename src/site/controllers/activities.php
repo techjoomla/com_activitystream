@@ -72,7 +72,8 @@ class ActivityStreamControllerActivities extends JControllerAdmin
 		$object_id = $jinput->get('object_id', '', 'CMD');
 		$target_id = $jinput->get('target_id', '', 'STRING');
 		$from_date = $jinput->get('from_date', '');
-		$limit = $jinput->get('limit') ? $jinput->get('limit'): 0;
+		$start = $jinput->get('start', '0');
+		$limit = $jinput->get('limit');
 
 		// Set model state
 		$ActivityStreamModelActivities->setState("type", $type);
@@ -80,9 +81,10 @@ class ActivityStreamControllerActivities extends JControllerAdmin
 		$ActivityStreamModelActivities->setState("object_id", $object_id);
 		$ActivityStreamModelActivities->setState("target_id", $target_id);
 		$ActivityStreamModelActivities->setState("from_date", $from_date);
-		$ActivityStreamModelActivities->setState("limit", $limit);
+		$ActivityStreamModelActivities->setState("list.limit", $limit);
 		$ActivityStreamModelActivities->setState("access", "1");
 		$ActivityStreamModelActivities->setState("state", '1');
+		$ActivityStreamModelActivities->setState("list.start", $start);
 
 		$result['results'] = $ActivityStreamModelActivities->getItems();
 

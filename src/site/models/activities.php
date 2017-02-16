@@ -80,7 +80,8 @@ class ActivityStreamModelActivities extends JModelList
 
 		$type = $this->getState('type');
 		$from_date = $this->getState('from_date');
-		$limit = $this->getState('limit');
+		$limit = $this->getState('list.limit');
+		$start = $this->getState('list.start');
 
 		$result_arr = array();
 
@@ -111,7 +112,7 @@ class ActivityStreamModelActivities extends JModelList
 
 		if ($limit != 0)
 		{
-			$query->setLimit($limit);
+			$query->setLimit($limit, $start);
 		}
 
 		// Add the list ordering clause.
@@ -133,6 +134,7 @@ class ActivityStreamModelActivities extends JModelList
 	public function getItems()
 	{
 		$items = parent::getItems();
+
 		$activities = array();
 
 		$activityStreamActivitiesHelper = new ActivityStreamHelperActivities;
@@ -166,5 +168,23 @@ class ActivityStreamModelActivities extends JModelList
 		}
 
 		return $activities;
+	}
+
+	/**
+	 * Method to auto-populate the model state.
+	 *
+	 * Note. Calling getState in this method will result in recursion.
+	 *
+	 * @param   string  $ordering   Elements order
+	 * @param   string  $direction  Order direction
+	 *
+	 * @return void
+	 *
+	 * @throws Exception
+	 */
+	protected function populateState($ordering = null, $direction = null)
+	{
+		// List state information.
+		parent::populateState('a.id', 'asc');
 	}
 }
