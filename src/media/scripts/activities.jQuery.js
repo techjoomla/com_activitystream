@@ -1,19 +1,23 @@
 (function( $ ) {
 techjoomla.jQuery(document).ready(function(){
-	jQuery('#tj-activitystream').getActivities();
-	jQuery('#tj-activitystream').html("<a id='load-more-activity-button'></a>");
+	getActivities();
 });
-var getActivities = {}
-$.fn.getActivities = function(){
+
+getActivities = function(){
+	var widgetNumber = 0;
+
 	jQuery('[tj-activitystream-widget]').each(function(){
-		var this_container = jQuery(this);
-		initActivities(this);
+		widgetNumber++;
+		jQuery(this).attr('id',"tj-activitystream" + widgetNumber);
+		jQuery(this).attr('activityNumber',0);
+		jQuery(this).attr('activityNumber',0);
+		jQuery(this).attr('start',0);
+		jQuery(this).html("<a id='load-more-activity-button"+jQuery(this).attr('id')+"'></a>");
+
+		var activity = initActivities(this);
 	});
 }
 })(jQuery);
-
-var activityNumber = 0;
-var start = 0;
 
 function initActivities(ele)
 {
@@ -26,6 +30,8 @@ function initActivities(ele)
 	var theme = jQuery(ele).attr("tj-activitystream-theme");
 	var lang = jQuery(ele).attr("tj-activitystream-language");
 	var limit = jQuery(ele).attr("tj-activitystream-limit");
+	var activityNumber = jQuery(ele).attr("activityNumber");
+	var start = jQuery(ele).attr("start");
 	var url = root_url+"index.php?option=com_activitystream&task=activities.getActivities";
 
 	if (typeof type != 'undefined')
@@ -52,20 +58,25 @@ function initActivities(ele)
 	{
 		url += "&limit="+limit;
 	}
-	jQuery.ajax({
+
+	var queueName = jQuery(ele).attr('id');
+
+	jQuery.ajaxq(queueName,{
 		url: url+"&start="+start,
 		type: 'GET',
 		dataType: 'json',
 		async:false,
 		success: function(result)
 		{
-			replaceTemplate(result.data.results, theme, view, lang, result.data.total);
+			setTimeout(function(){ replaceTemplate(result.data.results, theme, view, lang, result.data.total, ele);; }, 3000);
 		}
 	});
 }
-function replaceTemplate(activitiesData,theme,view, lang, total)
+function replaceTemplate(activitiesData,theme,view, lang, total, ele)
 {
-	console.log(activitiesData);
+	var activityNumber = jQuery(ele).attr("activityNumber");
+	var start = jQuery(ele).attr("start");
+
 	activityData = activitiesData[activityNumber];
 	var html = '';
 	var templatePath = '';
@@ -77,6 +88,7 @@ function replaceTemplate(activitiesData,theme,view, lang, total)
 	{
 		templatePath = root_url+"media/com_activitystream/themes/"+theme+"/templates/"+view+"/"+activityData.template;
 	}
+
 	jQuery.ajax({
 	method: 'GET',
 	url: templatePath,
@@ -94,36 +106,40 @@ function replaceTemplate(activitiesData,theme,view, lang, total)
 			}
 		}
 	}).done( function(){
-		jQuery("#tj-activitystream").append(html);
-		jQuery("#tj-activitystream .language").not('.'+lang).remove();
+		jQuery(ele).append(html);
+		jQuery(ele).children(".language").not('.'+lang).remove();
 
 		activityNumber++;
 		start++;
 
+		jQuery(ele).attr("activityNumber", activityNumber);
+		jQuery(ele).attr("start", start);
+
 		if(activityNumber < activitiesData.length)
 		{
-			replaceTemplate(activitiesData,theme,view, lang, total);
+			replaceTemplate(activitiesData,theme,view, lang, total, ele);
 		}
 
 		if (Number(start) < Number(total))
 		{
-			jQuery('#load-more-activity-button').attr("onclick",'loadMoreActivities('+start+')');
-			jQuery('#load-more-activity-button').attr("class",'btn btn-default btn-lg btn-block');
-			jQuery('#load-more-activity-button').html("Load More Activities");
-			jQuery('#load-more-activity-button').insertAfter(jQuery('#tj-activitystream'));
+			var elementId = jQuery(ele).attr('id');
+
+			jQuery('#load-more-activity-button'+elementId).attr("onclick","loadMoreActivities('"+elementId+"')");
+			jQuery('#load-more-activity-button'+elementId).attr("class",'btn btn-default btn-lg btn-block');
+			jQuery('#load-more-activity-button'+elementId).html("Load More Activities");
+			jQuery('#load-more-activity-button'+elementId).insertAfter(ele);
 		}
 		else
 		{
-			jQuery('#load-more-activity-button').remove();
+			jQuery('#load-more-activity-button'+elementId).remove();
 		}
 	}
 	);
 }
 
-function loadMoreActivities(start)
+function loadMoreActivities(eleId)
 {
-	activityNumber = 0;
-	jQuery('[tj-activitystream-widget]').each(function(){
-		initActivities(this, start);
-	});
+	jQuery('#load-more-activity-button'+eleId).remove();
+	jQuery(jQuery("#"+eleId)).attr("activityNumber", 0);
+	initActivities(jQuery("#"+eleId));
 }
