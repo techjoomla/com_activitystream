@@ -1,10 +1,10 @@
 <?php
 /**
- * @version    CVS: 1.0.0
- * @package    Com_Activitystream
- * @author     Parth Lawate <contact@techjoomla.com>
- * @copyright  2016 Parth Lawate
- * @license    GNU General Public License version 2 or later; see LICENSE.txt
+ * @version    SVN: <svn_id>
+ * @package    ActivityStream
+ * @author     Techjoomla <extensions@techjoomla.com>
+ * @copyright  Copyright (c) 2009-2017 TechJoomla. All rights reserved.
+ * @license    GNU General Public License version 2 or later.
  */
 
 // No direct access
@@ -18,6 +18,16 @@ defined('_JEXEC') or die;
 class ComActivityStreamHelper
 {
 	/**
+	 * Constructor
+	 *
+	 * @since   2.2
+	 */
+	public function __construct()
+	{
+		$this->getLanguageConstantForJs();
+	}
+
+	/**
 	 * Function to get language constants for JS
 	 *
 	 * @return null
@@ -27,5 +37,6 @@ class ComActivityStreamHelper
 	public function getLanguageConstantForJs()
 	{
 		JText::script('COM_ACTIVITYSTREAM_POST_TEXT_ACTIVITY_REMAINING_TEXT_LIMIT', true);
+		JText::script('COM_ACTIVITYSTREAM_LOAD_MORE_ACTIVITIES', true);
 	}
 }

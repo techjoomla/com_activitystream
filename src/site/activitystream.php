@@ -1,10 +1,10 @@
 <?php
 /**
- * @version    CVS: 1.0.0
- * @package    Com_Activitystream
- * @author     Parth Lawate <contact@techjoomla.com>
- * @copyright  2016 Parth Lawate
- * @license    GNU General Public License version 2 or later; see LICENSE.txt
+ * @version    SVN: <svn_id>
+ * @package    ActivityStream
+ * @author     Techjoomla <extensions@techjoomla.com>
+ * @copyright  Copyright (c) 2009-2017 TechJoomla. All rights reserved.
+ * @license    GNU General Public License version 2 or later.
  */
 
 defined('_JEXEC') or die;
@@ -15,6 +15,18 @@ jimport('joomla.application.component.controller');
 JLoader::registerPrefix('Activitystream', JPATH_COMPONENT);
 JLoader::register('ActivitystreamController', JPATH_COMPONENT . '/controller.php');
 
+$lang = JFactory::getLanguage();
+$lang->load('com_activitystream', JPATH_SITE);
+
+$path = JPATH_SITE . '/components/com_activitystream/helper.php';
+
+if (!class_exists('ComActivityStreamHelper'))
+{
+	JLoader::register('ComActivityStreamHelper', $path);
+	JLoader::load('ComActivityStreamHelper');
+}
+
+$ComActivityStreamHelper = new ComActivityStreamHelper;
 
 // Execute the task.
 $controller = JControllerLegacy::getInstance('Activitystream');
