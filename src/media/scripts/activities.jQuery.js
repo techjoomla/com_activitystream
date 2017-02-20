@@ -128,7 +128,7 @@ function replaceTemplate(activitiesData,theme,view, lang, total, ele)
 		if (Number(start) < Number(total))
 		{
 			techjoomla.jQuery('#load-more-activity-button'+elementId).attr("onclick","loadMoreActivities('"+elementId+"')");
-			techjoomla.jQuery('#load-more-activity-button'+elementId).attr("class",'btn btn-default btn-lg btn-block');
+			techjoomla.jQuery('#load-more-activity-button'+elementId).attr("class",'btn btn-primary btn-md pull-right');
 			techjoomla.jQuery('#load-more-activity-button'+elementId).html("Load More Activities");
 			techjoomla.jQuery('#load-more-activity-button'+elementId).insertAfter(ele);
 		}
