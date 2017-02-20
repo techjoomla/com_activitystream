@@ -38,6 +38,7 @@
 		<filename>index.html</filename>
 		<filename>activitystream.php</filename>
 		<filename>controller.php</filename>
+		<filename>helper.php</filename>
 		<filename>router.php</filename>
 		<folder>models</folder>
 		<folder>controllers</folder>
