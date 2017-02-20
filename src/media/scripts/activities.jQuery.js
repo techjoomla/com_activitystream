@@ -1,37 +1,46 @@
 (function( $ ) {
-techjoomla.jQuery(document).ready(function(){
+	if(typeof(techjoomla) == 'undefined')
+	{
+		var techjoomla = {};
+	}
+
+	if(typeof techjoomla.jQuery == "undefined")
+	{
+		techjoomla.jQuery = jQuery;
+	}
+
+	techjoomla.jQuery(document).ready(function(){
 	getActivities();
 });
 
 getActivities = function(){
 	var widgetNumber = 0;
 
-	jQuery('[tj-activitystream-widget]').each(function(){
+	techjoomla.jQuery('[tj-activitystream-widget]').each(function(){
 		widgetNumber++;
-		jQuery(this).attr('id',"tj-activitystream" + widgetNumber);
-		jQuery(this).attr('activityNumber',0);
-		jQuery(this).attr('activityNumber',0);
-		jQuery(this).attr('start',0);
-		jQuery(this).html("<a id='load-more-activity-button"+jQuery(this).attr('id')+"'></a>");
+		techjoomla.jQuery(this).attr('id',"tj-activitystream" + widgetNumber);
+		techjoomla.jQuery(this).attr('activityNumber',0);
+		techjoomla.jQuery(this).attr('start',0);
+		techjoomla.jQuery(this).html("<a id='load-more-activity-button"+techjoomla.jQuery(this).attr('id')+"'></a>");
 
 		var activity = initActivities(this);
 	});
 }
-})(jQuery);
+})(techjoomla.jQuery);
 
 function initActivities(ele)
 {
-	var type = jQuery(ele).attr("tj-activitystream-type");
-	var actor_id = jQuery(ele).attr("tj-activitystream-actor-id");
-	var object_id = jQuery(ele).attr("tj-activitystream-object-id");
-	var target_id = jQuery(ele).attr("tj-activitystream-target-id");
-	var from_date = jQuery(ele).attr("tj-activitystream-from-date");
-	var view = jQuery(ele).attr("tj-activitystream-bs");
-	var theme = jQuery(ele).attr("tj-activitystream-theme");
-	var lang = jQuery(ele).attr("tj-activitystream-language");
-	var limit = jQuery(ele).attr("tj-activitystream-limit");
-	var activityNumber = jQuery(ele).attr("activityNumber");
-	var start = jQuery(ele).attr("start");
+	var type = techjoomla.jQuery(ele).attr("tj-activitystream-type");
+	var actor_id = techjoomla.jQuery(ele).attr("tj-activitystream-actor-id");
+	var object_id = techjoomla.jQuery(ele).attr("tj-activitystream-object-id");
+	var target_id = techjoomla.jQuery(ele).attr("tj-activitystream-target-id");
+	var from_date = techjoomla.jQuery(ele).attr("tj-activitystream-from-date");
+	var view = techjoomla.jQuery(ele).attr("tj-activitystream-bs");
+	var theme = techjoomla.jQuery(ele).attr("tj-activitystream-theme");
+	var lang = techjoomla.jQuery(ele).attr("tj-activitystream-language");
+	var limit = techjoomla.jQuery(ele).attr("tj-activitystream-limit");
+	var activityNumber = techjoomla.jQuery(ele).attr("activityNumber");
+	var start = techjoomla.jQuery(ele).attr("start");
 	var url = root_url+"index.php?option=com_activitystream&task=activities.getActivities";
 
 	if (typeof type != 'undefined')
@@ -59,23 +68,21 @@ function initActivities(ele)
 		url += "&limit="+limit;
 	}
 
-	var queueName = jQuery(ele).attr('id');
-
-	jQuery.ajaxq(queueName,{
+	techjoomla.jQuery.ajax({
 		url: url+"&start="+start,
 		type: 'GET',
 		dataType: 'json',
 		async:false,
 		success: function(result)
 		{
-			setTimeout(function(){ replaceTemplate(result.data.results, theme, view, lang, result.data.total, ele);; }, 3000);
+			replaceTemplate(result.data.results, theme, view, lang, result.data.total, ele);
 		}
 	});
 }
 function replaceTemplate(activitiesData,theme,view, lang, total, ele)
 {
-	var activityNumber = jQuery(ele).attr("activityNumber");
-	var start = jQuery(ele).attr("start");
+	var activityNumber = techjoomla.jQuery(ele).attr("activityNumber");
+	var start = techjoomla.jQuery(ele).attr("start");
 
 	activityData = activitiesData[activityNumber];
 	var html = '';
@@ -89,9 +96,10 @@ function replaceTemplate(activitiesData,theme,view, lang, total, ele)
 		templatePath = root_url+"media/com_activitystream/themes/"+theme+"/templates/"+view+"/"+activityData.template;
 	}
 
-	jQuery.ajax({
+	techjoomla.jQuery.ajax({
 	method: 'GET',
 	url: templatePath,
+	async:false,
 	success: function(res,stat,xhr)
 		{
 			if (!activityData.template)
@@ -106,32 +114,32 @@ function replaceTemplate(activitiesData,theme,view, lang, total, ele)
 			}
 		}
 	}).done( function(){
-		jQuery(ele).append(html);
-		jQuery(ele).children(".language").not('.'+lang).remove();
+		techjoomla.jQuery(ele).append(html);
+		techjoomla.jQuery(ele).children(".language").not('.'+lang).remove();
 
 		activityNumber++;
 		start++;
 
-		jQuery(ele).attr("activityNumber", activityNumber);
-		jQuery(ele).attr("start", start);
+		techjoomla.jQuery(ele).attr("activityNumber", activityNumber);
+		techjoomla.jQuery(ele).attr("start", start);
+
+		var elementId = techjoomla.jQuery(ele).attr('id');
+
+		if (Number(start) < Number(total))
+		{
+			techjoomla.jQuery('#load-more-activity-button'+elementId).attr("onclick","loadMoreActivities('"+elementId+"')");
+			techjoomla.jQuery('#load-more-activity-button'+elementId).attr("class",'btn btn-default btn-lg btn-block');
+			techjoomla.jQuery('#load-more-activity-button'+elementId).html(Joomla.JText._('COM_ACTIVITYSTREAM_LOAD_MORE_ACTIVITIES'));
+			techjoomla.jQuery('#load-more-activity-button'+elementId).insertAfter(ele);
+		}
+		else
+		{
+			techjoomla.jQuery('#load-more-activity-button'+elementId).remove();
+		}
 
 		if(activityNumber < activitiesData.length)
 		{
 			replaceTemplate(activitiesData,theme,view, lang, total, ele);
-		}
-
-		if (Number(start) < Number(total))
-		{
-			var elementId = jQuery(ele).attr('id');
-
-			jQuery('#load-more-activity-button'+elementId).attr("onclick","loadMoreActivities('"+elementId+"')");
-			jQuery('#load-more-activity-button'+elementId).attr("class",'btn btn-default btn-lg btn-block');
-			jQuery('#load-more-activity-button'+elementId).html("Load More Activities");
-			jQuery('#load-more-activity-button'+elementId).insertAfter(ele);
-		}
-		else
-		{
-			jQuery('#load-more-activity-button'+elementId).remove();
 		}
 	}
 	);
@@ -139,7 +147,6 @@ function replaceTemplate(activitiesData,theme,view, lang, total, ele)
 
 function loadMoreActivities(eleId)
 {
-	jQuery('#load-more-activity-button'+eleId).remove();
-	jQuery(jQuery("#"+eleId)).attr("activityNumber", 0);
-	initActivities(jQuery("#"+eleId));
+	techjoomla.jQuery(techjoomla.jQuery("#"+eleId)).attr("activityNumber", 0);
+	initActivities(techjoomla.jQuery("#"+eleId));
 }
