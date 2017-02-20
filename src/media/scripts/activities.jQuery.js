@@ -129,7 +129,7 @@ function replaceTemplate(activitiesData,theme,view, lang, total, ele)
 		{
 			techjoomla.jQuery('#load-more-activity-button'+elementId).attr("onclick","loadMoreActivities('"+elementId+"')");
 			techjoomla.jQuery('#load-more-activity-button'+elementId).attr("class",'btn btn-default btn-lg btn-block');
-			techjoomla.jQuery('#load-more-activity-button'+elementId).html(Joomla.JText._('COM_ACTIVITYSTREAM_LOAD_MORE_ACTIVITIES'));
+			techjoomla.jQuery('#load-more-activity-button'+elementId).html("Load More Activities");
 			techjoomla.jQuery('#load-more-activity-button'+elementId).insertAfter(ele);
 		}
 		else
