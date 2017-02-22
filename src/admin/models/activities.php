@@ -140,6 +140,10 @@ class ActivityStreamModelActivities extends JModelList
 		{
 			foreach ($items as $k => $item)
 			{
+				// Get date in local time zone
+				$item->created_date = JHtml::date($item->created_date, 'Y-m-d h:i:s');
+				$item->updated_date = JHtml::date($item->updated_date, 'Y-m-d h:i:s');
+
 				// Get extra date info
 				$items[$k]->created_day = date_format(date_create($item->created_date), "D");
 				$items[$k]->created_date_month = date_format(date_create($item->created_date), "d, M");
