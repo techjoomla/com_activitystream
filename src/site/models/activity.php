@@ -99,12 +99,11 @@ class ActivityStreamModelActivity extends JModelAdmin
 	{
 		$cdate = JFactory::getDate('now');
 
-		if (empty($data['id']))
+		if (empty($data['id']) && empty($data['created_date']))
 		{
 			$data['created_date'] = $cdate->toSQL();
+			$data['updated_date'] = $cdate->toSQL();
 		}
-
-		$data['updated_date'] = $cdate->toSQL();
 
 		if (parent::save($data))
 		{
