@@ -7,7 +7,9 @@
 			<span class="language en-GB"><a href='{{actor.url}}'>{{actor.name}}</a> added {{object.count}} give-away(s) to the campaign</span>
 			<div>
 				{{#object.url}}
-					<img class="feed-item-image-upload" src="{{giveback_image}}" alt="Giveaways Image" height="150" width="150"/>
+					{{#giveback_image}}
+						<img class="feed-item-image-upload" src="{{giveback_image}}" alt="Giveaways Image" height="150" width="150"/>
+					{{/giveback_image}}
 				{{/object.url}}
 			</div>
 			<hr />
