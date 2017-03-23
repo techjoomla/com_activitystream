@@ -80,4 +80,7 @@
 {
 	height:120px;
 	margin-bottom:10px;
+	background-size:contain;
+	background-repeat:no-repeat;
+	background-position:left center;
 }
