@@ -26,7 +26,7 @@ getActivities = function(){
 		var activity = initActivities(this);
 	});
 }
-})(techjoomla.jQuery);
+})($);
 
 function initActivities(ele)
 {
