@@ -75,12 +75,3 @@
   color: #5c5f63;
   padding-left: 0px;
 }
-.feed-item-inner .camp-images,
-.feed-item-inner .camp-giveback-images
-{
-	height:120px;
-	margin-bottom:10px;
-	background-size:contain;
-	background-repeat:no-repeat;
-	background-position:left center;
-}
