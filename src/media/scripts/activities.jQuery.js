@@ -75,7 +75,10 @@ function initActivities(ele)
 		async:false,
 		success: function(result)
 		{
-			replaceTemplate(result.data.results, theme, view, lang, result.data.total, ele);
+			if (result.success != false)
+			{
+				replaceTemplate(result.data.results, theme, view, lang, result.data.total, ele);
+			}
 		}
 	});
 }
