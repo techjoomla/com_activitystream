@@ -68,7 +68,7 @@ class ActivityStreamViewActivities extends JViewLegacy
 		}
 
 		JToolBarHelper::title($title, 'activity');
-		JToolBarHelper::deleteList('', 'activitys.delete');
+		JToolBarHelper::deleteList('', 'activities.delete');
 		JToolBarHelper::editList('activity.edit');
 		JToolBarHelper::addNew('activity.add');
 		JToolBarHelper::publish('activity.publish');

@@ -50,6 +50,8 @@
 		</languages>
 		<files folder="admin">
 			<!-- Admin Main File Copy Section -->
+			<filename>access.xml</filename>
+			<filename>config.xml</filename>
 			<filename>activitystream.php</filename>
 			<filename>controller.php</filename>
 			<!-- SQL files section -->
