@@ -4,11 +4,13 @@
 		<div class="feed-item-inner">
 			<span><i class="fa fa-image fa-lg"></i></span>
 			<span><img class="feed-item-image" src="{{actor.image.avatar}}" /></span>
-			<span class="language en-GB"><a href='{{actor.url}}'>{{actor.name}}</a> has added {{object.count}} image(s) for the event</span>
-			<div>
-			{{#object.url}}
-				<img class="feed-item-image-upload img-responsive" src="{{.}}" height="" width="150"/>
-			{{/object.url}}
+			<span class="language en-GB"><a href='{{actor.url}}'>{{actor.name}}</a> added {{object.count}} image(s) to the event</span>
+			<div class="col-xs-12">
+				<div class="row">
+				{{#object.url}}
+					<div class="col-xs-12 col-sm-6 col-md-3"><img class="feed-item-image-upload img-responsive" src="{{.}}" height="150px" width=""/></div>
+				{{/object.url}}
+				</div>
 			</div>
 			<hr />
 		</div>
