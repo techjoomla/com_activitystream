@@ -146,6 +146,7 @@ class ActivityStreamModelActivities extends JModelList
 				// Get date in local time zone
 				$item->created_date = JHtml::date($item->created_date, 'Y-m-d h:i:s');
 				$item->updated_date = JHtml::date($item->updated_date, 'Y-m-d h:i:s');
+				$item->root = JUri::root();
 
 				// Get extra date info
 				$items[$k]->created_day = date_format(date_create($item->created_date), "D");
