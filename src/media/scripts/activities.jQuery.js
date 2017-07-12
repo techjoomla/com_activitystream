@@ -75,7 +75,7 @@ function initActivities(ele)
 		async:false,
 		success: function(result)
 		{
-			if (result.success !== false)
+			if (result.success != false)
 			{
 				replaceTemplate(result.data.results, theme, view, lang, result.data.total, ele);
 			}

@@ -2,14 +2,5 @@
 	<span><i class="fa fa-video-camera fa-lg"></i></span>&nbsp;
 	<span><img class="feed-item-image img-circle" src="{{actor.image.avatar}}" /></span>
 	<span class="language en-GB"><a href='{{actor.url}}'>{{actor.name}}</a> added {{object.count}} video(s) to the <a href='{{target.url}}'>{{target.name}}</a></span>
-	<div class="feed-item-video-upload">
-		<a rel='{handler: 'iframe', size: {x: 600, y: 600}}' href='{{object.playURL}}'>
-			{{#object.url}}
-			<div width="100%" controls>
-				<img src="{{object.thumbSrc}}" width="50%"/>
-			</div>
-			{{/object.url}}
-		</a>
-	</div>
 	<hr style="margin-top:10px; margin-bottom:10px;">
 </div>
