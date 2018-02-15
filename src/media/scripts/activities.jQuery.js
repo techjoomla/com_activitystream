@@ -26,7 +26,7 @@ getActivities = function(){
 		var activity = initActivities(this);
 	});
 }
-})($);
+
 
 function initActivities(ele)
 {
@@ -153,3 +153,5 @@ function loadMoreActivities(eleId)
 	techjoomla.jQuery(techjoomla.jQuery("#"+eleId)).attr("activityNumber", 0);
 	initActivities(techjoomla.jQuery("#"+eleId));
 }
+
+})($);
