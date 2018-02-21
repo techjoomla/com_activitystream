@@ -1,7 +1,7 @@
 (function( $ ) {
 	if(typeof(techjoomla) == 'undefined')
 	{
-		 var techjoomla = {};
+		var techjoomla = {};
 	}
 
 	if(typeof techjoomla.jQuery == "undefined")
