@@ -1,19 +1,14 @@
-(function( $ ) {
-	if(typeof(techjoomla) == 'undefined')
-	{
-		var techjoomla = {};
-	}
+if(typeof(techjoomla) == 'undefined')
+{
+	var techjoomla = {};
+}
 
-	if(typeof techjoomla.jQuery == "undefined")
-	{
-		techjoomla.jQuery = jQuery;
-	}
+if(typeof techjoomla.jQuery == "undefined")
+{
+	techjoomla.jQuery = jQuery;
+}
 
-	techjoomla.jQuery(document).ready(function(){
-	getActivities();
-});
-
-getActivities = function(){
+function getActivities(){
 	var widgetNumber = 0;
 
 	techjoomla.jQuery('[tj-activitystream-widget]').each(function(){
@@ -27,6 +22,9 @@ getActivities = function(){
 	});
 }
 
+techjoomla.jQuery(document).ready(function(){
+	getActivities();
+});
 
 function initActivities(ele)
 {
@@ -82,6 +80,7 @@ function initActivities(ele)
 		}
 	});
 }
+
 function replaceTemplate(activitiesData,theme,view, lang, total, ele)
 {
 	var activityNumber = techjoomla.jQuery(ele).attr("activityNumber");
@@ -153,5 +152,3 @@ function loadMoreActivities(eleId)
 	techjoomla.jQuery(techjoomla.jQuery("#"+eleId)).attr("activityNumber", 0);
 	initActivities(techjoomla.jQuery("#"+eleId));
 }
-
-})($);
