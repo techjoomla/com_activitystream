@@ -6,6 +6,6 @@
 	{{^actor.image.gravatar}}
 		<span><img class="feed-item-image img-circle " src="{{root}}{{actor.image.avatar}}"></span>
 	{{/actor.image.gravatar}}
-	<span class="language en-GB"><a href='{{actor.url}}'>{{actor.name}}</a> changed <a href='{{target.url}}'>{{target.name}}</a> end date to {{object.newenddate}}</span>
+	<span class="language en-GB"><a href='{{actor.url}}'>{{actor.name}}</a> changed <a href='{{root}}{{target.url}}'>{{target.name}}</a> end date to {{object.newenddate}}</span>
 	<hr style="margin-top:10px; margin-bottom:10px;">
 </div>
