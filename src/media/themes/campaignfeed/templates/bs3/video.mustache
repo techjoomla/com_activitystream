@@ -14,10 +14,18 @@
 				<div class="media" id="jgive_video_gallery">
 					{{#object.videos}}
 					<div class=" jgive_gallery_image_item" >
-						<a rel="{handler: 'iframe', size: {x: 600, y: 600}}" href="{{link}}" class="modal jgive-bs3-modal">
-							<img src="{{playIcon}}" class="play_icon"/>
-							<img src="{{thumbSrc}}" width="100%"/>
-						</a>
+						{{#external}}
+							<a rel="{handler: 'iframe', size: {x: 600, y: 600}}" href="{{root}}{{link}}" class="modal jgive-bs3-modal">
+								<img src="{{root}}{{playIcon}}" class="play_icon"/>
+								<img src="{{thumbSrc}}" width="100%"/>
+							</a>
+						{{/external}}
+						{{^external}}
+							<a rel="{handler: 'iframe', size: {x: 600, y: 600}}" href="{{root}}{{link}}" class="modal jgive-bs3-modal">
+								<img src="{{root}}{{playIcon}}" class="play_icon"/>
+								<img src="{{root}}{{thumbSrc}}" width="100%"/>
+							</a>
+						{{/external}}
 					</div>
 					{{/object.videos}}
 					</div>
