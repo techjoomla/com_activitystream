@@ -141,7 +141,10 @@ class ActivityStreamModelActivities extends JModelList
 			foreach ($items as $k => $item)
 			{
 				// Avoid XSS attack
-				$item->formatted_text = htmlspecialchars($item->formatted_text, ENT_COMPAT, 'UTF-8');
+				if ($item->formatted_text)
+				{
+					$item->formatted_text = htmlspecialchars($item->formatted_text, ENT_COMPAT, 'UTF-8');
+				}
 
 				// Get date in local time zone
 				$item->created_date = JHtml::date($item->created_date, 'Y-m-d h:i:s');
