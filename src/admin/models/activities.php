@@ -43,6 +43,7 @@ class ActivityStreamModelActivities extends JModelList
 			);
 		}
 
+		$this->filter = JFilterInput::getInstance();
 		parent::__construct($config);
 	}
 
@@ -143,7 +144,7 @@ class ActivityStreamModelActivities extends JModelList
 				// Avoid XSS attack
 				if ($item->formatted_text)
 				{
-					$item->formatted_text = htmlspecialchars($item->formatted_text, ENT_COMPAT, 'UTF-8');
+					$item->formatted_text = $this->filter->clean($item->formatted_text);
 				}
 
 				// Get date in local time zone
