@@ -16,6 +16,8 @@ defined('_JEXEC') or die;
  */
 class ActivityStreamModelActivities extends JModelList
 {
+	protected $activityStreamActivitiesHelper;
+
 	/**
 	 * Constructor.
 	 *
@@ -27,6 +29,8 @@ class ActivityStreamModelActivities extends JModelList
 	public function __construct($config = array())
 	{
 		require_once JPATH_ADMINISTRATOR . '/components/com_activitystream/helpers/activities.php';
+
+		$this->activityStreamActivitiesHelper = new ActivityStreamHelperActivities;
 
 		if (empty($config['filter_fields']))
 		{
@@ -88,6 +92,7 @@ class ActivityStreamModelActivities extends JModelList
 		// Return result related to specified activity type
 		if (!empty($type) && $type != 'all')
 		{
+			$type = $this->activityStreamActivitiesHelper->buildActivityFilterQuery($type);
 			$query->where($db->quoteName('type') . ' IN (' . $type . ')');
 		}
 
@@ -100,6 +105,7 @@ class ActivityStreamModelActivities extends JModelList
 
 			if (!empty($filterValue) && $filter != 'type')
 			{
+				$filterValue = $this->activityStreamActivitiesHelper->buildActivityFilterQuery($filterValue);
 				$query->where($db->quoteName($filter) . ' IN (' . $filterValue . ')');
 			}
 		}
@@ -107,7 +113,7 @@ class ActivityStreamModelActivities extends JModelList
 		// Return results from specified date
 		if (!empty($from_date))
 		{
-			$query->where($db->quoteName('created_date') . ' >= ' . $from_date);
+			$query->where($db->quoteName('created_date') . ' >= ' . $db->quote($from_date));
 		}
 
 		if ($limit != 0)
@@ -137,8 +143,6 @@ class ActivityStreamModelActivities extends JModelList
 
 		$activities = array();
 
-		$activityStreamActivitiesHelper = new ActivityStreamHelperActivities;
-
 		if (!empty($items))
 		{
 			foreach ($items as $k => $item)
@@ -156,14 +160,14 @@ class ActivityStreamModelActivities extends JModelList
 				$itemArray = (array) $item;
 
 				// Convet all the json data to array
-				$itemArray = $activityStreamActivitiesHelper->json_to_array($itemArray, true);
+				$itemArray = $this->activityStreamActivitiesHelper->json_to_array($itemArray, true);
 
 				foreach ($itemArray as $key => $itemSubArray)
 				{
 					if (is_array($itemSubArray))
 					{
 						// Convet all the json data to array
-						$itemArray[$key] = $activityStreamActivitiesHelper->json_to_array($itemSubArray, true);
+						$itemArray[$key] = $this->activityStreamActivitiesHelper->json_to_array($itemSubArray, true);
 					}
 				}
 
