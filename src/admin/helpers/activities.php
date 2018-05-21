@@ -77,4 +77,42 @@ class ActivityStreamHelperActivities
 
 		return array_map($jsonMapper, $array);
 	}
+
+	/**
+	 * Function to build safe query for IN clause
+	 *
+	 * @param   string  $filterString  filter string
+	 *
+	 * @return  string
+	 */
+	public function buildActivityFilterQuery($filterString)
+	{
+		$db = JFactory::getDbo();
+
+		// Check if $filterString is comma separated string.
+		if ((strpos($filterString, ',') !== false))
+		{
+			// Remove single and double quotes from string.
+			$filterString 	= str_replace(array('\'', '"'), '', $filterString);
+
+			// Create an array of string.
+			$filterArray 	= explode(',', $filterString);
+
+			// Joomla $db->quote every element of array.
+			$filterArray 	= array_map(array($db, 'quote'), $filterArray);
+
+			// Create safe string of array.
+			$filterString 	= implode(',', $filterArray);
+		}
+		else
+		{
+			// Remove single and double quotes from string.
+			$filterString 	= str_replace(array('\'', '"'), '', $filterString);
+
+			// Joomla $db->quote $filterString.
+			$filterString 	= $db->quote($filterString);
+		}
+
+		return $filterString;
+	}
 }
