@@ -14,7 +14,7 @@
 	});
 
 	getActivities = function(){
-		var widgetNumber = 0;
+		let widgetNumber = 0;
 
 		techjoomla.jQuery('[tj-activitystream-widget]').each(function(){
 			widgetNumber++;
@@ -23,23 +23,19 @@
 			techjoomla.jQuery(this).attr('start',0);
 			techjoomla.jQuery(this).html("<a id='load-more-activity-button"+techjoomla.jQuery(this).attr('id')+"'></a>");
 
-			var activity = initActivities(this);
+			initActivities(this);
 		});
 	}
 
 	initActivities = function (ele){
-		var type = techjoomla.jQuery(ele).attr("tj-activitystream-type");
-		var actor_id = techjoomla.jQuery(ele).attr("tj-activitystream-actor-id");
-		var object_id = techjoomla.jQuery(ele).attr("tj-activitystream-object-id");
-		var target_id = techjoomla.jQuery(ele).attr("tj-activitystream-target-id");
-		var from_date = techjoomla.jQuery(ele).attr("tj-activitystream-from-date");
-		var view = techjoomla.jQuery(ele).attr("tj-activitystream-bs");
-		var theme = techjoomla.jQuery(ele).attr("tj-activitystream-theme");
-		var lang = techjoomla.jQuery(ele).attr("tj-activitystream-language");
-		var limit = techjoomla.jQuery(ele).attr("tj-activitystream-limit");
-		var activityNumber = techjoomla.jQuery(ele).attr("activityNumber");
-		var start = techjoomla.jQuery(ele).attr("start");
-		var url = root_url+"index.php?option=com_activitystream&task=activities.getActivities";
+		let type = techjoomla.jQuery(ele).attr("tj-activitystream-type");
+		let actor_id = techjoomla.jQuery(ele).attr("tj-activitystream-actor-id");
+		let object_id = techjoomla.jQuery(ele).attr("tj-activitystream-object-id");
+		let target_id = techjoomla.jQuery(ele).attr("tj-activitystream-target-id");
+		let from_date = techjoomla.jQuery(ele).attr("tj-activitystream-from-date");
+		let limit = techjoomla.jQuery(ele).attr("tj-activitystream-limit");
+		let start = techjoomla.jQuery(ele).attr("start");
+		let url = root_url+"index.php?option=com_activitystream&task=activities.getActivities";
 
 		if (typeof type != 'undefined')
 		{
@@ -75,26 +71,36 @@
 			{
 				if (result.success != false)
 				{
-					replaceTemplate(result.data.results, theme, view, lang, result.data.total, ele);
+					replaceTemplate(result.data.results, result.data.total, ele);
 				}
 			}
 		});
 	}
 
-	replaceTemplate = function(activitiesData,theme,view, lang, total, ele){
-		var activityNumber = techjoomla.jQuery(ele).attr("activityNumber");
-		var start = techjoomla.jQuery(ele).attr("start");
+	replaceTemplate = function(activitiesData, total, ele){
+		let activityNumber = techjoomla.jQuery(ele).attr("activityNumber");
+		let start = techjoomla.jQuery(ele).attr("start");
+		let client = techjoomla.jQuery(ele).attr("tj-activitystream-client");
+		let view = techjoomla.jQuery(ele).attr("tj-activitystream-bs");
+		let theme = techjoomla.jQuery(ele).attr("tj-activitystream-theme");
+		let lang = techjoomla.jQuery(ele).attr("tj-activitystream-language");
+
+		if (typeof client === 'undefined' || client === false)
+		{
+			client = "com_activitystream";
+		}
 
 		activityData = activitiesData[activityNumber];
-		var html = '';
-		var templatePath = '';
+		let html = '';
+		let templatePath = '';
+
 		if (!activityData.template)
 		{
-			templatePath = root_url+"media/com_activitystream/themes/"+theme+"/templates/"+view+"/default.mustache";
+			templatePath = root_url+"media/"+client+"/themes/"+theme+"/templates/"+view+"/default.mustache";
 		}
 		else
 		{
-			templatePath = root_url+"media/com_activitystream/themes/"+theme+"/templates/"+view+"/"+activityData.template;
+			templatePath = root_url+"media/"+client+"/themes/"+theme+"/templates/"+view+"/"+activityData.template;
 		}
 
 		techjoomla.jQuery.ajax({
@@ -105,7 +111,7 @@
 			{
 				if (!activityData.template)
 				{
-					var formatted_text = Mustache.render(activityData.formatted_text, {actor : activityData.actor, object: activityData.object, target: activityData.target});
+					let formatted_text = Mustache.render(activityData.formatted_text, {actor : activityData.actor, object: activityData.object, target: activityData.target});
 					activityData.formatted_text = formatted_text;
 					html = Mustache.render(res, activityData);
 				}
@@ -124,7 +130,7 @@
 			techjoomla.jQuery(ele).attr("activityNumber", activityNumber);
 			techjoomla.jQuery(ele).attr("start", start);
 
-			var elementId = techjoomla.jQuery(ele).attr('id');
+			let elementId = techjoomla.jQuery(ele).attr('id');
 
 			if (Number(start) < Number(total))
 			{
@@ -140,7 +146,7 @@
 
 			if(activityNumber < activitiesData.length)
 			{
-				replaceTemplate(activitiesData,theme,view, lang, total, ele);
+				replaceTemplate(activitiesData, total, ele);
 			}
 		}
 		);
