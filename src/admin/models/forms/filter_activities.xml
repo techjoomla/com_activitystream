@@ -16,6 +16,16 @@
 			onchange="this.form.submit();"
 			>
 			<option value="">JOPTION_SELECT_PUBLISHED</option>
+
+
+		</field>
+		<field
+			name="activitytype"
+			type="activitytype"
+			label="COM_ACTIVITYSTREAM_SEARCH_FILTER"
+			description="COM_ACTIVITYSTREAM_SEARCH_FILTER_DESC"
+			onchange="this.form.submit();"
+			>
 		</field>
 	</fields>
 </form>

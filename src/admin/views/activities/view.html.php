@@ -24,6 +24,7 @@ class ActivityStreamViewActivities extends JViewLegacy
 	 *
 	 * @return  void
 	 */
+
 	public function display($tpl = null)
 	{
 		// To show all types of activity in list view
@@ -33,8 +34,10 @@ class ActivityStreamViewActivities extends JViewLegacy
 		$this->items = $this->get('Items');
 		$this->pagination	= $this->get('Pagination');
 		$this->state		= $this->get('State');
+		$this->input = JFactory::getApplication()->input;
 		$this->filterForm    = $this->get('FilterForm');
 		$this->activeFilters = $this->get('ActiveFilters');
+		$client = $this->input->get('client', '', 'STRING');
 
 		// Check for errors.
 		if (count($errors = $this->get('Errors')))
@@ -44,8 +47,15 @@ class ActivityStreamViewActivities extends JViewLegacy
 			return false;
 		}
 
-		// Set the tool-bar and number of found items
+		ActivityStreamHelperActivities::addSubmenu('countries');
+
+				// Set the tool-bar and number of found items
 		$this->addToolBar();
+
+		if (!empty($client))
+		{
+			$this->sidebar = JHtmlSidebar::render();
+		}
 
 		// Display the template
 		parent::display($tpl);
@@ -60,7 +70,14 @@ class ActivityStreamViewActivities extends JViewLegacy
 	 */
 	protected function addToolBar()
 	{
-		$title = JText::_('Activity Stream');
+		$title        = JText::_('Activity Stream');
+		$input        = JFactory::getApplication()->input;
+		$languageFile = JFactory::getLanguage();
+		$extension    = JFactory::getApplication()->input->get('client', '', 'word');
+		$base_dir     = JPATH_BASE . '/language';
+
+		// Load the language file
+		$languageFile->load($extension, $base_dir);
 
 		if ($this->pagination->total)
 		{
@@ -74,6 +91,10 @@ class ActivityStreamViewActivities extends JViewLegacy
 		JToolBarHelper::publish('activity.publish');
 		JToolBarHelper::unpublish('activity.publish');
 		JToolBarHelper::save2copy('activity.save2copy');
+
+		JHtmlSidebar::setAction('index.php?option=com_activitystream&view=activities');
+
+		$this->extra_sidebar = '';
 	}
 
 	/**
@@ -87,6 +108,9 @@ class ActivityStreamViewActivities extends JViewLegacy
 			'id' => JText::_('COM_ACTIVITYSTREAM_ACTIVITY_ID'),
 			'state' => JText::_('COM_ACTIVITYSTREAM_ACTIVITY_STATE'),
 			'type' => JText::_('COM_ACTIVITYSTREAM_ACTIVITY_TYPE'),
+			'post' => JText::_('Post'),
+			'activity' => JText::_('Activity'),
+			'order' => JText::_('Order'),
 			'created_date' => JText::_('COM_ACTIVITYSTREAM_ACTIVITY_CREATED_DATE'),
 			'updated_date' => JText::_('COM_ACTIVITYSTREAM_ACTIVITY_UPDATED_DATE')
 		);

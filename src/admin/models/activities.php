@@ -54,20 +54,29 @@ class ActivityStreamModelActivities extends JModelList
 	protected function getListQuery()
 	{
 		// Initialize variables.
-		$db    = JFactory::getDbo();
-		$query = $db->getQuery(true);
+		// Get client
+		$extension = JFactory::getApplication()->input->get('client', '', 'word');
+		$parts     = explode('.', $extension);
+
+		// Extract the component name
+		$this->setState('filter.component', $parts[0]);
+		$client = $parts[0];
+
+		$db     = JFactory::getDbo();
+		$query  = $db->getQuery(true);
 
 		// Create the base select statement.
 		$query->select($this->getState('list.select', '*'))
-			->from($db->quoteName('#__tj_activities'));
+				->from($db->quoteName('#__tj_activities'));
+		$query->where($db->quoteName('client') . ' = ' . $db->quote($client));
 
 		// Filter: like / search
 		$search = $this->getState('filter.search');
 
 		if (!empty($search))
 		{
-			$like = $db->quote('%' . $search . '%');
-			$query->where('type LIKE ' . $like);
+				$like = $db->quote('%' . $search . '%');
+				$query->where('type LIKE ' . $like);
 		}
 
 		// Filter by published state
@@ -75,19 +84,20 @@ class ActivityStreamModelActivities extends JModelList
 
 		if (is_numeric($published))
 		{
-			$query->where('state = ' . (int) $published);
+				$query->where('state = ' . (int) $published);
 		}
 
-		$type = $this->getState('type');
-		$from_date = $this->getState('from_date');
-		$limit = $this->getState('limit');
+		$type       = $this->getState('filter.activitytype');
+
+		$from_date  = $this->getState('from_date');
+		$limit      = $this->getState('limit');
 
 		$result_arr = array();
 
 		// Return result related to specified activity type
 		if (!empty($type) && $type != 'all')
 		{
-			$query->where($db->quoteName('type') . ' IN (' . $type . ')');
+			$query->where($db->quoteName('type') . ' = ' . $db->quote($type));
 		}
 
 		// Get all filters
@@ -104,16 +114,16 @@ class ActivityStreamModelActivities extends JModelList
 		// Return results from specified date
 		if (!empty($from_date))
 		{
-			$query->where($db->quoteName('created_date') . ' >= ' . $from_date);
+				$query->where($db->quoteName('created_date') . ' >= ' . $from_date);
 		}
 
 		if ($limit != 0)
 		{
-			$query->setLimit($limit);
+				$query->setLimit($limit);
 		}
 
 		// Add the list ordering clause.
-		$orderCol = $this->state->get('list.ordering', 'created_date');
+		$orderCol  = $this->state->get('list.ordering', 'created_date');
 		$orderDirn = $this->state->get('list.direction', 'desc');
 
 		$query->order($db->escape($orderCol) . ' ' . $db->escape($orderDirn));
@@ -130,9 +140,9 @@ class ActivityStreamModelActivities extends JModelList
 	 */
 	public function getItems()
 	{
-		$items = parent::getItems();
+		$items                          = parent::getItems();
 
-		$activities = array();
+		$activities                     = array();
 
 		$activityStreamActivitiesHelper = new ActivityStreamHelperActivities;
 
