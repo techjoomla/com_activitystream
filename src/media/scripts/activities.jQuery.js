@@ -35,7 +35,7 @@
 		let from_date = techjoomla.jQuery(ele).attr("tj-activitystream-from-date");
 		let limit = techjoomla.jQuery(ele).attr("tj-activitystream-limit");
 		let start = techjoomla.jQuery(ele).attr("start");
-		let url = root_url+"index.php?option=com_activitystream&task=activities.getActivities";
+		let url = Joomla.getOptions('system.paths').base +"/index.php?option=com_activitystream&task=activities.getActivities";
 
 		if (typeof type != 'undefined')
 		{
@@ -96,11 +96,11 @@
 
 		if (!activityData.template)
 		{
-			templatePath = root_url+"media/"+client+"/themes/"+theme+"/templates/"+view+"/default.mustache";
+			templatePath = Joomla.getOptions('system.paths').base+"/media/"+client+"/themes/"+theme+"/templates/"+view+"/default.mustache";
 		}
 		else
 		{
-			templatePath = root_url+"media/"+client+"/themes/"+theme+"/templates/"+view+"/"+activityData.template;
+			templatePath = Joomla.getOptions('system.paths').base + "/media/"+client+"/themes/"+theme+"/templates/"+view+"/"+activityData.template;
 		}
 
 		techjoomla.jQuery.ajax({
