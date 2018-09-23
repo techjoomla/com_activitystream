@@ -36,7 +36,7 @@ class ComActivityStreamHelper
 	 */
 	public function getLanguageConstantForJs()
 	{
-		JText::script('COM_ACTIVITYSTREAM_POST_TEXT_ACTIVITY_REMAINING_TEXT_LIMIT', true);
-		JText::script('COM_ACTIVITYSTREAM_LOAD_MORE_ACTIVITIES', true);
+		JText::script('COM_ACTIVITYSTREAM_POST_TEXT_ACTIVITY_REMAINING_TEXT_LIMIT');
+		JText::script('COM_ACTIVITYSTREAM_LOAD_MORE_ACTIVITIES');
 	}
 }
