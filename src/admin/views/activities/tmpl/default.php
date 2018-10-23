@@ -15,57 +15,43 @@ $sortFields = $this->getSortFields();
 $listOrder     = $this->escape($this->state->get('list.ordering'));
 $listDirn      = $this->escape($this->state->get('list.direction'));
 ?>
-<script type="text/javascript">
-
-</script>
-
-<?php
-
-if (!empty($this->extra_sidebar))
-{
-	$this->sidebar .= $this->extra_sidebar;
-}
-?>
-
-<form action="<?php echo JRoute::_('index.php?option=com_activitystream&view=activities&client=' .
-$this->input->get('client', '', 'STRING'));
-?>"
-		method="post" id="adminForm" name="adminForm">
-<?php
-if (!empty($this->sidebar))
-{
-	?>
-	<div id="j-sidebar-container" class="span2">
-		<?php echo $this->sidebar; ?>
+<form action="<?php echo JRoute::_('index.php?option=com_activitystream&view=activities&client=' . $this->client); ?>"  method="post" id="adminForm" name="adminForm">
+	<div class="row-fluid">
+		<div class="span6">
+			<?php
+				echo JLayoutHelper::render(
+					'joomla.searchtools.default',
+					array('view' => $this)
+				);
+			?>
+		</div>
 	</div>
-	<div id="j-main-container" class="span10">
-<?php
-}
-else
-{?>
-	<div id="j-main-container">
-<?php
-}?>
-
-
-
-
 	<div id="filter-bar" class="btn-toolbar">
 		<div class="btn-group pull-right hidden-phone">
 			<label for="limit" class="element-invisible"><?php echo JText::_('JFIELD_PLG_SEARCH_SEARCHLIMIT_DESC'); ?></label>
 			<?php echo $this->pagination->getLimitBox(); ?>
 		</div>
-	<div class="row-fluid">
-		<div class="span6">
-			<?php
-		// Search tools bar
-		echo JLayoutHelper::render('joomla.searchtools.default', array('view' => $this));
-		?>
-
+		<div class="btn-group pull-right hidden-phone">
+			<label for="directionTable" class="element-invisible"><?php echo JText::_('JFIELD_ORDERING_DESC'); ?></label>
+			<select name="directionTable" id="directionTable" class="input-medium" onchange="Joomla.orderTable()">
+				<option value=""><?php echo JText::_('JFIELD_ORDERING_DESC'); ?></option>
+				<option value="asc" <?php if ($listDirn == 'asc')
+				{
+					echo 'selected="selected"';
+				} ?>><?php echo JText::_('JGLOBAL_ORDER_ASCENDING'); ?></option>
+				<option value="desc" <?php if ($listDirn == 'desc')
+				{
+					echo 'selected="selected"';
+				} ?>><?php echo JText::_('JGLOBAL_ORDER_DESCENDING'); ?></option>
+			</select>
 		</div>
-	</div>
-
-
+		<div class="btn-group pull-right">
+			<label for="sortTable" class="element-invisible"><?php echo JText::_('JGLOBAL_SORT_BY'); ?></label>
+			<select name="sortTable" id="sortTable" class="input-medium" onchange="Joomla.orderTable()">
+				<option value=""><?php echo JText::_('JGLOBAL_SORT_BY'); ?></option>
+				<?php echo JHtml::_('select.options', $sortFields, 'value', 'text', $listOrder); ?>
+			</select>
+		</div>
 	</div>
 	<table class="table table-striped table-hover">
 		<thead>
@@ -75,16 +61,10 @@ else
 					<input type="checkbox" name="checkall-toggle" value=""
 					title="<?php echo JText::_('JGLOBAL_CHECK_ALL'); ?>" onclick="Joomla.checkAll(this)"/>
 				</th>
-				<th width="2%">
-					<?php echo JHtml::_('grid.sort', JText::_("COM_ACTIVITYSTREAM_ACTIVITY_ID"), 'id', $listDirn, $listOrder); ?>
-				</th>
 				<th width="5%">
 					<?php echo JHtml::_('grid.sort', JText::_("COM_ACTIVITYSTREAM_ACTIVITY_STATE"), 'state', $listDirn, $listOrder); ?>
 				</th>
 				<th width="5%">
-					<?php echo JHtml::_('grid.sort', JText::_("name"), 'name', $listDirn, $listOrder); ?>
-				</th>
-								<th width="5%">
 					<?php echo JHtml::_('grid.sort', JText::_("COM_ACTIVITYSTREAM_ACTIVITY_TYPE"), 'type', $listDirn, $listOrder);?>
 				</th>
 				<th width="5%">
@@ -93,7 +73,9 @@ else
 				<th width="5%">
 					<?php echo JHtml::_('grid.sort', JText::_('COM_ACTIVITYSTREAM_ACTIVITY_UPDATED_DATE'), 'updated_date', $listDirn, $listOrder);?>
 				</th>
-
+				<th width="2%">
+					<?php echo JHtml::_('grid.sort', JText::_("COM_ACTIVITYSTREAM_ACTIVITY_ID"), 'id', $listDirn, $listOrder); ?>
+				</th>
 			</tr>
 		<?php endif;?>
 		</thead>
@@ -108,29 +90,17 @@ else
 		<tbody>
 			<?php if (!empty($this->items) && empty($this->items['error'])) : ?>
 				<?php foreach ($this->items as $i => $row) :
-
 					$link = JRoute::_('index.php?option=com_activitystream&task=activity.edit&id=' . $row->id);
-				$obj = json_encode($row);
-
 				?>
-
 					<tr>
 						<td>
 							<?php echo JHtml::_('grid.id', $i, $row->id); ?>
 						</td>
 						<td align="center">
-							<a href="<?php echo $link; ?>" title="<?php echo JText::_('type'); ?>">
-								<?php echo $row->id; ?>
-							</a>
-						</td>
-						<td align="center">
 							<?php echo JHtml::_('jgrid.published', $row->state, $i, 'activities.', true, 'cb'); ?>
 						</td>
-						<td align="center">
-							<?php print_r( $row->target['name']); ?>
-						</td>
-						<td align="center">
-							<?php echo ucfirst(trim(strstr($row->type, '.'), '.')); ?>
+						<td>
+							<?php echo $row->type; ?>
 						</td>
 						<td align="center">
 							<?php echo $row->created_date; ?>
@@ -138,7 +108,11 @@ else
 						<td align="center">
 							<?php echo $row->updated_date; ?>
 						</td>
-
+						<td align="center">
+							<a href="<?php echo $link; ?>" title="<?php echo JText::_('type'); ?>">
+								<?php echo $row->id; ?>
+							</a>
+						</td>
 					</tr>
 				<?php endforeach; ?>
 			<?php else: ?>

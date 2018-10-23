@@ -30,14 +30,13 @@ class ActivityStreamViewActivities extends JViewLegacy
 		// To show all types of activity in list view
 		$activitiesModel = $this->getModel();
 		$activitiesModel->setState("type", 'all');
-
+		$this->input = JFactory::getApplication()->input;
 		$this->items = $this->get('Items');
 		$this->pagination	= $this->get('Pagination');
 		$this->state		= $this->get('State');
-		$this->input = JFactory::getApplication()->input;
 		$this->filterForm    = $this->get('FilterForm');
 		$this->activeFilters = $this->get('ActiveFilters');
-		$client = $this->input->get('client', '', 'STRING');
+		$this->client = $this->input->get('client', '', 'STRING');
 
 		// Check for errors.
 		if (count($errors = $this->get('Errors')))
@@ -74,7 +73,7 @@ class ActivityStreamViewActivities extends JViewLegacy
 		$input        = JFactory::getApplication()->input;
 		$languageFile = JFactory::getLanguage();
 		$extension    = JFactory::getApplication()->input->get('client', '', 'word');
-		$base_dir     = JPATH_BASE . '/language';
+		$base_dir     = JPATH_BASE;
 
 		// Load the language file
 		$languageFile->load($extension, $base_dir);
@@ -108,9 +107,6 @@ class ActivityStreamViewActivities extends JViewLegacy
 			'id' => JText::_('COM_ACTIVITYSTREAM_ACTIVITY_ID'),
 			'state' => JText::_('COM_ACTIVITYSTREAM_ACTIVITY_STATE'),
 			'type' => JText::_('COM_ACTIVITYSTREAM_ACTIVITY_TYPE'),
-			'post' => JText::_('Post'),
-			'activity' => JText::_('Activity'),
-			'order' => JText::_('Order'),
 			'created_date' => JText::_('COM_ACTIVITYSTREAM_ACTIVITY_CREATED_DATE'),
 			'updated_date' => JText::_('COM_ACTIVITYSTREAM_ACTIVITY_UPDATED_DATE')
 		);

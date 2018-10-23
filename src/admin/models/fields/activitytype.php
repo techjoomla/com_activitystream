@@ -58,16 +58,16 @@ class JFormFieldActivityType extends JFormFieldList
 		$db->setQuery($query);
 
 		// Send filter values
-		$allUsers  = $db->loadObjectList();
+		$dataType  = $db->loadObjectList();
 		$options   = array();
 		$options[] = JHtml::_('select.option', 'all', JText::_('COM_ACTIVITYSTREAM_SEARCH_FILTER'));
 
-		foreach ($allUsers as $u)
+		foreach ($dataType as $type)
 		{
-			$tempArr     = implode("_", explode('.', $u->type));
+			$tempArr     = implode("_", explode('.', $type->type));
 			$filterValue = $client . '_activity_type_' . $tempArr;
 			$filterText  = strtoupper($filterValue);
-			$options[]   = JHtml::_('select.option', $u->type, JText::_($filterText));
+			$options[]   = JHtml::_('select.option', $type->type, JText::_($filterText));
 		}
 
 		return $options;

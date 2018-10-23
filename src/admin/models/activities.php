@@ -67,8 +67,8 @@ class ActivityStreamModelActivities extends JModelList
 
 		// Create the base select statement.
 		$query->select($this->getState('list.select', '*'))
-				->from($db->quoteName('#__tj_activities'));
-		$query->where($db->quoteName('client') . ' = ' . $db->quote($client));
+			->from($db->quoteName('#__tj_activities'));
+			$query->where($db->quoteName('client') . ' = ' . $db->quote($extension));
 
 		// Filter: like / search
 		$search = $this->getState('filter.search');
@@ -88,7 +88,6 @@ class ActivityStreamModelActivities extends JModelList
 		}
 
 		$type       = $this->getState('filter.activitytype');
-
 		$from_date  = $this->getState('from_date');
 		$limit      = $this->getState('limit');
 
