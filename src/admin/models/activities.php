@@ -75,8 +75,8 @@ class ActivityStreamModelActivities extends JModelList
 
 		if (!empty($search))
 		{
-				$like = $db->quote('%' . $search . '%');
-				$query->where('type LIKE ' . $like);
+			$like = $db->quote('%' . $search . '%');
+			$query->where('type LIKE ' . $like);
 		}
 
 		// Filter by published state
@@ -84,7 +84,7 @@ class ActivityStreamModelActivities extends JModelList
 
 		if (is_numeric($published))
 		{
-				$query->where('state = ' . (int) $published);
+			$query->where('state = ' . (int) $published);
 		}
 
 		$type       = $this->getState('filter.activitytype');
@@ -113,7 +113,7 @@ class ActivityStreamModelActivities extends JModelList
 		// Return results from specified date
 		if (!empty($from_date))
 		{
-				$query->where($db->quoteName('created_date') . ' >= ' . $from_date);
+			$query->where($db->quoteName('created_date') . ' >= ' . $from_date);
 		}
 
 		if ($limit != 0)
