@@ -118,7 +118,7 @@ class ActivityStreamModelActivities extends JModelList
 
 		if ($limit != 0)
 		{
-				$query->setLimit($limit);
+			$query->setLimit($limit);
 		}
 
 		// Add the list ordering clause.
