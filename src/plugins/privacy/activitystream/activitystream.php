@@ -90,7 +90,7 @@ class PlgPrivacyActivitystream extends PrivacyPlugin
 			->select($db->quoteName(array('actor_id', 'object_id', 'target_id', 'type', 'template')))
 			->from($db->quoteName('#__tj_activities'))
 			->where(
-						$db->quoteName('actor_id') . ' = ' . $db->quote($user->id)
+					$db->quoteName('actor_id') . ' = ' . $db->quote($user->id)
 				);
 		$userData = $db->setQuery($query)->loadAssocList();
 
