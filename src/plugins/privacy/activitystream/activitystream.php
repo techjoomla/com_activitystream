@@ -28,7 +28,7 @@ class PlgPrivacyActivitystream extends PrivacyPlugin
 	 *
 	 * @var    boolean
 	 *
-	 * @since  3.2.11
+	 * @since  __DEPLOY_VERSION__
 	 */
 	protected $autoloadLanguage = true;
 
@@ -39,24 +39,6 @@ class PlgPrivacyActivitystream extends PrivacyPlugin
 	 * @since  __DEPLOY_VERSION__
 	 */
 	protected $db;
-
-	/**
-	 * Reports the privacy related capabilities for this plugin to site administrators.
-	 *
-	 * @return  array
-	 *
-	 * @since   __DEPLOY_VERSION__
-	 */
-	public function onPrivacyCollectAdminCapabilities()
-	{
-		$this->loadLanguage();
-
-		return array(
-			JText::_('PLG_PRIVACY_ACTIVITYSTREAM') => array(
-				JText::_('PLG_PRIVACY_ACTIVITYSTREAM_PRIVACY_CAPABILITY_USER_DETAIL')
-			)
-		);
-	}
 
 	/**
 	 * Processes an export request for Activity Stream user data
@@ -103,14 +85,14 @@ class PlgPrivacyActivitystream extends PrivacyPlugin
 	private function createActivityStreamDomain(JTableUser $user)
 	{
 		$domain = $this->createDomain('ActivityStream', 'ActivityStream data');
-
-		$query = $this->db->getQuery(true)
-			->select('actor_id, object_id, target_id, type, template')
-			->from($this->db->quoteName('#__tj_activities'))
+		$db = JFactory::getDbo();
+		$query = $db->getQuery(true)
+			->select($db->quoteName(array('actor_id', 'object_id', 'target_id', 'type', 'template')))
+			->from($db->quoteName('#__tj_activities'))
 			->where(
-						$this->db->quoteName('actor_id') . ' = ' . $this->db->quote($user->id)
+						$db->quoteName('actor_id') . ' = ' . $db->quote($user->id)
 				);
-		$userData = $this->db->setQuery($query)->loadAssocList();
+		$userData = $db->setQuery($query)->loadAssocList();
 
 		if (!empty($userData))
 		{
