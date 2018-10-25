@@ -46,15 +46,14 @@ class Com_ActivityStreamInstallerScript
 	 *
 	 * @param   STRING  $parent  parent
 	 *
-	 * @return void
+	 * @return object
 	 */
 	public function uninstall($parent)
 	{
 		jimport('joomla.installer.installer');
-		$db              = JFactory::getDBO();
+		$db              = JFactory::getDbo();
 		$status          = new JObject;
 		$status->plugins = array();
-		$src             = $parent->getParent()->getPath('source');
 
 		// Plugins uninstallation
 		if (count($this->queue['plugins']))
@@ -126,15 +125,14 @@ class Com_ActivityStreamInstallerScript
 	 */
 	public function postflight($type, $parent)
 	{
-		$src             = $parent->getParent()->getPath('source');
-		$db              = JFactory::getDbo();
-		$status          = new JObject;
-		$status->plugins = array();
+		$src = $parent->getParent()->getPath('source');
+ 		$db = JFactory::getDbo();
+ 		$status = new JObject;
+ 		$status->plugins = array();
 
 		// Plugins installation
-
-		if (count($this->queue['plugins']))
-		{
+ 		if (count($this->queue['plugins']))
+ 		{
 			foreach ($this->queue['plugins'] as $folder => $plugins)
 			{
 				if (count($plugins))
@@ -143,54 +141,59 @@ class Com_ActivityStreamInstallerScript
 					{
 						$path = "$src/plugins/$folder/$plugin";
 
-						if (!is_dir($path))
-						{
-							$path = "$src/plugins/$folder/plg_$plugin";
-						}
+ 						if (!is_dir($path))
+ 						{
+ 							$path = "$src/plugins/$folder/plg_$plugin";
+ 						}
 
-						if (!is_dir($path))
-						{
-							$path = "$src/plugins/$plugin";
-						}
+ 						if (!is_dir($path))
+ 						{
+ 							$path = "$src/plugins/$plugin";
+ 						}
 
-						if (!is_dir($path))
-						{
-							$path = "$src/plugins/plg_$plugin";
-						}
+ 						if (!is_dir($path))
+ 						{
+ 							$path = "$src/plugins/plg_$plugin";
+ 						}
 
-						if (!is_dir($path))
-						{
-							continue;
-						}
+ 						if (!is_dir($path))
+ 						{
+ 							continue;
+ 						}
 
-						// Was the plugin already installed?
-						$query = $db->getQuery(true)
-							->select('COUNT(*)')
-							->from($db->qn('#__extensions'))
-							->where($db->qn('element') . ' = ' . $db->q($plugin))
-							->where($db->qn('folder') . ' = ' . $db->q($folder));
-						$db->setQuery($query);
-						$count = $db->loadResult();
+ 						// Was the plugin already installed?
+ 						$query = $db->getQuery(true)
+ 							->select('COUNT(*)')
+ 							->from($db->qn('#__extensions'))
+ 							->where($db->qn('element') . ' = ' . $db->q($plugin))
+ 							->where($db->qn('folder') . ' = ' . $db->q($folder));
+ 						$db->setQuery($query);
+ 						$count = $db->loadResult();
 
-						$installer = new JInstaller;
-						$result = $installer->install($path);
+ 						$installer = new JInstaller;
+ 						$result = $installer->install($path);
 
 						$status->plugins[] = array('name' => 'plg_' . $plugin, 'group' => $folder, 'result' => $result);
 
-						if ($published && !$count)
-						{
-							$query = $db->getQuery(true)
-								->update($db->qn('#__extensions'))
-								->set($db->qn('enabled') . ' = ' . $db->q('1'))
-								->where($db->qn('element') . ' = ' . $db->q($plugin))
-								->where($db->qn('folder') . ' = ' . $db->q($folder));
-							$db->setQuery($query);
-							$db->execute();
-						}
+ 						if ($published && !$count)
+ 						{
+ 							$query = $db->getQuery(true)
+ 								->update($db->qn('#__extensions'))
+ 								->set($db->qn('enabled') . ' = ' . $db->q('1'))
+ 								->where($db->qn('element') . ' = ' . $db->q($plugin))
+ 								->where($db->qn('folder') . ' = ' . $db->q($folder));
+ 							$db->setQuery($query);
+ 							$db->execute();
+ 						}
+
 					}
 				}
 			}
+
 		}
+
+		// Install SQL FIles
+		$this->installSqlFiles($parent);
 	}
 
 	/**
