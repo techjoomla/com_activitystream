@@ -12,7 +12,7 @@
 defined('_JEXEC') or die();
 jimport('joomla.application.component.model');
 
-use Joomla\Utilities\ArrayHelper;
+use Joomla\CMS\Factory;
 JLoader::register('PrivacyPlugin', JPATH_ADMINISTRATOR . '/components/com_privacy/helpers/plugin.php');
 JLoader::register('PrivacyRemovalStatus', JPATH_ADMINISTRATOR . '/components/com_privacy/helpers/removal/status.php');
 
@@ -85,7 +85,7 @@ class PlgPrivacyActivitystream extends PrivacyPlugin
 	private function createActivityStreamDomain(JTableUser $user)
 	{
 		$domain = $this->createDomain('ActivityStream', 'ActivityStream data');
-		$db = JFactory::getDbo();
+		$db = Factory::getDbo();
 		$query = $db->getQuery(true)
 			->select($db->quote(array('id', 'actor_id', 'object_id', 'target_id', 'type', 'template')))
 			->from($db->quoteName('#__tj_activities'))
