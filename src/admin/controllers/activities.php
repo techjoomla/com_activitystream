@@ -1,6 +1,5 @@
 <?php
 /**
- * @version    SVN: <svn_id>
  * @package    ActivityStream
  * @author     Techjoomla <extensions@techjoomla.com>
  * @copyright  Copyright (c) 2009-2017 TechJoomla. All rights reserved.
@@ -10,9 +9,9 @@
 defined('_JEXEC') or die;
 
 /**
- * HelloWorlds Controller
+ * Activity Stream Controller
  *
- * @since  0.0.1
+ * @since  1.0.2
  */
 class ActivityStreamControllerActivities extends JControllerAdmin
 {
@@ -25,7 +24,7 @@ class ActivityStreamControllerActivities extends JControllerAdmin
 	 *
 	 * @return  object  The model.
 	 *
-	 * @since   1.6
+	 * @since   1.0.2
 	 */
 	public function getModel($name = 'Activity', $prefix = 'ActivityStreamModel', $config = array('ignore_request' => true))
 	{
@@ -55,7 +54,7 @@ class ActivityStreamControllerActivities extends JControllerAdmin
 		$ActivityStreamModelActivities = $this->getModel('Activities');
 
 		$jinput = JFactory::getApplication()->input;
-		$type = $jinput->get("type", '', 'STRING');
+		$type   = $jinput->get("type", '', 'STRING');
 
 		// Return result related to specified activity type
 		if (empty($type))
@@ -68,11 +67,11 @@ class ActivityStreamControllerActivities extends JControllerAdmin
 			jexit();
 		}
 
-		$actor_id = $jinput->get('actor_id', '', 'CMD');
+		$actor_id  = $jinput->get('actor_id', '', 'CMD');
 		$object_id = $jinput->get('object_id', '', 'CMD');
 		$target_id = $jinput->get('target_id', '', 'STRING');
 		$from_date = $jinput->get('from_date', '');
-		$limit = $jinput->get('limit') ? $jinput->get('limit'): 0;
+		$limit     = $jinput->get('limit') ? $jinput->get('limit'): 0;
 
 		// Set model state
 		$ActivityStreamModelActivities->setState("type", $type);
@@ -94,13 +93,71 @@ class ActivityStreamControllerActivities extends JControllerAdmin
 		}
 		else
 		{
-			$result_arr['success'] = true;
-			$result_arr['data'] = $result;
+			$result_arr['success']       = true;
+			$result_arr['data']          = $result;
 			$result_arr['data']['total'] = $ActivityStreamModelActivities->getTotal();
 		}
 
 		echo json_encode($result_arr);
 
 		jexit();
+	}
+
+	/**
+	 * Function to delete the activity
+	 *
+	 * @return  void
+	 *
+	 * @since 1.0.2
+	 */
+
+	public function delete()
+	{
+		$input  = JFactory::getApplication()->input;
+		$client = $input->get('client', '', 'STRING');
+		$id     = JFactory::getApplication()->input->get('cid', array(), 'array');
+
+		if (!is_array($id) || count($id) < 1)
+		{
+			JLog::add(JText::_($this->text_prefix . '_NO_ITEM_SELECTED'), JLog::WARNING, 'jerror');
+		}
+		else
+		{
+			// Get the model.
+			$model = $this->getModel('activity');
+
+			// Make sure the item ids are integers
+			jimport('joomla.utilities.arrayhelper');
+			JArrayHelper::toInteger($id);
+
+			// Remove the activity.
+			if ($model->delete($id))
+			{
+				$this->setMessage(JText::plural($this->text_prefix . '_N_ITEMS_DELETED', count($id)));
+				$ntext = $this->text_prefix . '_N_ITEMS_DELETED';
+
+				if (isset($client))
+				{
+					$this->setRedirect(JRoute::_('index.php?option=com_activitystream&view=activities&client=' . $client, false));
+				}
+				else
+				{
+					$this->setRedirect(JRoute::_('index.php?option=com_activitystream&view=activities', false));
+				}
+			}
+			else
+			{
+				$this->setMessage($model->getError());
+
+				if (isset($client))
+				{
+					$this->setRedirect(JRoute::_('index.php?option=com_activitystream&view=activities&client=' . $client, false));
+				}
+				else
+				{
+					$this->setRedirect(JRoute::_('index.php?option=com_activitystream&view=activities', false));
+				}
+			}
+		}
 	}
 }

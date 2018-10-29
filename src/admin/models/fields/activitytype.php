@@ -1,8 +1,7 @@
 <?php
 
 /**
- * @version    SVN: <svn_id>
- * @package    Com_Tjlms
+ * @package    Com_Activitystream
  * @author     Techjoomla <extensions@techjoomla.com>
  * @copyright  Copyright (c) 2009-2015 TechJoomla. All rights reserved.
  * @license    GNU General Public License version 2 or later.
@@ -16,7 +15,7 @@ JFormHelper::loadFieldClass('list');
 /**
  * Supports an HTML select list of courses
  *
- * @since  1.0.0
+ * @since  1.0.2
  */
 class JFormFieldActivityType extends JFormFieldList
 {
@@ -24,7 +23,7 @@ class JFormFieldActivityType extends JFormFieldList
 	 * The form field type.
 	 *
 	 * @var		string
-	 * @since	1.6
+	 * @since	1.0.2
 	 */
 	protected $type = 'activitytype';
 
@@ -32,7 +31,7 @@ class JFormFieldActivityType extends JFormFieldList
 	 * Fiedd to decide if options are being loaded externally and from xml
 	 *
 	 * @var		integer
-	 * @since	2.2
+	 * @since	1.0.2
 	 */
 	protected $loadExternally = 0;
 
@@ -41,31 +40,31 @@ class JFormFieldActivityType extends JFormFieldList
 	 *
 	 * @return	array		An array of JHtml options.
 	 *
-	 * @since   11.4
+	 * @since   1.0.2
 	 */
 	protected function getOptions()
 	{
 		$db     = JFactory::getDbo();
 		$input  = JFactory::getApplication()->input;
-		$client = $input->get('client', '', 'STRING');
+		$client = JFactory::getApplication()->input->get('client', '', 'string');
 		$filter = JFilterInput::getInstance();
+		$query  = $db->getQuery(true);
 
-		$query = $db->getQuery(true);
-		$query->select('distinct l.type');
-		$query->from('#__tj_activities AS l');
-		$query->where($db->quoteName('client') . ' = ' . $db->quote($client));
+		$query->select('distinct l.type')
+				->from($db->quoteName('#__tj_activities') . 'as l')
+				->where($db->quoteName('client') . ' = ' . $db->quote($client));
 		$query->order($db->escape('l.type ASC'));
 		$db->setQuery($query);
 
 		// Send filter values
-		$dataType  = $db->loadObjectList();
-		$options   = array();
-		$options[] = JHtml::_('select.option', 'all', JText::_('COM_ACTIVITYSTREAM_SEARCH_FILTER'));
+		$activityType = $db->loadObjectList();
+		$options      = array();
+		$options[]    = JHtml::_('select.option', 'all', JText::_('COM_ACTIVITYSTREAM_SEARCH_FILTER'));
 
-		foreach ($dataType as $type)
+		foreach ($activityType as $type)
 		{
-			$tempArr     = implode("_", explode('.', $type->type));
-			$filterValue = $client . '_activity_type_' . $tempArr;
+			$temp        = implode("_", explode('.', $type->type));
+			$filterValue = $client . '_activity_type_' . $temp;
 			$filterText  = strtoupper($filterValue);
 			$options[]   = JHtml::_('select.option', $type->type, JText::_($filterText));
 		}

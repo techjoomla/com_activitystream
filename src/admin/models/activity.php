@@ -1,6 +1,5 @@
 <?php
 /**
- * @version    SVN: <svn_id>
  * @package    ActivityStream
  * @author     Techjoomla <extensions@techjoomla.com>
  * @copyright  Copyright (c) 2009-2017 TechJoomla. All rights reserved.
@@ -113,6 +112,23 @@ class ActivityStreamModelActivity extends JModelAdmin
 		else
 		{
 			return false;
+		}
+	}
+
+	/**
+	 * Delete the activity
+	 *
+	 * @param   int  &$id  Item id
+	 *
+	 * @return  boolean
+	 *
+	 * @since   1.0.2
+	 */
+	public function delete(&$id)
+	{
+		foreach ($id as $data)
+		{
+			return parent::delete($id);
 		}
 	}
 }

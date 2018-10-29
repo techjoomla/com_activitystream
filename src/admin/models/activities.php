@@ -1,6 +1,5 @@
 <?php
 /**
- * @version    SVN: <svn_id>
  * @package    ActivityStream
  * @author     Techjoomla <extensions@techjoomla.com>
  * @copyright  Copyright (c) 2009-2017 TechJoomla. All rights reserved.
@@ -47,6 +46,28 @@ class ActivityStreamModelActivities extends JModelList
 	}
 
 	/**
+	 * Method to auto-populate the model state.
+	 *
+	 * Note. Calling getState in this method will result in recursion.
+	 *
+	 * @param   string  $ordering   An optional ordering field.
+	 * @param   string  $direction  An optional direction (asc|desc).
+	 *
+	 * @return  void
+	 *
+	 * @since   1.0.2
+	 */
+	protected function populateState($ordering = null, $direction = null)
+	{
+		// Initialise variables.
+		$jinput = JFactory::getApplication()->input;
+
+		// Client filter
+		$extension = $jinput->get("client", '', 'STRING');
+		$this->setState('extension', $extension);
+	}
+
+	/**
 	 * Method to build an SQL query to load the list data.
 	 *
 	 * @return      string  An SQL query
@@ -54,21 +75,20 @@ class ActivityStreamModelActivities extends JModelList
 	protected function getListQuery()
 	{
 		// Initialize variables.
-		// Get client
-		$extension = JFactory::getApplication()->input->get('client', '', 'word');
-		$parts     = explode('.', $extension);
-
-		// Extract the component name
-		$this->setState('filter.component', $parts[0]);
-		$client = $parts[0];
-
-		$db     = JFactory::getDbo();
-		$query  = $db->getQuery(true);
+		$db    = JFactory::getDbo();
+		$query = $db->getQuery(true);
 
 		// Create the base select statement.
 		$query->select($this->getState('list.select', '*'))
 			->from($db->quoteName('#__tj_activities'));
+
+		// Filter by client
+		$extension = $this->getState('extension');
+
+		if (!empty($extension))
+		{
 			$query->where($db->quoteName('client') . ' = ' . $db->quote($extension));
+		}
 
 		// Filter: like / search
 		$search = $this->getState('filter.search');
@@ -96,7 +116,7 @@ class ActivityStreamModelActivities extends JModelList
 		// Return result related to specified activity type
 		if (!empty($type) && $type != 'all')
 		{
-			$query->where($db->quoteName('type') . ' = ' . $db->quote($type));
+			$query->where($db->quoteName('type') . ' IN (' . $type . ')');
 		}
 
 		// Get all filters
@@ -139,9 +159,9 @@ class ActivityStreamModelActivities extends JModelList
 	 */
 	public function getItems()
 	{
-		$items                          = parent::getItems();
+		$items = parent::getItems();
 
-		$activities                     = array();
+		$activities = array();
 
 		$activityStreamActivitiesHelper = new ActivityStreamHelperActivities;
 
