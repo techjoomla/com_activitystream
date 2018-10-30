@@ -87,7 +87,7 @@ class PlgPrivacyActivitystream extends PrivacyPlugin
 		$domain = $this->createDomain('ActivityStream', 'ActivityStream data');
 		$db = Factory::getDbo();
 		$query = $db->getQuery(true)
-			->select($db->quoteName(array('id', 'actor_id', 'object_id', 'target_id', 'type', 'template')))
+			->select($db->quote(array('id', 'actor_id', 'object_id', 'target_id', 'type', 'template')))
 			->from($db->quoteName('#__tj_activities'))
 			->where(
 					$db->quoteName('actor_id') . ' = ' . $db->quote($user->id)
