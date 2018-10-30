@@ -87,7 +87,7 @@ class PlgPrivacyActivitystream extends PrivacyPlugin
 		$domain = $this->createDomain('ActivityStream', 'ActivityStream data');
 		$db = Factory::getDbo();
 		$query = $db->getQuery(true)
-			->select($db->quote(array('id', 'actor_id', 'object_id', 'target_id', 'type', 'template')))
+			->select($db->quoteName(array('id', 'actor_id', 'object_id', 'target_id', 'type', 'template')))
 			->from($db->quoteName('#__tj_activities'))
 			->where(
 					$db->quoteName('actor_id') . ' = ' . $db->quote($user->id)
@@ -160,7 +160,7 @@ class PlgPrivacyActivitystream extends PrivacyPlugin
 		// Delete Activity Stream user data :
 		$query = $db->getQuery(true)
 					->delete($db->quoteName('#__tj_activities'))
-					->where('actor_id = ' . $user->id);
+					->where($db->quoteName('actor_id = ' . $user->id));
 		$db->setQuery($query);
 		$db->execute();
 	}

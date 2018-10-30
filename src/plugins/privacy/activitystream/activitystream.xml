@@ -2,7 +2,7 @@
 <extension version="3.9" type="plugin" group="privacy" method="upgrade">
 	<name>plg_privacy_activitystream</name>
 	<version>__DEPLOY_VERSION__</version>
-	<creationDate>5th October 2018</creationDate>
+	<creationDate>__RELEASE_DATE__</creationDate>
 	<author>Techjoomla</author>
 	<authorEmail>extensions@techjoomla.com</authorEmail>
 	<authorUrl>https://techjoomla.com</authorUrl>
