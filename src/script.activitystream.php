@@ -17,6 +17,19 @@ defined('_JEXEC') or die('Restricted access');
  */
 class Com_ActivityStreamInstallerScript
 {
+	/** @var array The list of extra modules and plugins to install */
+	private $queue = array(
+		// Plugins => { (folder) => { (element) => (published) }* }*
+		'plugins' => array(
+			'privacy' => array(
+				'activitystream' => 1
+			),
+			'api' => array(
+				'tjactivity' =>0
+				)
+		),
+	);
+
 	/**
 	 * method to install the component
 	 *
@@ -33,10 +46,49 @@ class Com_ActivityStreamInstallerScript
 	 *
 	 * @param   STRING  $parent  parent
 	 *
-	 * @return void
+	 * @return object
 	 */
 	public function uninstall($parent)
 	{
+		jimport('joomla.installer.installer');
+		$db              = JFactory::getDbo();
+		$status          = new JObject;
+		$status->plugins = array();
+
+		// Plugins uninstallation
+		if (count($this->queue['plugins']))
+		{
+			foreach ($this->queue['plugins'] as $folder => $plugins)
+			{
+				if (count($plugins))
+				{
+					foreach ($plugins as $plugin => $published)
+					{
+						$sql = $db->getQuery(true)->select($db->qn('extension_id'))
+						->from($db->qn('#__extensions'))
+						->where($db->qn('type') . ' = ' . $db->q('plugin'))
+						->where($db->qn('element') . ' = ' . $db->q($plugin))
+						->where($db->qn('folder') . ' = ' . $db->q($folder));
+						$db->setQuery($sql);
+
+						$id = $db->loadResult();
+
+						if ($id)
+						{
+							$installer         = new JInstaller;
+							$result            = $installer->uninstall('plugin', $id);
+							$status->plugins[] = array(
+								'name' => 'plg_' . $plugin,
+								'group' => $folder,
+								'result' => $result
+							);
+						}
+					}
+				}
+			}
+		}
+
+		return $status;
 	}
 
 	/**
@@ -73,6 +125,75 @@ class Com_ActivityStreamInstallerScript
 	 */
 	public function postflight($type, $parent)
 	{
+		$src = $parent->getParent()->getPath('source');
+ 		$db = JFactory::getDbo();
+ 		$status = new JObject;
+ 		$status->plugins = array();
+
+		// Plugins installation
+ 		if (count($this->queue['plugins']))
+ 		{
+			foreach ($this->queue['plugins'] as $folder => $plugins)
+			{
+				if (count($plugins))
+				{
+					foreach ($plugins as $plugin => $published)
+					{
+						$path = "$src/plugins/$folder/$plugin";
+
+ 						if (!is_dir($path))
+ 						{
+ 							$path = "$src/plugins/$folder/plg_$plugin";
+ 						}
+
+ 						if (!is_dir($path))
+ 						{
+ 							$path = "$src/plugins/$plugin";
+ 						}
+
+ 						if (!is_dir($path))
+ 						{
+ 							$path = "$src/plugins/plg_$plugin";
+ 						}
+
+ 						if (!is_dir($path))
+ 						{
+ 							continue;
+ 						}
+
+ 						// Was the plugin already installed?
+ 						$query = $db->getQuery(true)
+ 							->select('COUNT(*)')
+ 							->from($db->qn('#__extensions'))
+ 							->where($db->qn('element') . ' = ' . $db->q($plugin))
+ 							->where($db->qn('folder') . ' = ' . $db->q($folder));
+ 						$db->setQuery($query);
+ 						$count = $db->loadResult();
+
+ 						$installer = new JInstaller;
+ 						$result = $installer->install($path);
+
+						$status->plugins[] = array('name' => 'plg_' . $plugin, 'group' => $folder, 'result' => $result);
+
+ 						if ($published && !$count)
+ 						{
+ 							$query = $db->getQuery(true)
+ 								->update($db->qn('#__extensions'))
+ 								->set($db->qn('enabled') . ' = ' . $db->q('1'))
+ 								->where($db->qn('element') . ' = ' . $db->q($plugin))
+ 								->where($db->qn('folder') . ' = ' . $db->q($folder));
+ 							$db->setQuery($query);
+ 							$db->execute();
+ 						}
+
+					}
+				}
+			}
+
+		}
+
+		// Install SQL FIles
+		$this->installSqlFiles($parent);
 	}
 
 	/**
