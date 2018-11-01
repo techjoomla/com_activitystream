@@ -74,6 +74,10 @@ class ActivityStreamModelActivities extends JModelList
 			$this->setState('list.limit', $listlimit);
 		}
 
+		// Load filter published
+		$published = $this->getUserStateFromRequest($this->context . '.filter.published', 'filter_published', '');
+		$this->setState('filter.published', $published);
+
 		// Load the filter search
 		$search = $this->getUserStateFromRequest($this->context . 'filter.search', 'filter_search');
 		$this->setState('filter.search', $search);
@@ -115,11 +119,15 @@ class ActivityStreamModelActivities extends JModelList
 		}
 
 		// Filter by published state
-		$published = $this->getState('filter.state');
+		$published = $this->getState('filter.published');
 
 		if (is_numeric($published))
 		{
 			$query->where('state = ' . (int) $published);
+		}
+		elseif ($published === '')
+		{
+			$query->where('(state = 0 OR state = 1)');
 		}
 
 		$listlimit = $this->getState('list.limit');
