@@ -1,6 +1,5 @@
 <?php
 /**
- * @version    SVN: <svn_id>
  * @package    ActivityStream
  * @author     Techjoomla <extensions@techjoomla.com>
  * @copyright  Copyright (c) 2009-2017 TechJoomla. All rights reserved.
@@ -11,14 +10,14 @@
 defined('_JEXEC') or die;
 
 /**
- * HelloWorlds View
+ * ActivityStream View
  *
  * @since  0.0.1
  */
 class ActivityStreamViewActivities extends JViewLegacy
 {
 	/**
-	 * Display the Hello World view
+	 * Display the ActivityStream view
 	 *
 	 * @param   string  $tpl  The name of the template file to parse; automatically searches through the template paths.
 	 *
@@ -72,7 +71,7 @@ class ActivityStreamViewActivities extends JViewLegacy
 		$title        = JText::_('Activity Stream');
 		$input        = JFactory::getApplication()->input;
 		$languageFile = JFactory::getLanguage();
-		$extension    = JFactory::getApplication()->input->get('client', '', 'word');
+		$extension    = JFactory::getApplication()->input->get('client', '', 'STRING');
 		$base_dir     = JPATH_BASE;
 
 		// Load the language file
@@ -84,16 +83,11 @@ class ActivityStreamViewActivities extends JViewLegacy
 		}
 
 		JToolBarHelper::title($title, 'activity');
-		JToolBarHelper::deleteList('', 'activities.delete');
-		JToolBarHelper::editList('activity.edit');
 		JToolBarHelper::addNew('activity.add');
+		JToolBarHelper::editList('activity.edit');
 		JToolBarHelper::publish('activity.publish');
 		JToolBarHelper::unpublish('activity.publish');
-		JToolBarHelper::save2copy('activity.save2copy');
-
-		JHtmlSidebar::setAction('index.php?option=com_activitystream&view=activities');
-
-		$this->extra_sidebar = '';
+		JToolBarHelper::deleteList('', 'activities.delete');
 	}
 
 	/**
