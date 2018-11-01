@@ -114,21 +114,4 @@ class ActivityStreamModelActivity extends JModelAdmin
 			return false;
 		}
 	}
-
-	/**
-	 * Delete the activity
-	 *
-	 * @param   int  &$id  Item id
-	 *
-	 * @return  boolean
-	 *
-	 * @since   1.1.0
-	 */
-	public function delete(&$id)
-	{
-		foreach ($id as $data)
-		{
-			return parent::delete($id);
-		}
-	}
 }

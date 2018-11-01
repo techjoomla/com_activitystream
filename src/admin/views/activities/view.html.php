@@ -21,7 +21,7 @@ class ActivityStreamViewActivities extends JViewLegacy
 	 *
 	 * @param   string  $tpl  The name of the template file to parse; automatically searches through the template paths.
 	 *
-	 * @return  void
+	 * @return   mixed  A string if successful, otherwise an Error object.
 	 */
 
 	public function display($tpl = null)
@@ -35,7 +35,6 @@ class ActivityStreamViewActivities extends JViewLegacy
 		$this->state         = $this->get('State');
 		$this->filterForm    = $this->get('FilterForm');
 		$this->activeFilters = $this->get('ActiveFilters');
-		$this->client        = $this->input->get('client', '', 'STRING');
 
 		// Check for errors.
 		if (count($errors = $this->get('Errors')))
@@ -45,9 +44,7 @@ class ActivityStreamViewActivities extends JViewLegacy
 			return false;
 		}
 
-		ActivityStreamHelperActivities::addSubmenu('countries');
-
-				// Set the tool-bar and number of found items
+		// Set the tool-bar and number of found items
 		$this->addToolBar();
 
 		// Display the template
@@ -64,7 +61,6 @@ class ActivityStreamViewActivities extends JViewLegacy
 	protected function addToolBar()
 	{
 		$title        = JText::_('Activity Stream');
-		$input        = JFactory::getApplication()->input;
 		$languageFile = JFactory::getLanguage();
 		$extension    = JFactory::getApplication()->input->get('client', '', 'STRING');
 		$base_dir     = JPATH_BASE;

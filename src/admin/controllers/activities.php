@@ -135,7 +135,6 @@ class ActivityStreamControllerActivities extends JControllerAdmin
 			if ($model->delete($id))
 			{
 				$this->setMessage(JText::plural($this->text_prefix . '_N_ITEMS_DELETED', count($id)));
-				$ntext = $this->text_prefix . '_N_ITEMS_DELETED';
 
 				if (isset($client))
 				{
