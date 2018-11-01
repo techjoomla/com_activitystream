@@ -5,7 +5,7 @@
 			name="search"
 			type="text"
 			label="COM_ACTIVITYSTREAM_FILTER_SEARCH"
-			description="COM_CONTENT_FILTER_SEARCH_DESC"
+			description="COM_ACTIVITYSTREAM_FILTER_SEARCH_DESC"
 			hint="JSEARCH_FILTER"
 		/>
 		<field
@@ -54,8 +54,8 @@
 		<field
 			name="limit"
 			type="limitbox"
-			label="COM_CONTENT_LIST_LIMIT"
-			description="COM_CONTENT_LIST_LIMIT_DESC"
+			label="COM_ACTIVITYSTREAM_LIST_LIMIT"
+			description="COM_ACTIVITYSTREAM_LIST_LIMIT_DESC"
 			class="input-mini"
 			default="25"
 			onchange="this.form.submit();"
