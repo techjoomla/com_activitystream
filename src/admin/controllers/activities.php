@@ -7,6 +7,7 @@
  */
 // No direct access to this file
 defined('_JEXEC') or die;
+use Joomla\Utilities\ArrayHelper;
 
 /**
  * Activity Stream Controller
@@ -38,7 +39,7 @@ class ActivityStreamControllerActivities extends JControllerAdmin
 	 *
 	 * @return  object  activities
 	 *
-	 * @since   1.6
+	 * @since   1.0.2
 	 */
 	public function getActivities()
 	{
@@ -128,7 +129,7 @@ class ActivityStreamControllerActivities extends JControllerAdmin
 
 			// Make sure the item ids are integers
 			jimport('joomla.utilities.arrayhelper');
-			JArrayHelper::toInteger($id);
+			ArrayHelper::toInteger($id);
 
 			// Remove the activity.
 			if ($model->delete($id))

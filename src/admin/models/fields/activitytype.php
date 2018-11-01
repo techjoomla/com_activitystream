@@ -46,8 +46,7 @@ class JFormFieldActivityType extends JFormFieldList
 	{
 		$db     = JFactory::getDbo();
 		$input  = JFactory::getApplication()->input;
-		$client = JFactory::getApplication()->input->get('client', '', 'string');
-		$filter = JFilterInput::getInstance();
+		$client = JFactory::getApplication()->input->get('client', '', 'STRING');
 		$query  = $db->getQuery(true);
 
 		$query->select('distinct l.type')
