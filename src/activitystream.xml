@@ -44,6 +44,7 @@
 		<folder>controllers</folder>
 	</files>
 	<administration>
+		<menu link="option=com_activitystream" view="activities">com_activitystream</menu>
 		<languages folder="admin/language">
 			<language tag="en-GB">/en-GB/en-GB.com_activitystream.sys.ini</language>
 			<language tag="en-GB">/en-GB/en-GB.com_activitystream.ini</language>
