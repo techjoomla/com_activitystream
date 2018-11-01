@@ -16,7 +16,7 @@ $listDirn      = $this->escape($this->state->get('list.direction'));
 ?>
 <form action="index.php?option=com_activitystream&view=activities" method="post" id="adminForm" name="adminForm">
 	<div class="row-fluid">
-		<div class="span6">
+		<div class="span12">
 			<?php
 				echo JLayoutHelper::render(
 					'joomla.searchtools.default',
