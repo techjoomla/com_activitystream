@@ -45,7 +45,6 @@ class JFormFieldActivityType extends JFormFieldList
 	protected function getOptions()
 	{
 		$db     = JFactory::getDbo();
-		$input  = JFactory::getApplication()->input;
 		$client = JFactory::getApplication()->input->get('client', '', 'STRING');
 		$query  = $db->getQuery(true);
 
