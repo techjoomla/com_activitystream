@@ -55,9 +55,9 @@ class ActivityStreamModelActivities extends JModelList
 	 *
 	 * @return  void
 	 *
-	 * @since   1.0.2
+	 * @since   1.1.0
 	 */
-	protected function populateState($ordering = null, $direction = null)
+	protected function populateState($ordering = 'id', $direction = 'desc')
 	{
 		// Initialise variables.
 		$jinput = JFactory::getApplication()->input;
@@ -65,6 +65,21 @@ class ActivityStreamModelActivities extends JModelList
 		// Client filter
 		$extension = $jinput->get("client", '', 'STRING');
 		$this->setState('extension', $extension);
+
+		// Set activities limit
+		$listlimit = $jinput->input->get('limit', '', 'INT');
+
+		if ($listlimit != '' || $listlimit == '0')
+		{
+			$this->setState('list.limit', $listlimit);
+		}
+
+		// Load the filter search
+		$search = $this->getUserStateFromRequest($this->context . 'filter.search', 'filter_search');
+		$this->setState('filter.search', $search);
+
+		// List state information.
+		parent::populateState($ordering, $direction);
 	}
 
 	/**
@@ -107,9 +122,19 @@ class ActivityStreamModelActivities extends JModelList
 			$query->where('state = ' . (int) $published);
 		}
 
-		$type       = $this->getState('filter.activitytype');
-		$from_date  = $this->getState('from_date');
-		$limit      = $this->getState('limit');
+		$listlimit = $this->getState('list.limit');
+
+		// Default pagination for first page load
+		if ($listlimit == '' && $listlimit != '0')
+		{
+			$listlimit = 20;
+		}
+
+		$this->setState('list.limit', $listlimit);
+
+		$type      = $this->getState('filter.activitytype');
+		$from_date = $this->getState('from_date');
+		$limit     = $this->getState('limit');
 
 		$result_arr = array();
 

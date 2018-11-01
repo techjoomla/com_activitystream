@@ -1,6 +1,5 @@
 <?php
 /**
- * @version    SVN: <svn_id>
  * @package    ActivityStream
  * @author     Techjoomla <extensions@techjoomla.com>
  * @copyright  Copyright (c) 2009-2017 TechJoomla. All rights reserved.
@@ -15,7 +14,7 @@ $sortFields = $this->getSortFields();
 $listOrder     = $this->escape($this->state->get('list.ordering'));
 $listDirn      = $this->escape($this->state->get('list.direction'));
 ?>
-<form action="<?php echo JRoute::_('index.php?option=com_activitystream&view=activities&client=' . $this->client); ?>"  method="post" id="adminForm" name="adminForm">
+<form action="index.php?option=com_activitystream&view=activities" method="post" id="adminForm" name="adminForm">
 	<div class="row-fluid">
 		<div class="span6">
 			<?php
@@ -24,33 +23,6 @@ $listDirn      = $this->escape($this->state->get('list.direction'));
 					array('view' => $this)
 				);
 			?>
-		</div>
-	</div>
-	<div id="filter-bar" class="btn-toolbar">
-		<div class="btn-group pull-right hidden-phone">
-			<label for="limit" class="element-invisible"><?php echo JText::_('JFIELD_PLG_SEARCH_SEARCHLIMIT_DESC'); ?></label>
-			<?php echo $this->pagination->getLimitBox(); ?>
-		</div>
-		<div class="btn-group pull-right hidden-phone">
-			<label for="directionTable" class="element-invisible"><?php echo JText::_('JFIELD_ORDERING_DESC'); ?></label>
-			<select name="directionTable" id="directionTable" class="input-medium" onchange="Joomla.orderTable()">
-				<option value=""><?php echo JText::_('JFIELD_ORDERING_DESC'); ?></option>
-				<option value="asc" <?php if ($listDirn == 'asc')
-				{
-					echo 'selected="selected"';
-				} ?>><?php echo JText::_('JGLOBAL_ORDER_ASCENDING'); ?></option>
-				<option value="desc" <?php if ($listDirn == 'desc')
-				{
-					echo 'selected="selected"';
-				} ?>><?php echo JText::_('JGLOBAL_ORDER_DESCENDING'); ?></option>
-			</select>
-		</div>
-		<div class="btn-group pull-right">
-			<label for="sortTable" class="element-invisible"><?php echo JText::_('JGLOBAL_SORT_BY'); ?></label>
-			<select name="sortTable" id="sortTable" class="input-medium" onchange="Joomla.orderTable()">
-				<option value=""><?php echo JText::_('JGLOBAL_SORT_BY'); ?></option>
-				<?php echo JHtml::_('select.options', $sortFields, 'value', 'text', $listOrder); ?>
-			</select>
 		</div>
 	</div>
 	<table class="table table-striped table-hover">
@@ -132,8 +104,6 @@ $listDirn      = $this->escape($this->state->get('list.direction'));
 	</table>
 	<input type="hidden" name="task" value=""/>
 	<input type="hidden" name="boxchecked" value="0"/>
-	<input type="hidden" name="filter_order" value="<?php echo $listOrder; ?>"/>
-	<input type="hidden" name="filter_order_Dir" value="<?php echo $listDirn; ?>"/>
 	<?php echo JHtml::_('form.token'); ?>
 </form>
 
