@@ -11,8 +11,8 @@ defined('_JEXEC') or die;
 
 JHtml::_('formbehavior.chosen', 'select');
 $sortFields = $this->getSortFields();
-$listOrder     = $this->escape($this->state->get('list.ordering'));
-$listDirn      = $this->escape($this->state->get('list.direction'));
+$listOrder  = $this->escape($this->state->get('list.ordering'));
+$listDirn   = $this->escape($this->state->get('list.direction'));
 ?>
 <form action="<?php echo JRoute::_('index.php?option=com_activitystream&view=activities&client=' . $this->input->get('client', '', 'STRING')); ?>" method="post" id="adminForm" name="adminForm">
 	<div class="row-fluid">
@@ -31,19 +31,19 @@ $listDirn      = $this->escape($this->state->get('list.direction'));
 					title="<?php echo JText::_('JGLOBAL_CHECK_ALL'); ?>" onclick="Joomla.checkAll(this)"/>
 				</th>
 				<th width="5%">
-					<?php echo JHtml::_('grid.sort', JText::_('COM_ACTIVITYSTREAM_ACTIVITY_STATE'), 'state', $listDirn, $listOrder); ?>
+					<?php echo JHtml::_('searchtools.sort', JText::_('COM_ACTIVITYSTREAM_ACTIVITY_STATE'), 'state', $listDirn, $listOrder); ?>
 				</th>
 				<th width="5%">
-					<?php echo JHtml::_('grid.sort', JText::_('COM_ACTIVITYSTREAM_ACTIVITY_TYPE'), 'type', $listDirn, $listOrder);?>
+					<?php echo JHtml::_('searchtools.sort', JText::_('COM_ACTIVITYSTREAM_ACTIVITY_TYPE'), 'type', $listDirn, $listOrder);?>
 				</th>
 				<th width="5%">
-					<?php echo JHtml::_('grid.sort', JText::_('COM_ACTIVITYSTREAM_ACTIVITY_CREATED_DATE'), 'created_date', $listDirn, $listOrder);?>
+					<?php echo JHtml::_('searchtools.sort', JText::_('COM_ACTIVITYSTREAM_ACTIVITY_CREATED_DATE'), 'created_date', $listDirn, $listOrder);?>
 				</th>
 				<th width="5%">
-					<?php echo JHtml::_('grid.sort', JText::_('COM_ACTIVITYSTREAM_ACTIVITY_UPDATED_DATE'), 'updated_date', $listDirn, $listOrder);?>
+					<?php echo JHtml::_('searchtools.sort', JText::_('COM_ACTIVITYSTREAM_ACTIVITY_UPDATED_DATE'), 'updated_date', $listDirn, $listOrder);?>
 				</th>
 				<th width="2%">
-					<?php echo JHtml::_('grid.sort', JText::_('COM_ACTIVITYSTREAM_ACTIVITY_ID'), 'id', $listDirn, $listOrder); ?>
+					<?php echo JHtml::_('searchtools.sort', JText::_('COM_ACTIVITYSTREAM_ACTIVITY_ID'), 'id', $listDirn, $listOrder); ?>
 				</th>
 			</tr>
 		<?php endif;?>

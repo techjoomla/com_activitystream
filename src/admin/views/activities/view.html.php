@@ -27,15 +27,15 @@ class ActivityStreamViewActivities extends JViewLegacy
 	public function display($tpl = null)
 	{
 		// To show all types of activity in list view
-		$activitiesModel = $this->getModel();
+		$activitiesModel     = $this->getModel();
 		$activitiesModel->setState("type", 'all');
-		$this->input = JFactory::getApplication()->input;
-		$this->items = $this->get('Items');
-		$this->pagination	= $this->get('Pagination');
-		$this->state		= $this->get('State');
+		$this->input         = JFactory::getApplication()->input;
+		$this->items         = $this->get('Items');
+		$this->pagination    = $this->get('Pagination');
+		$this->state         = $this->get('State');
 		$this->filterForm    = $this->get('FilterForm');
 		$this->activeFilters = $this->get('ActiveFilters');
-		$this->client = $this->input->get('client', '', 'STRING');
+		$this->client        = $this->input->get('client', '', 'STRING');
 
 		// Check for errors.
 		if (count($errors = $this->get('Errors')))
@@ -49,11 +49,6 @@ class ActivityStreamViewActivities extends JViewLegacy
 
 				// Set the tool-bar and number of found items
 		$this->addToolBar();
-
-		if (!empty($client))
-		{
-			$this->sidebar = JHtmlSidebar::render();
-		}
 
 		// Display the template
 		parent::display($tpl);
@@ -98,9 +93,9 @@ class ActivityStreamViewActivities extends JViewLegacy
 	protected function getSortFields()
 	{
 		return array(
-			'id' => JText::_('COM_ACTIVITYSTREAM_ACTIVITY_ID'),
-			'state' => JText::_('COM_ACTIVITYSTREAM_ACTIVITY_STATE'),
-			'type' => JText::_('COM_ACTIVITYSTREAM_ACTIVITY_TYPE'),
+			'id'           => JText::_('COM_ACTIVITYSTREAM_ACTIVITY_ID'),
+			'state'        => JText::_('COM_ACTIVITYSTREAM_ACTIVITY_STATE'),
+			'type'         => JText::_('COM_ACTIVITYSTREAM_ACTIVITY_TYPE'),
 			'created_date' => JText::_('COM_ACTIVITYSTREAM_ACTIVITY_CREATED_DATE'),
 			'updated_date' => JText::_('COM_ACTIVITYSTREAM_ACTIVITY_UPDATED_DATE')
 		);

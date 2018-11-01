@@ -122,7 +122,7 @@ class ActivityStreamModelActivity extends JModelAdmin
 	 *
 	 * @return  boolean
 	 *
-	 * @since   1.0.2
+	 * @since   1.1.0
 	 */
 	public function delete(&$id)
 	{
