@@ -7,6 +7,7 @@ CREATE TABLE IF NOT EXISTS `#__tj_activities` (
 	`target` text(900),
 	`target_id` text(900),
 	`type` text(900),
+	`client` varchar(20),
 	`template` text(900),
 	`formatted_text` text(900),
 	`access` tinyint(2) DEFAULT 1,
