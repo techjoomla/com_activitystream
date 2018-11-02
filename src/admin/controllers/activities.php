@@ -109,7 +109,7 @@ class ActivityStreamControllerActivities extends JControllerAdmin
 	 *
 	 * @return  void
 	 *
-	 * @since 1.1.0
+	 * @since  __DEPLOY_VERSION__
 	 */
 
 	public function delete()
