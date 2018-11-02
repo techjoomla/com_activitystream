@@ -18,16 +18,6 @@ JLoader::register('ActivitystreamController', JPATH_COMPONENT . '/controller.php
 $lang = JFactory::getLanguage();
 $lang->load('com_activitystream', JPATH_SITE);
 
-$path = JPATH_SITE . '/components/com_activitystream/helper.php';
-
-if (!class_exists('ComActivityStreamHelper'))
-{
-	JLoader::register('ComActivityStreamHelper', $path);
-	JLoader::load('ComActivityStreamHelper');
-}
-
-$ComActivityStreamHelper = new ComActivityStreamHelper;
-
 // Execute the task.
 $controller = JControllerLegacy::getInstance('Activitystream');
 $controller->execute(JFactory::getApplication()->input->get('task'));
