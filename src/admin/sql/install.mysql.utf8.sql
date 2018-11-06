@@ -9,6 +9,7 @@ CREATE TABLE IF NOT EXISTS `#__tj_activities` (
 	`type` text(900),
 	`client` varchar(20),
 	`template` text(900),
+	`default_theme` varchar(20),
 	`formatted_text` text(900),
 	`access` tinyint(2) DEFAULT 1,
 	`state` tinyint(2) DEFAULT 1,
