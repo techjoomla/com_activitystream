@@ -125,10 +125,6 @@ class ActivityStreamModelActivities extends JModelList
 		{
 			$query->where('state = ' . (int) $published);
 		}
-		elseif ($published === '')
-		{
-			$query->where('(state = 0 OR state = 1)');
-		}
 
 		$listlimit = $this->getState('list.limit');
 
@@ -141,15 +137,11 @@ class ActivityStreamModelActivities extends JModelList
 		$this->setState('list.limit', $listlimit);
 
 		$type      = $this->getState('filter.activitytype');
-		$from_date = $this->getState('from_date');
-		$limit     = $this->getState('limit');
-
-		$result_arr = array();
 
 		// Return result related to specified activity type
 		if (!empty($type) && $type != 'all')
 		{
-			$query->where($db->quoteName('type') . ' IN (' . $type . ')');
+			$query->where($db->quoteName('type') . ' = ' . $db->quote($type));
 		}
 
 		// Get all filters
@@ -161,17 +153,6 @@ class ActivityStreamModelActivities extends JModelList
 			{
 				$query->where($db->quoteName($filter) . ' IN (' . $this->getState($filter) . ')');
 			}
-		}
-
-		// Return results from specified date
-		if (!empty($from_date))
-		{
-			$query->where($db->quoteName('created_date') . ' >= ' . $from_date);
-		}
-
-		if ($limit != 0)
-		{
-			$query->setLimit($limit);
 		}
 
 		// Add the list ordering clause.

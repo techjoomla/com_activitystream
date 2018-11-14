@@ -12,7 +12,7 @@ use Joomla\Utilities\ArrayHelper;
 /**
  * Activity Stream Controller
  *
- * @since  1.0.2
+ * @since  0.0.1
  */
 class ActivityStreamControllerActivities extends JControllerAdmin
 {
@@ -135,28 +135,19 @@ class ActivityStreamControllerActivities extends JControllerAdmin
 			if ($model->delete($id))
 			{
 				$this->setMessage(JText::plural($this->text_prefix . '_N_ITEMS_DELETED', count($id)));
-
-				if (isset($client))
-				{
-					$this->setRedirect(JRoute::_('index.php?option=com_activitystream&view=activities&client=' . $client, false));
-				}
-				else
-				{
-					$this->setRedirect(JRoute::_('index.php?option=com_activitystream&view=activities', false));
-				}
 			}
 			else
 			{
 				$this->setMessage($model->getError());
+			}
 
-				if (isset($client))
-				{
-					$this->setRedirect(JRoute::_('index.php?option=com_activitystream&view=activities&client=' . $client, false));
-				}
-				else
-				{
-					$this->setRedirect(JRoute::_('index.php?option=com_activitystream&view=activities', false));
-				}
+			if (isset($client))
+			{
+				$this->setRedirect(JRoute::_('index.php?option=com_activitystream&view=activities&client=' . $client, false));
+			}
+			else
+			{
+				$this->setRedirect(JRoute::_('index.php?option=com_activitystream&view=activities', false));
 			}
 		}
 	}

@@ -65,13 +65,17 @@ class ActivityStreamViewActivities extends JViewLegacy
 		$extension    = JFactory::getApplication()->input->get('client', '', 'STRING');
 		$base_dir     = JPATH_BASE;
 
-		// Load the language file
-		$languageFile->load($extension, $base_dir);
+		// Load the language file for particular extension
 
-		if ($this->pagination->total)
+		if ($extension)
 		{
-			$title .= "<span style='font-size: 0.5em; vertical-align: middle;'>(" . $this->pagination->total . ")</span>";
+			$languageFile->load($extension, $base_dir);
 		}
+
+		//~ if ($this->pagination->total)
+		//~ {
+			//~ $title .= "<span style='font-size: 0.5em; vertical-align: middle;'>(" . $this->pagination->total . ")</span>";
+		//~ }
 
 		JToolBarHelper::title($title, 'activity');
 		JToolBarHelper::addNew('activity.add');

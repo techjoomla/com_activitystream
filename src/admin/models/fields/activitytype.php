@@ -15,7 +15,7 @@ JFormHelper::loadFieldClass('list');
 /**
  * Supports an HTML select list of courses
  *
- * @since  1.1.0
+ * @since  __DEPLOY_VERSION__
  */
 class JFormFieldActivityType extends JFormFieldList
 {
