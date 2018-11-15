@@ -160,7 +160,7 @@ class PlgPrivacyActivitystream extends PrivacyPlugin
 		// Delete Activity Stream user data :
 		$query = $db->getQuery(true)
 					->delete($db->quoteName('#__tj_activities'))
-					->where($db->quoteName('actor_id = ' . $user->id));
+					->where($db->quoteName('actor_id') . ' = ' . $db->quote($user->id));
 		$db->setQuery($query);
 		$db->execute();
 	}
