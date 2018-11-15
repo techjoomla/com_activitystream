@@ -15,7 +15,7 @@ JFormHelper::loadFieldClass('list');
 /**
  * Supports an HTML select list of courses
  *
- * @since  __DEPLOY_VERSION__
+ * @since  1.0.1
  */
 class JFormFieldActivityType extends JFormFieldList
 {
@@ -23,7 +23,7 @@ class JFormFieldActivityType extends JFormFieldList
 	 * The form field type.
 	 *
 	 * @var		string
-	 * @since	1.1.0
+	 * @since	1.0.1
 	 */
 	protected $type = 'activitytype';
 
@@ -31,7 +31,7 @@ class JFormFieldActivityType extends JFormFieldList
 	 * Fiedd to decide if options are being loaded externally and from xml
 	 *
 	 * @var		integer
-	 * @since	1.1.0
+	 * @since	1.0.1
 	 */
 	protected $loadExternally = 0;
 
@@ -40,7 +40,7 @@ class JFormFieldActivityType extends JFormFieldList
 	 *
 	 * @return	array		An array of JHtml options.
 	 *
-	 * @since   1.1.0
+	 * @since   1.0.1
 	 */
 	protected function getOptions()
 	{

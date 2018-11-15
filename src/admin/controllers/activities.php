@@ -25,7 +25,7 @@ class ActivityStreamControllerActivities extends JControllerAdmin
 	 *
 	 * @return  object  The model.
 	 *
-	 * @since   1.0.2
+	 * @since   0.0.1
 	 */
 	public function getModel($name = 'Activity', $prefix = 'ActivityStreamModel', $config = array('ignore_request' => true))
 	{
@@ -39,7 +39,7 @@ class ActivityStreamControllerActivities extends JControllerAdmin
 	 *
 	 * @return  object  activities
 	 *
-	 * @since   1.0.2
+	 * @since   0.0.1
 	 */
 	public function getActivities()
 	{
@@ -109,9 +109,8 @@ class ActivityStreamControllerActivities extends JControllerAdmin
 	 *
 	 * @return  void
 	 *
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.0.1
 	 */
-
 	public function delete()
 	{
 		$input  = JFactory::getApplication()->input;

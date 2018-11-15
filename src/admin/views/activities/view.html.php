@@ -16,6 +16,8 @@ defined('_JEXEC') or die;
  */
 class ActivityStreamViewActivities extends JViewLegacy
 {
+	protected $input;
+
 	/**
 	 * Display the ActivityStream view
 	 *
@@ -72,12 +74,12 @@ class ActivityStreamViewActivities extends JViewLegacy
 			$languageFile->load($extension, $base_dir);
 		}
 
-		//~ if ($this->pagination->total)
-		//~ {
-			//~ $title .= "<span style='font-size: 0.5em; vertical-align: middle;'>(" . $this->pagination->total . ")</span>";
-		//~ }
+		/*if ($this->pagination->total)
+		{
+			$title .= "<span style='font-size: 0.5em; vertical-align: middle;'>(" . $this->pagination->total . ")</span>";
+		}*/
 
-		JToolBarHelper::title($title, 'activity');
+		JToolBarHelper::title($title, 'list');
 		JToolBarHelper::addNew('activity.add');
 		JToolBarHelper::editList('activity.edit');
 		JToolBarHelper::publish('activity.publish');

@@ -55,7 +55,7 @@ class ActivityStreamModelActivities extends JModelList
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.0.1
 	 */
 	protected function populateState($ordering = 'id', $direction = 'desc')
 	{
