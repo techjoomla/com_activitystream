@@ -19,7 +19,7 @@
  * @package    Techjoomla.Build
  *
  * @author     Techjoomla <extensions@techjoomla.com>
- * @copyright  Copyright (C) 2015 - 2018 Techjoomla. All rights reserved.
+ * @copyright  Copyright (C) 2016 - 2018 Techjoomla. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -225,7 +225,7 @@ $author      = 'Techjoomla';
 $authorEmail = 'extensions@techjoomla.com';
 $authorUrl   = 'https://techjoomla.com';
 $license     = 'http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL';
-$copyright   = 'Copyright (C) 2014 - 2018 Techjoomla. All rights reserved.';
+$copyright   = 'Copyright (C) 2016 - 2018 Techjoomla. All rights reserved.';
 
 echo PHP_EOL;
 
@@ -353,11 +353,11 @@ foreach ($iterator as $file)
 			$fileContents = file_get_contents($filePath);
 
 			// Check if need to change the copyright date.
-			if (preg_match('#2015\s+-\s+[0-9]{4}\s+Techjoomla.\s+All\s+rights#', $fileContents)
-				&& !preg_match('#2015\s+-\s+' . $year . '\s+Techjoomla.\s+All\s+rights#', $fileContents))
+			if (preg_match('#2016\s+-\s+[0-9]{4}\s+Techjoomla.\s+All\s+rights#', $fileContents)
+				&& !preg_match('#2016\s+-\s+' . $year . '\s+Techjoomla.\s+All\s+rights#', $fileContents))
 			{
 				$changeCopyrightDate = true;
-				$fileContents = preg_replace('#2015\s+-\s+[0-9]{4}\s+Techjoomla.\s+All\s+rights#', '2015 - ' .
+				$fileContents = preg_replace('#2016\s+-\s+[0-9]{4}\s+Techjoomla.\s+All\s+rights#', '2016 - ' .
 				$year . ' Techjoomla. All rights', $fileContents
 				);
 				$changedFilesCopyrightDate++;
