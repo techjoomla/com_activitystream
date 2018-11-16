@@ -19,7 +19,7 @@ JLoader::register('PrivacyRemovalStatus', JPATH_ADMINISTRATOR . '/components/com
 /**
  * Privacy plugin managing ActivityStream user data
  *
- * @since  __DEPLOY_VERSION__
+ * @since  1.0.0
  */
 class PlgPrivacyActivitystream extends PrivacyPlugin
 {
@@ -28,7 +28,7 @@ class PlgPrivacyActivitystream extends PrivacyPlugin
 	 *
 	 * @var    boolean
 	 *
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.0.0
 	 */
 	protected $autoloadLanguage = true;
 
@@ -36,7 +36,7 @@ class PlgPrivacyActivitystream extends PrivacyPlugin
 	 * Database object
 	 *
 	 * @var    JDatabaseDriver
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.0.0
 	 */
 	protected $db;
 
@@ -52,7 +52,7 @@ class PlgPrivacyActivitystream extends PrivacyPlugin
 	 *
 	 * @return  PrivacyExportDomain[]
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.0.0
 	 */
 	public function onPrivacyExportRequest(PrivacyTableRequest $request, JUser $user = null)
 	{
@@ -80,7 +80,7 @@ class PlgPrivacyActivitystream extends PrivacyPlugin
 	 *
 	 * @return  PrivacyExportDomain
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.0.0
 	 */
 	private function createActivityStreamDomain(JTableUser $user)
 	{
@@ -115,7 +115,7 @@ class PlgPrivacyActivitystream extends PrivacyPlugin
 	 *
 	 * @return  PrivacyRemovalStatus
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.0.0
 	 */
 	public function onPrivacyCanRemoveData(PrivacyTableRequest $request, JUser $user = null)
 	{
@@ -139,7 +139,7 @@ class PlgPrivacyActivitystream extends PrivacyPlugin
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.0.0
 	 */
 	public function onPrivacyRemoveData(PrivacyTableRequest $request, JUser $user = null)
 	{
