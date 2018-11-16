@@ -1,6 +1,5 @@
 <?php
 /**
- * @version    SVN: <svn_id>
  * @package    ActivityStream
  * @author     Techjoomla <extensions@techjoomla.com>
  * @copyright  Copyright (c) 2009-2017 TechJoomla. All rights reserved.
@@ -11,28 +10,31 @@
 defined('_JEXEC') or die;
 
 /**
- * HelloWorlds View
+ * ActivityStream View
  *
  * @since  0.0.1
  */
 class ActivityStreamViewActivities extends JViewLegacy
 {
+	protected $input;
+
 	/**
-	 * Display the Hello World view
+	 * Display the ActivityStream view
 	 *
 	 * @param   string  $tpl  The name of the template file to parse; automatically searches through the template paths.
 	 *
-	 * @return  void
+	 * @return   mixed  A string if successful, otherwise an Error object.
 	 */
+
 	public function display($tpl = null)
 	{
 		// To show all types of activity in list view
-		$activitiesModel = $this->getModel();
+		$activitiesModel     = $this->getModel();
 		$activitiesModel->setState("type", 'all');
-
-		$this->items = $this->get('Items');
-		$this->pagination	= $this->get('Pagination');
-		$this->state		= $this->get('State');
+		$this->input         = JFactory::getApplication()->input;
+		$this->items         = $this->get('Items');
+		$this->pagination    = $this->get('Pagination');
+		$this->state         = $this->get('State');
 		$this->filterForm    = $this->get('FilterForm');
 		$this->activeFilters = $this->get('ActiveFilters');
 
@@ -60,20 +62,29 @@ class ActivityStreamViewActivities extends JViewLegacy
 	 */
 	protected function addToolBar()
 	{
-		$title = JText::_('Activity Stream');
+		$title        = JText::_('Activity Stream');
+		$languageFile = JFactory::getLanguage();
+		$extension    = JFactory::getApplication()->input->get('client', '', 'STRING');
+		$base_dir     = JPATH_BASE;
 
-		if ($this->pagination->total)
+		// Load the language file for particular extension
+
+		if ($extension)
 		{
-			$title .= "<span style='font-size: 0.5em; vertical-align: middle;'>(" . $this->pagination->total . ")</span>";
+			$languageFile->load($extension, $base_dir);
 		}
 
-		JToolBarHelper::title($title, 'activity');
-		JToolBarHelper::deleteList('', 'activities.delete');
-		JToolBarHelper::editList('activity.edit');
+		/*if ($this->pagination->total)
+		{
+			$title .= "<span style='font-size: 0.5em; vertical-align: middle;'>(" . $this->pagination->total . ")</span>";
+		}*/
+
+		JToolBarHelper::title($title, 'list');
 		JToolBarHelper::addNew('activity.add');
+		JToolBarHelper::editList('activity.edit');
 		JToolBarHelper::publish('activity.publish');
 		JToolBarHelper::unpublish('activity.publish');
-		JToolBarHelper::save2copy('activity.save2copy');
+		JToolBarHelper::deleteList('', 'activities.delete');
 	}
 
 	/**
@@ -84,9 +95,9 @@ class ActivityStreamViewActivities extends JViewLegacy
 	protected function getSortFields()
 	{
 		return array(
-			'id' => JText::_('COM_ACTIVITYSTREAM_ACTIVITY_ID'),
-			'state' => JText::_('COM_ACTIVITYSTREAM_ACTIVITY_STATE'),
-			'type' => JText::_('COM_ACTIVITYSTREAM_ACTIVITY_TYPE'),
+			'id'           => JText::_('COM_ACTIVITYSTREAM_ACTIVITY_ID'),
+			'state'        => JText::_('COM_ACTIVITYSTREAM_ACTIVITY_STATE'),
+			'type'         => JText::_('COM_ACTIVITYSTREAM_ACTIVITY_TYPE'),
 			'created_date' => JText::_('COM_ACTIVITYSTREAM_ACTIVITY_CREATED_DATE'),
 			'updated_date' => JText::_('COM_ACTIVITYSTREAM_ACTIVITY_UPDATED_DATE')
 		);
