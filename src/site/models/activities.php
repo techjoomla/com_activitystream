@@ -100,6 +100,7 @@ class ActivityStreamModelActivities extends JModelList
 		// Get all filters
 		$filters = $this->get('filter_fields');
 
+		// Default filter condition AND support
 		if ($filter_condition != 'any')
 		{
 			foreach ($filters as $filter)
@@ -115,6 +116,7 @@ class ActivityStreamModelActivities extends JModelList
 		}
 		else
 		{
+			// Filter condition OR support
 			$count = 1;
 			$subQuery = $db->getQuery(true);
 
@@ -132,6 +134,7 @@ class ActivityStreamModelActivities extends JModelList
 					}
 					else
 					{
+						// OR support for - Actor id, Object id, Target id
 						if ($count == 1)
 						{
 							$subQuery .= "(" . $db->quoteName($filter) . " IN (" . $filterValue . ")";
