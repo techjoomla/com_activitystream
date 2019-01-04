@@ -128,7 +128,7 @@ class ActivityStreamModelActivities extends JModelList
 				{
 					$filterValue = $this->activityStreamActivitiesHelper->buildActivityFilterQuery($filterValue);
 
-					if ($filter != 'target_id' && $filter != 'object_id' && $filter != 'actor_id')
+					if (!in_array($filter, ['target_id', 'object_id', 'actor_id']))
 					{
 						$query->where($db->quoteName($filter) . ' IN (' . $filterValue . ')');
 					}
