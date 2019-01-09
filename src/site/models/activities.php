@@ -117,8 +117,7 @@ class ActivityStreamModelActivities extends JModelList
 		else
 		{
 			// Filter condition OR support
-			$count = 1;
-			$subQuery = $db->getQuery(true);
+			$whereClause = array();
 
 			foreach ($filters as $filter)
 			{
@@ -127,29 +126,25 @@ class ActivityStreamModelActivities extends JModelList
 				if (!empty($filterValue) && $filter != 'type')
 				{
 					$filterValue = $this->activityStreamActivitiesHelper->buildActivityFilterQuery($filterValue);
+					$conditionFilters = array('target_id', 'object_id', 'actor_id');
 
-					if (!in_array($filter, ['target_id', 'object_id', 'actor_id']))
+					if (!in_array($filter, $conditionFilters))
 					{
 						$query->where($db->quoteName($filter) . ' IN (' . $filterValue . ')');
 					}
 					else
 					{
-						// OR support for - Actor id, Object id, Target id
-						if ($count == 1)
-						{
-							$subQuery .= "(" . $db->quoteName($filter) . " IN (" . $filterValue . ")";
-							$count++;
-						}
-						else
-						{
-							$subQuery .= " OR " . $db->quoteName($filter) . " IN (" . $filterValue . ")";
-						}
+						$whereClause[] = $db->quoteName($filter) . " IN (" . $filterValue . ")";
 					}
 				}
 			}
 
-			$subQuery .= ")";
-			$query->where($subQuery);
+			if (!empty($whereClause))
+			{
+				$whereClause = '(' . implode(' OR ', $whereClause) . ')';
+			}
+
+			$query->where($whereClause);
 		}
 
 		// Return results from specified date
