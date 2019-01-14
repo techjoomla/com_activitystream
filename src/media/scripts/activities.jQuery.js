@@ -33,6 +33,7 @@
 		let object_id = techjoomla.jQuery(ele).attr("tj-activitystream-object-id");
 		let target_id = techjoomla.jQuery(ele).attr("tj-activitystream-target-id");
 		let from_date = techjoomla.jQuery(ele).attr("tj-activitystream-from-date");
+		let filter_condition = techjoomla.jQuery(ele).attr("tj-activitystream-filter-condition");		
 		let limit = techjoomla.jQuery(ele).attr("tj-activitystream-limit");
 		let start = techjoomla.jQuery(ele).attr("start");
 		let url = root_url+"index.php?option=com_activitystream&task=activities.getActivities";
@@ -60,6 +61,10 @@
 		if (typeof limit != 'undefined')
 		{
 			url += "&limit="+limit;
+		}
+		if (typeof filter_condition != 'undefined')
+		{
+			url += "&filter_condition="+filter_condition;
 		}
 
 		techjoomla.jQuery.ajax({

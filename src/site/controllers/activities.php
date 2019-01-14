@@ -74,6 +74,7 @@ class ActivityStreamControllerActivities extends JControllerAdmin
 		$from_date = $jinput->get('from_date', '');
 		$start = $jinput->get('start', '0');
 		$limit = $jinput->get('limit');
+		$filter_condition = $jinput->get('filter_condition', '', 'STRING');
 
 		// Set model state
 		$ActivityStreamModelActivities->setState("type", $type);
@@ -85,6 +86,7 @@ class ActivityStreamControllerActivities extends JControllerAdmin
 		$ActivityStreamModelActivities->setState("access", "1");
 		$ActivityStreamModelActivities->setState("state", '1');
 		$ActivityStreamModelActivities->setState("list.start", $start);
+		$ActivityStreamModelActivities->setState("filter_condition", $filter_condition);
 
 		$result['results'] = $ActivityStreamModelActivities->getItems();
 
