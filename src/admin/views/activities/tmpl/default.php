@@ -33,16 +33,16 @@ $listDirn   = $this->escape($this->state->get('list.direction'));
 				<th width="5%">
 					<?php echo JHtml::_('searchtools.sort', JText::_('COM_ACTIVITYSTREAM_ACTIVITY_STATE'), 'state', $listDirn, $listOrder); ?>
 				</th>
-				<th width="5%">
+				<th width="20%">
 					<?php echo JHtml::_('searchtools.sort', JText::_('COM_ACTIVITYSTREAM_ACTIVITY_TYPE'), 'type', $listDirn, $listOrder);?>
 				</th>
-				<th width="5%">
+				<th width="15%">
 					<?php echo JHtml::_('searchtools.sort', JText::_('COM_ACTIVITYSTREAM_ACTIVITY_CREATED_DATE'), 'created_date', $listDirn, $listOrder);?>
 				</th>
-				<th width="5%">
+				<th width="15%">
 					<?php echo JHtml::_('searchtools.sort', JText::_('COM_ACTIVITYSTREAM_ACTIVITY_UPDATED_DATE'), 'updated_date', $listDirn, $listOrder);?>
 				</th>
-				<th width="2%">
+				<th width="1%">
 					<?php echo JHtml::_('searchtools.sort', JText::_('COM_ACTIVITYSTREAM_ACTIVITY_ID'), 'id', $listDirn, $listOrder); ?>
 				</th>
 			</tr>
