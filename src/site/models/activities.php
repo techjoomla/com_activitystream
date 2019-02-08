@@ -86,6 +86,7 @@ class ActivityStreamModelActivities extends JModelList
 		$from_date = $this->getState('from_date');
 		$limit = $this->getState('list.limit');
 		$start = $this->getState('list.start');
+		$filter_condition = $this->getState('filter_condition');
 
 		$result_arr = array();
 
@@ -99,15 +100,51 @@ class ActivityStreamModelActivities extends JModelList
 		// Get all filters
 		$filters = $this->get('filter_fields');
 
-		foreach ($filters as $filter)
+		// Default filter condition AND support
+		if ($filter_condition != 'any')
 		{
-			$filterValue = $this->getState($filter);
-
-			if (!empty($filterValue) && $filter != 'type')
+			foreach ($filters as $filter)
 			{
-				$filterValue = $this->activityStreamActivitiesHelper->buildActivityFilterQuery($filterValue);
-				$query->where($db->quoteName($filter) . ' IN (' . $filterValue . ')');
+				$filterValue = $this->getState($filter);
+
+				if (!empty($filterValue) && $filter != 'type')
+				{
+					$filterValue = $this->activityStreamActivitiesHelper->buildActivityFilterQuery($filterValue);
+					$query->where($db->quoteName($filter) . ' IN (' . $filterValue . ')');
+				}
 			}
+		}
+		else
+		{
+			// Filter condition OR support
+			$whereClause = array();
+
+			foreach ($filters as $filter)
+			{
+				$filterValue = $this->getState($filter);
+
+				if (!empty($filterValue) && $filter != 'type')
+				{
+					$filterValue = $this->activityStreamActivitiesHelper->buildActivityFilterQuery($filterValue);
+					$conditionFilters = array('target_id', 'object_id', 'actor_id');
+
+					if (!in_array($filter, $conditionFilters))
+					{
+						$query->where($db->quoteName($filter) . ' IN (' . $filterValue . ')');
+					}
+					else
+					{
+						$whereClause[] = $db->quoteName($filter) . " IN (" . $filterValue . ")";
+					}
+				}
+			}
+
+			if (!empty($whereClause))
+			{
+				$whereClause = '(' . implode(' OR ', $whereClause) . ')';
+			}
+
+			$query->where($whereClause);
 		}
 
 		// Return results from specified date
