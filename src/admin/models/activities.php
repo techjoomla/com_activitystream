@@ -1,6 +1,5 @@
 <?php
 /**
- * @version    SVN: <svn_id>
  * @package    ActivityStream
  * @author     Techjoomla <extensions@techjoomla.com>
  * @copyright  Copyright (c) 2009-2017 TechJoomla. All rights reserved.
@@ -47,6 +46,47 @@ class ActivityStreamModelActivities extends JModelList
 	}
 
 	/**
+	 * Method to auto-populate the model state.
+	 *
+	 * Note. Calling getState in this method will result in recursion.
+	 *
+	 * @param   string  $ordering   An optional ordering field.
+	 * @param   string  $direction  An optional direction (asc|desc).
+	 *
+	 * @return  void
+	 *
+	 * @since   1.0.1
+	 */
+	protected function populateState($ordering = 'id', $direction = 'desc')
+	{
+		// Initialise variables.
+		$jinput = JFactory::getApplication()->input;
+
+		// Client filter
+		$extension = $jinput->get("client", '', 'STRING');
+		$this->setState('extension', $extension);
+
+		// Set activities limit
+		$listlimit = $jinput->input->get('limit', '', 'INT');
+
+		if ($listlimit != '' || $listlimit == '0')
+		{
+			$this->setState('list.limit', $listlimit);
+		}
+
+		// Load filter published
+		$published = $this->getUserStateFromRequest($this->context . '.filter.published', 'filter_published', '');
+		$this->setState('filter.published', $published);
+
+		// Load the filter search
+		$search = $this->getUserStateFromRequest($this->context . 'filter.search', 'filter_search');
+		$this->setState('filter.search', $search);
+
+		// List state information.
+		parent::populateState($ordering, $direction);
+	}
+
+	/**
 	 * Method to build an SQL query to load the list data.
 	 *
 	 * @return      string  An SQL query
@@ -61,6 +101,14 @@ class ActivityStreamModelActivities extends JModelList
 		$query->select($this->getState('list.select', '*'))
 			->from($db->quoteName('#__tj_activities'));
 
+		// Filter by client
+		$extension = $this->getState('extension');
+
+		if (!empty($extension))
+		{
+			$query->where($db->quoteName('client') . ' = ' . $db->quote($extension));
+		}
+
 		// Filter: like / search
 		$search = $this->getState('filter.search');
 
@@ -71,23 +119,29 @@ class ActivityStreamModelActivities extends JModelList
 		}
 
 		// Filter by published state
-		$published = $this->getState('filter.state');
+		$published = $this->getState('filter.published');
 
 		if (is_numeric($published))
 		{
 			$query->where('state = ' . (int) $published);
 		}
 
-		$type = $this->getState('type');
-		$from_date = $this->getState('from_date');
-		$limit = $this->getState('limit');
+		$listlimit = $this->getState('list.limit');
 
-		$result_arr = array();
+		// Default pagination for first page load
+		if ($listlimit == '' && $listlimit != '0')
+		{
+			$listlimit = 20;
+		}
+
+		$this->setState('list.limit', $listlimit);
+
+		$type      = $this->getState('filter.activitytype');
 
 		// Return result related to specified activity type
 		if (!empty($type) && $type != 'all')
 		{
-			$query->where($db->quoteName('type') . ' IN (' . $type . ')');
+			$query->where($db->quoteName('type') . ' = ' . $db->quote($type));
 		}
 
 		// Get all filters
@@ -101,19 +155,8 @@ class ActivityStreamModelActivities extends JModelList
 			}
 		}
 
-		// Return results from specified date
-		if (!empty($from_date))
-		{
-			$query->where($db->quoteName('created_date') . ' >= ' . $from_date);
-		}
-
-		if ($limit != 0)
-		{
-			$query->setLimit($limit);
-		}
-
 		// Add the list ordering clause.
-		$orderCol = $this->state->get('list.ordering', 'created_date');
+		$orderCol  = $this->state->get('list.ordering', 'created_date');
 		$orderDirn = $this->state->get('list.direction', 'desc');
 
 		$query->order($db->escape($orderCol) . ' ' . $db->escape($orderDirn));
