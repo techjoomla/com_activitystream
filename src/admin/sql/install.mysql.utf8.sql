@@ -19,6 +19,4 @@ CREATE TABLE IF NOT EXISTS `#__tj_activities` (
 	`created_date` datetime DEFAULT NULL,
 	`updated_date` datetime DEFAULT NULL,
 	PRIMARY KEY (`id`)
-)
-	DEFAULT CHARSET =utf8 AUTO_INCREMENT =1;
-
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 DEFAULT COLLATE=utf8mb4_unicode_ci AUTO_INCREMENT=1;
