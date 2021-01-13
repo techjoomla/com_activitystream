@@ -10,12 +10,17 @@
 // No direct access to this file
 defined('_JEXEC') or die;
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\View\HtmlView;
+use Joomla\CMS\Toolbar\ToolbarHelper;
+
 /**
  * Activity Stream View
  *
  * @since  0.0.1
  */
-class ActivityStreamViewActivity extends JViewLegacy
+class ActivityStreamViewActivity extends HtmlView
 {
 	/**
 	 * View form
@@ -34,13 +39,14 @@ class ActivityStreamViewActivity extends JViewLegacy
 	public function display($tpl = null)
 	{
 		// Get the Data
+		$app  = Factory::getApplication();
 		$form = $this->get('Form');
 		$item = $this->get('Item');
 
 		// Check for errors.
 		if (count($errors = $this->get('Errors')))
 		{
-			JError::raiseError(500, implode('<br />', $errors));
+			$app->enqueueMessage($errors, 'error');
 
 			return false;
 		}
@@ -65,28 +71,23 @@ class ActivityStreamViewActivity extends JViewLegacy
 	 */
 	protected function addToolBar()
 	{
-		$input = JFactory::getApplication()->input;
+		$input = Factory::getApplication()->input;
 
 		// Hide com_activitystream Main menu
 		$input->set('hidemainmenu', true);
-
 		$isNew = ($this->item->id == 0);
+		$title = Text::_('Edit');
 
 		if ($isNew)
 		{
-			$title = JText::_('New');
-		}
-		else
-		{
-			$title = JText::_('Edit');
+			$title = Text::_('New');
 		}
 
-		JToolBarHelper::title($title, 'Activity');
-		JToolBarHelper::apply('activity.apply');
-		JToolBarHelper::save('activity.save');
-		JToolBarHelper::save2new('activity.save2new');
-
-		JToolBarHelper::cancel(
+		ToolBarHelper::title($title, 'Activity');
+		ToolBarHelper::apply('activity.apply');
+		ToolBarHelper::save('activity.save');
+		ToolBarHelper::save2new('activity.save2new');
+		ToolBarHelper::cancel(
 			'activity.cancel',
 			$isNew ? 'JTOOLBAR_CANCEL' : 'JTOOLBAR_CLOSE'
 		);

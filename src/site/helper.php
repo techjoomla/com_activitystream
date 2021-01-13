@@ -9,6 +9,7 @@
 
 // No direct access
 defined('_JEXEC') or die;
+use Joomla\CMS\Language\Text;
 
 /**
  * Class ActivitystreamHelper
@@ -26,7 +27,7 @@ class ComActivityStreamHelper
 	 */
 	public function getLanguageConstantForJs()
 	{
-		JText::script('COM_ACTIVITYSTREAM_POST_TEXT_ACTIVITY_REMAINING_TEXT_LIMIT');
-		JText::script('COM_ACTIVITYSTREAM_LOAD_MORE_ACTIVITIES');
+		Text::script('COM_ACTIVITYSTREAM_POST_TEXT_ACTIVITY_REMAINING_TEXT_LIMIT');
+		Text::script('COM_ACTIVITYSTREAM_LOAD_MORE_ACTIVITIES');
 	}
 }

@@ -9,6 +9,10 @@
 
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Installer\Installer;
+use Joomla\Database\DatabaseDriver;
 
 /**
  * Script file of activitystream component
@@ -51,7 +55,7 @@ class Com_ActivityStreamInstallerScript
 	public function uninstall($parent)
 	{
 		jimport('joomla.installer.installer');
-		$db              = JFactory::getDbo();
+		$db              = Factory::getDbo();
 		$status          = new JObject;
 		$status->plugins = array();
 
@@ -75,7 +79,7 @@ class Com_ActivityStreamInstallerScript
 
 						if ($id)
 						{
-							$installer         = new JInstaller;
+							$installer         = new Installer;
 							$result            = $installer->uninstall('plugin', $id);
 							$status->plugins[] = array(
 								'name' => 'plg_' . $plugin,
@@ -119,14 +123,14 @@ class Com_ActivityStreamInstallerScript
 	 * method to run after an install/update/uninstall method
 	 *
 	 * @param   STRING  $type    type
-	 * @param   STRING  $parent  parent
+	 * @param   Object  $parent  parent
 	 *
 	 * @return void
 	 */
 	public function postflight($type, $parent)
 	{
 		$src = $parent->getParent()->getPath('source');
- 		$db = JFactory::getDbo();
+ 		$db = Factory::getDbo();
  		$status = new JObject;
  		$status->plugins = array();
 
@@ -170,7 +174,7 @@ class Com_ActivityStreamInstallerScript
  						$db->setQuery($query);
  						$count = $db->loadResult();
 
- 						$installer = new JInstaller;
+ 						$installer = new Installer;
  						$result = $installer->install($path);
 
 						$status->plugins[] = array('name' => 'plg_' . $plugin, 'group' => $folder, 'result' => $result);
@@ -205,7 +209,8 @@ class Com_ActivityStreamInstallerScript
 	 */
 	public function installSqlFiles($parent)
 	{
-		$db = JFactory::getDBO();
+		$db  = Factory::getDBO();
+		$app = Factory::getApplication();
 
 		// Obviously you may have to change the path and name if your installation SQL file ;)
 		if (method_exists($parent, 'extension_root'))
@@ -222,8 +227,7 @@ class Com_ActivityStreamInstallerScript
 
 		if ($buffer !== false)
 		{
-			jimport('joomla.installer.helper');
-			$queries = JInstallerHelper::splitSql($buffer);
+			$queries = DatabaseDriver::splitSql($buffer);
 
 			if (count($queries) != 0)
 			{
@@ -231,13 +235,13 @@ class Com_ActivityStreamInstallerScript
 				{
 					$query = trim($query);
 
-					if ($query != '' && $query{0} != '#')
+					if ($query != '' && $query[0] != '#')
 					{
 						$db->setQuery($query);
 
-						if (!$db->query())
+						if (!$db->execute())
 						{
-							JError::raiseWarning(1, JText::sprintf('JLIB_INSTALLER_ERROR_SQL_ERROR', $db->stderr(true)));
+							$app->enqueueMessage(Text::sprintf('JLIB_INSTALLER_ERROR_SQL_ERROR'), 'error');
 
 							return false;
 						}

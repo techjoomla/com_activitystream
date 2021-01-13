@@ -10,7 +10,12 @@
 // No direct access.
 defined('_JEXEC') or die();
 
-JFormHelper::loadFieldClass('list');
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Form\FormHelper;
+
+FormHelper::loadFieldClass('list');
 
 /**
  * Supports an HTML select list of courses
@@ -44,8 +49,8 @@ class JFormFieldActivityType extends JFormFieldList
 	 */
 	protected function getOptions()
 	{
-		$db     = JFactory::getDbo();
-		$client = JFactory::getApplication()->input->get('client', '', 'STRING');
+		$db     = Factory::getDbo();
+		$client = Factory::getApplication()->input->get('client', '', 'STRING');
 		$query  = $db->getQuery(true);
 
 		$query->select('distinct l.type')
@@ -57,14 +62,14 @@ class JFormFieldActivityType extends JFormFieldList
 		// Send filter values
 		$activityType = $db->loadObjectList();
 		$options      = array();
-		$options[]    = JHtml::_('select.option', 'all', JText::_('COM_ACTIVITYSTREAM_SEARCH_FILTER'));
+		$options[]    = HTMLHelper::_('select.option', 'all', Text::_('COM_ACTIVITYSTREAM_SEARCH_FILTER'));
 
 		foreach ($activityType as $type)
 		{
 			$temp        = implode("_", explode('.', $type->type));
 			$filterValue = $client . '_activity_type_' . $temp;
 			$filterText  = strtoupper($filterValue);
-			$options[]   = JHtml::_('select.option', $type->type, JText::_($filterText));
+			$options[]   = HTMLHelper::_('select.option', $type->type, Text::_($filterText));
 		}
 
 		return $options;

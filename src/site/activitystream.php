@@ -8,6 +8,8 @@
  */
 
 defined('_JEXEC') or die;
+use Joomla\CMS\Factory;
+use Joomla\CMS\MVC\Controller\BaseController;
 
 // Include dependancies
 jimport('joomla.application.component.controller');
@@ -15,10 +17,10 @@ jimport('joomla.application.component.controller');
 JLoader::registerPrefix('Activitystream', JPATH_COMPONENT);
 JLoader::register('ActivitystreamController', JPATH_COMPONENT . '/controller.php');
 
-$lang = JFactory::getLanguage();
+$lang = Factory::getLanguage();
 $lang->load('com_activitystream', JPATH_SITE);
 
 // Execute the task.
-$controller = JControllerLegacy::getInstance('Activitystream');
-$controller->execute(JFactory::getApplication()->input->get('task'));
+$controller = BaseController::getInstance('Activitystream');
+$controller->execute(Factory::getApplication()->input->get('task'));
 $controller->redirect();

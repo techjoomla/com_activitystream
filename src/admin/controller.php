@@ -9,6 +9,7 @@
 
 // No direct access to this file
 defined('_JEXEC') or die;
+use Joomla\CMS\MVC\Controller\BaseController;
 
 /**
  * General Controller of ActivityStream component
@@ -17,7 +18,7 @@ defined('_JEXEC') or die;
  * @subpackage  com_activitystream
  * @since       0.0.7
  */
-class ActivityStreamController extends JControllerLegacy
+class ActivityStreamController extends BaseController
 {
 	/**
 	 * The default view for the display method.
