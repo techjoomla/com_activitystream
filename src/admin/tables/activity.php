@@ -69,7 +69,7 @@ class ActivityStreamTableActivity extends JTable
 
 		if (count($errors))
 		{
-			$this->setError(implode($errors, ', '));
+			$this->setError(implode(', ', $errors));
 
 			return false;
 		}
