@@ -8,13 +8,17 @@
  */
 // No direct access to this file
 defined('_JEXEC') or die;
+use Joomla\CMS\MVC\Model\ListModel;
+use Joomla\CMS\Factory;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Uri\Uri;
 
 /**
  * ActivityStreamList Model
  *
  * @since  0.0.1
  */
-class ActivityStreamModelActivities extends JModelList
+class ActivityStreamModelActivities extends ListModel
 {
 	protected $activityStreamActivitiesHelper;
 
@@ -58,7 +62,7 @@ class ActivityStreamModelActivities extends JModelList
 	protected function getListQuery()
 	{
 		// Initialize variables.
-		$db    = JFactory::getDbo();
+		$db    = Factory::getDbo();
 		$query = $db->getQuery(true);
 
 		// Create the base select statement.
@@ -185,9 +189,9 @@ class ActivityStreamModelActivities extends JModelList
 			foreach ($items as $k => $item)
 			{
 				// Get date in local time zone
-				$item->created_date = JHtml::date($item->created_date, 'Y-m-d h:i:s');
-				$item->updated_date = JHtml::date($item->updated_date, 'Y-m-d h:i:s');
-				$item->root = JUri::root();
+				$item->created_date = HTMLHelper::date($item->created_date, 'Y-m-d h:i:s');
+				$item->updated_date = HTMLHelper::date($item->updated_date, 'Y-m-d h:i:s');
+				$item->root = Uri::root();
 
 				// Get extra date info
 				$items[$k]->created_day = date_format(date_create($item->created_date), "D");

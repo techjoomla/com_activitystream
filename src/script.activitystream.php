@@ -9,6 +9,11 @@
 
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
+use Joomla\CMS\Factory;
+use Joomla\CMS\Object\CMSObject;
+use Joomla\CMS\Installer\Installer;
+use Joomla\Data\DataObject;
+use Joomla\CMS\Language\Text;
 
 /**
  * Script file of activitystream component
@@ -51,8 +56,8 @@ class Com_ActivityStreamInstallerScript
 	public function uninstall($parent)
 	{
 		jimport('joomla.installer.installer');
-		$db              = JFactory::getDbo();
-		$status          = new JObject;
+		$db              = Factory::getDbo();
+		$status          = new CMSObject;
 		$status->plugins = array();
 
 		// Plugins uninstallation
@@ -75,7 +80,7 @@ class Com_ActivityStreamInstallerScript
 
 						if ($id)
 						{
-							$installer         = new JInstaller;
+							$installer         = new Installer;
 							$result            = $installer->uninstall('plugin', $id);
 							$status->plugins[] = array(
 								'name' => 'plg_' . $plugin,
@@ -126,8 +131,8 @@ class Com_ActivityStreamInstallerScript
 	public function postflight($type, $parent)
 	{
 		$src = $parent->getParent()->getPath('source');
- 		$db = JFactory::getDbo();
- 		$status = new JObject;
+ 		$db = Factory::getDbo();
+ 		$status = new CMSObject;
  		$status->plugins = array();
 
 		// Plugins installation
@@ -170,7 +175,7 @@ class Com_ActivityStreamInstallerScript
  						$db->setQuery($query);
  						$count = $db->loadResult();
 
- 						$installer = new JInstaller;
+ 						$installer = new Installer;
  						$result = $installer->install($path);
 
 						$status->plugins[] = array('name' => 'plg_' . $plugin, 'group' => $folder, 'result' => $result);
@@ -205,7 +210,7 @@ class Com_ActivityStreamInstallerScript
 	 */
 	public function installSqlFiles($parent)
 	{
-		$db = JFactory::getDBO();
+		$db = Factory::getDBO();
 
 		// Obviously you may have to change the path and name if your installation SQL file ;)
 		if (method_exists($parent, 'extension_root'))
@@ -236,7 +241,7 @@ class Com_ActivityStreamInstallerScript
 
 						if (!$db->execute())
 						{
-							JError::raiseWarning(1, JText::sprintf('JLIB_INSTALLER_ERROR_SQL_ERROR', $db->stderr(true)));
+							JError::raiseWarning(1, Text::sprintf('JLIB_INSTALLER_ERROR_SQL_ERROR', $db->stderr(true)));
 
 							return false;
 						}
