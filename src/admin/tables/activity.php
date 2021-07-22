@@ -65,9 +65,11 @@ class ActivityStreamTableActivity extends JTable
 			}
 		}
 
+		$errors = isset($errors) && is_array($errors) ? $errors : [];
+
 		if (count($errors))
 		{
-			$this->setError(implode($errors, ', '));
+			$this->setError(implode(', ', $errors));
 
 			return false;
 		}
