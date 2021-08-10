@@ -1,14 +1,16 @@
 <?php
 /**
- * @version    SVN: <svn_id>
- * @package    ActivityStream
- * @author     Techjoomla <extensions@techjoomla.com>
- * @copyright  Copyright (c) 2009-2017 TechJoomla. All rights reserved.
- * @license    GNU General Public License version 2 or later.
+ * @package     Activitystream
+ * @subpackage  Com_Activitystream
+ *
+ * @author      Techjoomla <extensions@techjoomla.com>
+ * @copyright   Copyright (C) 2016 - 2021 Techjoomla. All rights reserved.
+ * @license     http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
 // No direct access to this file
 defined('_JEXEC') or die;
+use Joomla\CMS\MVC\Controller\BaseController;
 
 /**
  * General Controller of ActivityStream component
@@ -17,7 +19,7 @@ defined('_JEXEC') or die;
  * @subpackage  com_activitystream
  * @since       0.0.7
  */
-class ActivityStreamController extends JControllerLegacy
+class ActivityStreamController extends BaseController
 {
 	/**
 	 * The default view for the display method.

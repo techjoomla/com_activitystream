@@ -1,14 +1,20 @@
 <?php
 /**
- * @version    CVS: 1.0.0
- * @package    Com_Activitystream
- * @author     Parth Lawate <contact@techjoomla.com>
- * @copyright  2016 Parth Lawate
- * @license    GNU General Public License version 2 or later; see LICENSE.txt
+ * @package     Activitystream
+ * @subpackage  Com_Activitystream
+ *
+ * @author      Techjoomla <extensions@techjoomla.com>
+ * @copyright   Copyright (C) 2016 - 2021 Techjoomla. All rights reserved.
+ * @license     http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Installer\Installer;
+use Joomla\Database\DatabaseDriver;
 
 /**
  * Script file of activitystream component
@@ -25,7 +31,7 @@ class Com_ActivityStreamInstallerScript
 				'activitystream' => 1
 			),
 			'api' => array(
-				'tjactivity' =>0
+				'tjactivity' => 0
 				)
 		),
 	);
@@ -51,7 +57,7 @@ class Com_ActivityStreamInstallerScript
 	public function uninstall($parent)
 	{
 		jimport('joomla.installer.installer');
-		$db              = JFactory::getDbo();
+		$db              = Factory::getDbo();
 		$status          = new JObject;
 		$status->plugins = array();
 
@@ -75,7 +81,7 @@ class Com_ActivityStreamInstallerScript
 
 						if ($id)
 						{
-							$installer         = new JInstaller;
+							$installer         = new Installer;
 							$result            = $installer->uninstall('plugin', $id);
 							$status->plugins[] = array(
 								'name' => 'plg_' . $plugin,
@@ -119,20 +125,20 @@ class Com_ActivityStreamInstallerScript
 	 * method to run after an install/update/uninstall method
 	 *
 	 * @param   STRING  $type    type
-	 * @param   STRING  $parent  parent
+	 * @param   Object  $parent  parent
 	 *
 	 * @return void
 	 */
 	public function postflight($type, $parent)
 	{
 		$src = $parent->getParent()->getPath('source');
- 		$db = JFactory::getDbo();
- 		$status = new JObject;
- 		$status->plugins = array();
+		$db = Factory::getDbo();
+		$status = new JObject;
+		$status->plugins = array();
 
 		// Plugins installation
- 		if (count($this->queue['plugins']))
- 		{
+		if (count($this->queue['plugins']))
+		{
 			foreach ($this->queue['plugins'] as $folder => $plugins)
 			{
 				if (count($plugins))
@@ -141,55 +147,53 @@ class Com_ActivityStreamInstallerScript
 					{
 						$path = "$src/plugins/$folder/$plugin";
 
- 						if (!is_dir($path))
- 						{
- 							$path = "$src/plugins/$folder/plg_$plugin";
- 						}
+						if (!is_dir($path))
+						{
+							$path = "$src/plugins/$folder/plg_$plugin";
+						}
 
- 						if (!is_dir($path))
- 						{
- 							$path = "$src/plugins/$plugin";
- 						}
+						if (!is_dir($path))
+						{
+							$path = "$src/plugins/$plugin";
+						}
 
- 						if (!is_dir($path))
- 						{
- 							$path = "$src/plugins/plg_$plugin";
- 						}
+						if (!is_dir($path))
+						{
+							$path = "$src/plugins/plg_$plugin";
+						}
 
- 						if (!is_dir($path))
- 						{
- 							continue;
- 						}
+						if (!is_dir($path))
+						{
+							continue;
+						}
 
- 						// Was the plugin already installed?
- 						$query = $db->getQuery(true)
- 							->select('COUNT(*)')
- 							->from($db->qn('#__extensions'))
- 							->where($db->qn('element') . ' = ' . $db->q($plugin))
- 							->where($db->qn('folder') . ' = ' . $db->q($folder));
- 						$db->setQuery($query);
- 						$count = $db->loadResult();
+						// Was the plugin already installed?
+						$query = $db->getQuery(true)
+							->select('COUNT(*)')
+							->from($db->qn('#__extensions'))
+							->where($db->qn('element') . ' = ' . $db->q($plugin))
+							->where($db->qn('folder') . ' = ' . $db->q($folder));
+						$db->setQuery($query);
+						$count = $db->loadResult();
 
- 						$installer = new JInstaller;
- 						$result = $installer->install($path);
+						$installer = new Installer;
+						$result = $installer->install($path);
 
 						$status->plugins[] = array('name' => 'plg_' . $plugin, 'group' => $folder, 'result' => $result);
 
- 						if ($published && !$count)
- 						{
- 							$query = $db->getQuery(true)
- 								->update($db->qn('#__extensions'))
- 								->set($db->qn('enabled') . ' = ' . $db->q('1'))
- 								->where($db->qn('element') . ' = ' . $db->q($plugin))
- 								->where($db->qn('folder') . ' = ' . $db->q($folder));
- 							$db->setQuery($query);
- 							$db->execute();
- 						}
-
+						if ($published && !$count)
+						{
+							$query = $db->getQuery(true)
+								->update($db->qn('#__extensions'))
+								->set($db->qn('enabled') . ' = ' . $db->q('1'))
+								->where($db->qn('element') . ' = ' . $db->q($plugin))
+								->where($db->qn('folder') . ' = ' . $db->q($folder));
+							$db->setQuery($query);
+							$db->execute();
+						}
 					}
 				}
 			}
-
 		}
 
 		// Install SQL FIles
@@ -205,7 +209,8 @@ class Com_ActivityStreamInstallerScript
 	 */
 	public function installSqlFiles($parent)
 	{
-		$db = JFactory::getDBO();
+		$db  = Factory::getDBO();
+		$app = Factory::getApplication();
 
 		// Obviously you may have to change the path and name if your installation SQL file ;)
 		if (method_exists($parent, 'extension_root'))
@@ -222,8 +227,7 @@ class Com_ActivityStreamInstallerScript
 
 		if ($buffer !== false)
 		{
-			jimport('joomla.installer.helper');
-			$queries = JInstallerHelper::splitSql($buffer);
+			$queries = DatabaseDriver::splitSql($buffer);
 
 			if (count($queries) != 0)
 			{
@@ -235,9 +239,9 @@ class Com_ActivityStreamInstallerScript
 					{
 						$db->setQuery($query);
 
-						if (!$db->query())
+						if (!$db->execute())
 						{
-							JError::raiseWarning(1, JText::sprintf('JLIB_INSTALLER_ERROR_SQL_ERROR', $db->stderr(true)));
+							$app->enqueueMessage(Text::sprintf('JLIB_INSTALLER_ERROR_SQL_ERROR'), 'error');
 
 							return false;
 						}

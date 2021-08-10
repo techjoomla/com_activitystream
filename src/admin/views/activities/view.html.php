@@ -1,20 +1,25 @@
 <?php
 /**
- * @package    ActivityStream
- * @author     Techjoomla <extensions@techjoomla.com>
- * @copyright  Copyright (c) 2009-2017 TechJoomla. All rights reserved.
- * @license    GNU General Public License version 2 or later.
+ * @package     Activitystream
+ * @subpackage  Com_Activitystream
+ *
+ * @author      Techjoomla <extensions@techjoomla.com>
+ * @copyright   Copyright (C) 2016 - 2021 Techjoomla. All rights reserved.
+ * @license     http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
 // No direct access to this file
 defined('_JEXEC') or die;
+use Joomla\CMS\MVC\View\HtmlView;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
 
 /**
  * ActivityStream View
  *
  * @since  0.0.1
  */
-class ActivityStreamViewActivities extends JViewLegacy
+class ActivityStreamViewActivities extends HtmlView
 {
 	protected $input;
 
@@ -31,7 +36,7 @@ class ActivityStreamViewActivities extends JViewLegacy
 		// To show all types of activity in list view
 		$activitiesModel     = $this->getModel();
 		$activitiesModel->setState("type", 'all');
-		$this->input         = JFactory::getApplication()->input;
+		$this->input         = Factory::getApplication()->input;
 		$this->items         = $this->get('Items');
 		$this->pagination    = $this->get('Pagination');
 		$this->state         = $this->get('State');
@@ -62,9 +67,9 @@ class ActivityStreamViewActivities extends JViewLegacy
 	 */
 	protected function addToolBar()
 	{
-		$title        = JText::_('Activity Stream');
-		$languageFile = JFactory::getLanguage();
-		$extension    = JFactory::getApplication()->input->get('client', '', 'STRING');
+		$title        = Text::_('Activity Stream');
+		$languageFile = Factory::getLanguage();
+		$extension    = Factory::getApplication()->input->get('client', '', 'STRING');
 		$base_dir     = JPATH_BASE;
 
 		// Load the language file for particular extension
@@ -95,11 +100,11 @@ class ActivityStreamViewActivities extends JViewLegacy
 	protected function getSortFields()
 	{
 		return array(
-			'id'           => JText::_('COM_ACTIVITYSTREAM_ACTIVITY_ID'),
-			'state'        => JText::_('COM_ACTIVITYSTREAM_ACTIVITY_STATE'),
-			'type'         => JText::_('COM_ACTIVITYSTREAM_ACTIVITY_TYPE'),
-			'created_date' => JText::_('COM_ACTIVITYSTREAM_ACTIVITY_CREATED_DATE'),
-			'updated_date' => JText::_('COM_ACTIVITYSTREAM_ACTIVITY_UPDATED_DATE')
+			'id'           => Text::_('COM_ACTIVITYSTREAM_ACTIVITY_ID'),
+			'state'        => Text::_('COM_ACTIVITYSTREAM_ACTIVITY_STATE'),
+			'type'         => Text::_('COM_ACTIVITYSTREAM_ACTIVITY_TYPE'),
+			'created_date' => Text::_('COM_ACTIVITYSTREAM_ACTIVITY_CREATED_DATE'),
+			'updated_date' => Text::_('COM_ACTIVITYSTREAM_ACTIVITY_UPDATED_DATE')
 		);
 	}
 }

@@ -1,20 +1,27 @@
 <?php
 /**
- * @version    SVN: <svn_id>
- * @package    ActivityStream
- * @author     Techjoomla <extensions@techjoomla.com>
- * @copyright  Copyright (c) 2009-2017 TechJoomla. All rights reserved.
- * @license    GNU General Public License version 2 or later.
+ * @package     Activitystream
+ * @subpackage  Com_Activitystream
+ *
+ * @author      Techjoomla <extensions@techjoomla.com>
+ * @copyright   Copyright (C) 2016 - 2021 Techjoomla. All rights reserved.
+ * @license     http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
+
 // No direct access to this file
 defined('_JEXEC') or die;
+
+use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\Factory;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\MVC\Model\ListModel;
 
 /**
  * ActivityStreamList Model
  *
  * @since  0.0.1
  */
-class ActivityStreamModelActivities extends JModelList
+class ActivityStreamModelActivities extends ListModel
 {
 	protected $activityStreamActivitiesHelper;
 
@@ -58,7 +65,7 @@ class ActivityStreamModelActivities extends JModelList
 	protected function getListQuery()
 	{
 		// Initialize variables.
-		$db    = JFactory::getDbo();
+		$db    = Factory::getDbo();
 		$query = $db->getQuery(true);
 
 		// Create the base select statement.
@@ -82,10 +89,10 @@ class ActivityStreamModelActivities extends JModelList
 			$query->where('state = ' . (int) $published);
 		}
 
-		$type = $this->getState('type');
+		$type      = $this->getState('type');
 		$from_date = $this->getState('from_date');
-		$limit = $this->getState('list.limit');
-		$start = $this->getState('list.start');
+		$limit     = $this->getState('list.limit');
+		$start     = $this->getState('list.start');
 		$filter_condition = $this->getState('filter_condition');
 
 		$result_arr = array();
@@ -185,9 +192,9 @@ class ActivityStreamModelActivities extends JModelList
 			foreach ($items as $k => $item)
 			{
 				// Get date in local time zone
-				$item->created_date = JHtml::date($item->created_date, 'Y-m-d h:i:s');
-				$item->updated_date = JHtml::date($item->updated_date, 'Y-m-d h:i:s');
-				$item->root = JUri::root();
+				$item->created_date = HTMLHelper::date($item->created_date, 'Y-m-d h:i:s');
+				$item->updated_date = HTMLHelper::date($item->updated_date, 'Y-m-d h:i:s');
+				$item->root = Uri::root();
 
 				// Get extra date info
 				$items[$k]->created_day = date_format(date_create($item->created_date), "D");

@@ -1,21 +1,26 @@
 <?php
 /**
- * @version    SVN: <svn_id>
- * @package    ActivityStream
- * @author     Techjoomla <extensions@techjoomla.com>
- * @copyright  Copyright (c) 2009-2017 TechJoomla. All rights reserved.
- * @license    GNU General Public License version 2 or later.
+ * @package     Activitystream
+ * @subpackage  Com_Activitystream
+ *
+ * @author      Techjoomla <extensions@techjoomla.com>
+ * @copyright   Copyright (C) 2016 - 2021 Techjoomla. All rights reserved.
+ * @license     http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
 // No direct access to this file
 defined('_JEXEC') or die;
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\Table\Table;
+use Joomla\CMS\MVC\Model\AdminModel;
+
 /**
- * ActivityStream Model
+ * Activity Model
  *
  * @since  0.0.1
  */
-class ActivityStreamModelActivity extends JModelAdmin
+class ActivityStreamModelActivity extends AdminModel
 {
 	/**
 	 * Method to get a table object, load it if necessary.
@@ -30,7 +35,7 @@ class ActivityStreamModelActivity extends JModelAdmin
 	 */
 	public function getTable($type = 'activity', $prefix = 'ActivityStreamTable', $config = array())
 	{
-		return JTable::getInstance($type, $prefix, $config);
+		return Table::getInstance($type, $prefix, $config);
 	}
 
 	/**
@@ -73,7 +78,7 @@ class ActivityStreamModelActivity extends JModelAdmin
 	protected function loadFormData()
 	{
 		// Check the session for previously entered form data.
-		$data = JFactory::getApplication()->getUserState(
+		$data = Factory::getApplication()->getUserState(
 			'com_activitystream.edit.activity.data',
 			array()
 		);
@@ -97,7 +102,7 @@ class ActivityStreamModelActivity extends JModelAdmin
 	 */
 	public function save($data)
 	{
-		$cdate = JFactory::getDate('now');
+		$cdate = Factory::getDate('now');
 
 		if (empty($data['id']) && empty($data['created_date']))
 		{

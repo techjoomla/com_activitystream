@@ -1,13 +1,16 @@
 <?php
 /**
- * @version    SVN: <svn_id>
- * @package    ActivityStream
- * @author     Techjoomla <extensions@techjoomla.com>
- * @copyright  Copyright (c) 2009-2017 TechJoomla. All rights reserved.
- * @license    GNU General Public License version 2 or later.
+ * @package     Activitystream
+ * @subpackage  Com_Activitystream
+ *
+ * @author      Techjoomla <extensions@techjoomla.com>
+ * @copyright   Copyright (C) 2016 - 2021 Techjoomla. All rights reserved.
+ * @license     http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
+
 // No direct access to this file
 defined('_JEXEC') or die;
+use Joomla\CMS\MVC\Controller\FormController;
 
 /**
  * HelloWorld Controller
@@ -16,6 +19,6 @@ defined('_JEXEC') or die;
  * @subpackage  com_activitystream
  * @since       0.0.9
  */
-class ActivityStreamControllerActivity extends JControllerForm
+class ActivityStreamControllerActivity extends FormController
 {
 }

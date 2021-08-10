@@ -1,19 +1,26 @@
 <?php
 /**
- * @package    ActivityStream
- * @author     Techjoomla <extensions@techjoomla.com>
- * @copyright  Copyright (c) 2009-2017 TechJoomla. All rights reserved.
- * @license    GNU General Public License version 2 or later.
+ * @package     Activitystream
+ * @subpackage  Com_Activitystream
+ *
+ * @author      Techjoomla <extensions@techjoomla.com>
+ * @copyright   Copyright (C) 2016 - 2021 Techjoomla. All rights reserved.
+ * @license     http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
+
 // No direct access to this file
 defined('_JEXEC') or die;
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\MVC\Model\ListModel;
 
 /**
  * ActivityStreamList Model
  *
  * @since  0.0.1
  */
-class ActivityStreamModelActivities extends JModelList
+class ActivityStreamModelActivities extends ListModel
 {
 	/**
 	 * Constructor.
@@ -60,7 +67,7 @@ class ActivityStreamModelActivities extends JModelList
 	protected function populateState($ordering = 'id', $direction = 'desc')
 	{
 		// Initialise variables.
-		$jinput = JFactory::getApplication()->input;
+		$jinput = Factory::getApplication()->input;
 
 		// Client filter
 		$extension = $jinput->get("client", '', 'STRING');
@@ -94,7 +101,7 @@ class ActivityStreamModelActivities extends JModelList
 	protected function getListQuery()
 	{
 		// Initialize variables.
-		$db    = JFactory::getDbo();
+		$db    = Factory::getDbo();
 		$query = $db->getQuery(true);
 
 		// Create the base select statement.
@@ -184,8 +191,8 @@ class ActivityStreamModelActivities extends JModelList
 			foreach ($items as $k => $item)
 			{
 				// Get date in local time zone
-				$item->created_date = JHtml::date($item->created_date, 'Y-m-d h:i:s');
-				$item->updated_date = JHtml::date($item->updated_date, 'Y-m-d h:i:s');
+				$item->created_date = HTMLHelper::date($item->created_date, 'Y-m-d h:i:s');
+				$item->updated_date = HTMLHelper::date($item->updated_date, 'Y-m-d h:i:s');
 
 				// Get extra date info
 				$items[$k]->created_day = date_format(date_create($item->created_date), "D");
