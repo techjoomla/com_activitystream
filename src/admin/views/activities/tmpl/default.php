@@ -8,6 +8,7 @@
 
 // No direct access to this file
 defined('_JEXEC') or die;
+use Joomla\CMS\Language\Text;
 
 JHtml::_('formbehavior.chosen', 'select');
 $sortFields = $this->getSortFields();
@@ -22,42 +23,53 @@ $listDirn   = $this->escape($this->state->get('list.direction'));
 			?>
 		</div>
 	</div>
-	<table class="table table-striped table-hover">
-		<thead>
-		<?php if (!empty($this->items) && empty($this->items['error'])) : ?>
-			<tr>
-				<th width="1%" class="hidden-phone">
-					<input type="checkbox" name="checkall-toggle" value=""
-					title="<?php echo JText::_('JGLOBAL_CHECK_ALL'); ?>" onclick="Joomla.checkAll(this)"/>
+	<?php
+	if (empty($this->items))
+	{
+		?>
+		<div class="clearfix">&nbsp;</div>
+
+		<div class="alert alert-no-items">
+			<?php echo Text::_('COM_ACTIVITYSTREAM_NO_ACTIVITY');?>
+		</div>
+		<?php
+	}
+	elseif (!empty($this->items) && empty($this->items['error']))
+	{
+		?>
+		<table class="table table-striped table-hover">
+			<thead>
+				<tr>
+					<th width="1%" class="hidden-phone">
+						<input type="checkbox" name="checkall-toggle" value=""
+						title="<?php echo JText::_('JGLOBAL_CHECK_ALL'); ?>" onclick="Joomla.checkAll(this)"/>
+					</th>
+					<th width="5%">
+						<?php echo JHtml::_('searchtools.sort', JText::_('COM_ACTIVITYSTREAM_ACTIVITY_STATE'), 'state', $listDirn, $listOrder); ?>
+					</th>
+					<th width="5%">
+						<?php echo JHtml::_('searchtools.sort', JText::_('COM_ACTIVITYSTREAM_ACTIVITY_TYPE'), 'type', $listDirn, $listOrder);?>
+					</th>
+					<th width="5%">
+						<?php echo JHtml::_('searchtools.sort', JText::_('COM_ACTIVITYSTREAM_ACTIVITY_CREATED_DATE'), 'created_date', $listDirn, $listOrder);?>
+					</th>
+					<th width="5%">
+						<?php echo JHtml::_('searchtools.sort', JText::_('COM_ACTIVITYSTREAM_ACTIVITY_UPDATED_DATE'), 'updated_date', $listDirn, $listOrder);?>
+					</th>
+					<th width="2%">
+						<?php echo JHtml::_('searchtools.sort', JText::_('COM_ACTIVITYSTREAM_ACTIVITY_ID'), 'id', $listDirn, $listOrder); ?>
+					</th>
+				</tr>
+			</thead>
+			<tfoot>
+				<tr>
+					<td colspan="6">
+						<?php echo $this->pagination->getListFooter(); ?>
+					</td>
 				</th>
-				<th width="5%">
-					<?php echo JHtml::_('searchtools.sort', JText::_('COM_ACTIVITYSTREAM_ACTIVITY_STATE'), 'state', $listDirn, $listOrder); ?>
-				</th>
-				<th width="5%">
-					<?php echo JHtml::_('searchtools.sort', JText::_('COM_ACTIVITYSTREAM_ACTIVITY_TYPE'), 'type', $listDirn, $listOrder);?>
-				</th>
-				<th width="5%">
-					<?php echo JHtml::_('searchtools.sort', JText::_('COM_ACTIVITYSTREAM_ACTIVITY_CREATED_DATE'), 'created_date', $listDirn, $listOrder);?>
-				</th>
-				<th width="5%">
-					<?php echo JHtml::_('searchtools.sort', JText::_('COM_ACTIVITYSTREAM_ACTIVITY_UPDATED_DATE'), 'updated_date', $listDirn, $listOrder);?>
-				</th>
-				<th width="2%">
-					<?php echo JHtml::_('searchtools.sort', JText::_('COM_ACTIVITYSTREAM_ACTIVITY_ID'), 'id', $listDirn, $listOrder); ?>
-				</th>
-			</tr>
-		<?php endif;?>
-		</thead>
-		<tfoot>
-			<tr>
-				<td colspan="6">
-					<?php echo $this->pagination->getListFooter(); ?>
-				</td>
-			</th>
-			</tr>
-		</tfoot>
-		<tbody>
-			<?php if (!empty($this->items) && empty($this->items['error'])) : ?>
+				</tr>
+			</tfoot>
+			<tbody>
 				<?php foreach ($this->items as $i => $row) :
 					$link = JRoute::_('index.php?option=com_activitystream&task=activity.edit&id=' . $row->id);
 				?>
@@ -84,21 +96,11 @@ $listDirn   = $this->escape($this->state->get('list.direction'));
 						</td>
 					</tr>
 				<?php endforeach; ?>
-			<?php else: ?>
-				<div>&nbsp;</div>
-				<div class="alert alert-error">
-					<div>
-						<?php
-						if (!empty($this->items['message']))
-						{
-							echo $this->items['message'];
-						}
-						?>
-					</div>
-				</div>
-			<?php endif;?>
-		</tbody>
-	</table>
+			</tbody>
+		</table>
+	<?php
+	}
+	?>
 	<input type="hidden" name="task" value=""/>
 	<input type="hidden" name="boxchecked" value="0"/>
 	<?php echo JHtml::_('form.token'); ?>
