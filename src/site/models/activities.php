@@ -9,6 +9,8 @@
 // No direct access to this file
 defined('_JEXEC') or die;
 
+use Joomla\CMS\Language\Text;
+
 /**
  * ActivityStreamList Model
  *
@@ -191,7 +193,7 @@ class ActivityStreamModelActivities extends JModelList
 
 				// Get extra date info
 				$items[$k]->created_day = date_format(date_create($item->created_date), "D");
-				$items[$k]->created_date_month = date_format(date_create($item->created_date), "d, M");
+				$items[$k]->created_date_month = date_format(date_create($item->created_date), Text::_('COM_ACTIVITYSTREAM_ACTIVITY_DATE_FORMAT'));
 
 				// Convert item data into array
 				$itemArray = (array) $item;
