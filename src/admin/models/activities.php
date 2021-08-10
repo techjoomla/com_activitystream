@@ -42,6 +42,7 @@ class ActivityStreamModelActivities extends JModelList
 			);
 		}
 
+		$this->filter = JFilterInput::getInstance();
 		parent::__construct($config);
 	}
 
@@ -183,6 +184,12 @@ class ActivityStreamModelActivities extends JModelList
 		{
 			foreach ($items as $k => $item)
 			{
+				// Avoid XSS attack
+				if ($item->formatted_text)
+				{
+					$item->formatted_text = $this->filter->clean($item->formatted_text);
+				}
+
 				// Get date in local time zone
 				$item->created_date = JHtml::date($item->created_date, 'Y-m-d h:i:s');
 				$item->updated_date = JHtml::date($item->updated_date, 'Y-m-d h:i:s');
