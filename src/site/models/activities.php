@@ -9,12 +9,18 @@
 // No direct access to this file
 defined('_JEXEC') or die;
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\Model\ListModel;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Uri\Uri;
+
 /**
  * ActivityStreamList Model
  *
  * @since  0.0.1
  */
-class ActivityStreamModelActivities extends JModelList
+class ActivityStreamModelActivities extends ListModel
 {
 	protected $activityStreamActivitiesHelper;
 
@@ -58,7 +64,7 @@ class ActivityStreamModelActivities extends JModelList
 	protected function getListQuery()
 	{
 		// Initialize variables.
-		$db    = JFactory::getDbo();
+		$db    = Factory::getDbo();
 		$query = $db->getQuery(true);
 
 		// Create the base select statement.
@@ -82,10 +88,10 @@ class ActivityStreamModelActivities extends JModelList
 			$query->where('state = ' . (int) $published);
 		}
 
-		$type = $this->getState('type');
-		$from_date = $this->getState('from_date');
-		$limit = $this->getState('list.limit');
-		$start = $this->getState('list.start');
+		$type             = $this->getState('type');
+		$from_date        = $this->getState('from_date');
+		$limit            = $this->getState('list.limit');
+		$start            = $this->getState('list.start');
 		$filter_condition = $this->getState('filter_condition');
 
 		$result_arr = array();
@@ -125,7 +131,7 @@ class ActivityStreamModelActivities extends JModelList
 
 				if (!empty($filterValue) && $filter != 'type')
 				{
-					$filterValue = $this->activityStreamActivitiesHelper->buildActivityFilterQuery($filterValue);
+					$filterValue      = $this->activityStreamActivitiesHelper->buildActivityFilterQuery($filterValue);
 					$conditionFilters = array('target_id', 'object_id', 'actor_id');
 
 					if (!in_array($filter, $conditionFilters))
@@ -159,7 +165,7 @@ class ActivityStreamModelActivities extends JModelList
 		}
 
 		// Add the list ordering clause.
-		$orderCol = $this->state->get('list.ordering', 'created_date');
+		$orderCol  = $this->state->get('list.ordering', 'created_date');
 		$orderDirn = $this->state->get('list.direction', 'desc');
 
 		$query->order($db->escape($orderCol) . ' ' . $db->escape($orderDirn));
@@ -177,7 +183,6 @@ class ActivityStreamModelActivities extends JModelList
 	public function getItems()
 	{
 		$items = parent::getItems();
-
 		$activities = array();
 
 		if (!empty($items))
@@ -185,13 +190,13 @@ class ActivityStreamModelActivities extends JModelList
 			foreach ($items as $k => $item)
 			{
 				// Get date in local time zone
-				$item->created_date = JHtml::date($item->created_date, 'Y-m-d h:i:s');
-				$item->updated_date = JHtml::date($item->updated_date, 'Y-m-d h:i:s');
-				$item->root = JUri::root();
+				$item->created_date = HTMLHelper::date($item->created_date, 'Y-m-d h:i:s');
+				$item->updated_date = HTMLHelper::date($item->updated_date, 'Y-m-d h:i:s');
+				$item->root         = Uri::root();
 
 				// Get extra date info
-				$items[$k]->created_day = date_format(date_create($item->created_date), "D");
-				$items[$k]->created_date_month = date_format(date_create($item->created_date), "d, M");
+				$items[$k]->created_day        = Factory::getDate($item->created_date)->Format(Text::_('COM_ACTIVITYSTREAM_CREATED_DAY'), false, true);
+				$items[$k]->created_date_month = Factory::getDate($item->created_date)->Format(Text::_('COM_ACTIVITYSTREAM_CREATED_DATE_MONTH'), false, true);
 
 				// Convert item data into array
 				$itemArray = (array) $item;
