@@ -7,6 +7,12 @@
  */
 // No direct access to this file
 defined('_JEXEC') or die;
+use Joomla\CMS\MVC\Controller\AdminController;
+use Joomla\CMS\Table\Table;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Log\Log;
+use Joomla\CMS\Router\Route;
 use Joomla\Utilities\ArrayHelper;
 
 /**
@@ -14,7 +20,7 @@ use Joomla\Utilities\ArrayHelper;
  *
  * @since  0.0.1
  */
-class ActivityStreamControllerActivities extends JControllerAdmin
+class ActivityStreamControllerActivities extends AdminController
 {
 	/**
 	 * Proxy for getModel.
@@ -44,7 +50,7 @@ class ActivityStreamControllerActivities extends JControllerAdmin
 	public function getActivities()
 	{
 		// Load component tables
-		JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_activitystream/tables');
+		Table::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_activitystream/tables');
 
 		// Variable to store activity data fetched
 		$result = array();
@@ -54,14 +60,14 @@ class ActivityStreamControllerActivities extends JControllerAdmin
 
 		$ActivityStreamModelActivities = $this->getModel('Activities');
 
-		$jinput = JFactory::getApplication()->input;
+		$jinput = Factory::getApplication()->input;
 		$type   = $jinput->get("type", '', 'STRING');
 
 		// Return result related to specified activity type
 		if (empty($type))
 		{
 			$result_arr['success'] = false;
-			$result_arr['message'] = JText::_("COM_ACTIVITYSTREAM_ERROR_ACTIVITY_TYPE");
+			$result_arr['message'] = Text::_("COM_ACTIVITYSTREAM_ERROR_ACTIVITY_TYPE");
 
 			echo json_encode($result_arr);
 
@@ -90,7 +96,7 @@ class ActivityStreamControllerActivities extends JControllerAdmin
 		if (empty($result['results']))
 		{
 			$result_arr['success'] = false;
-			$result_arr['message'] = JText::_("COM_ACTIVITYSTREAM_NO_ACTIVITY");
+			$result_arr['message'] = Text::_("COM_ACTIVITYSTREAM_NO_ACTIVITY");
 		}
 		else
 		{
@@ -113,13 +119,13 @@ class ActivityStreamControllerActivities extends JControllerAdmin
 	 */
 	public function delete()
 	{
-		$input  = JFactory::getApplication()->input;
+		$input  = Factory::getApplication()->input;
 		$client = $input->get('client', '', 'STRING');
-		$id     = JFactory::getApplication()->input->get('cid', array(), 'array');
+		$id     = Factory::getApplication()->input->get('cid', array(), 'array');
 
 		if (!is_array($id) || count($id) < 1)
 		{
-			JLog::add(JText::_($this->text_prefix . '_NO_ITEM_SELECTED'), JLog::WARNING, 'jerror');
+			Log::add(Text::_($this->text_prefix . '_NO_ITEM_SELECTED'), Log::WARNING, 'jerror');
 		}
 		else
 		{
@@ -133,7 +139,7 @@ class ActivityStreamControllerActivities extends JControllerAdmin
 			// Remove the activity.
 			if ($model->delete($id))
 			{
-				$this->setMessage(JText::plural($this->text_prefix . '_N_ITEMS_DELETED', count($id)));
+				$this->setMessage(Text::plural($this->text_prefix . '_N_ITEMS_DELETED', count($id)));
 			}
 			else
 			{
@@ -142,11 +148,11 @@ class ActivityStreamControllerActivities extends JControllerAdmin
 
 			if (isset($client))
 			{
-				$this->setRedirect(JRoute::_('index.php?option=com_activitystream&view=activities&client=' . $client, false));
+				$this->setRedirect(Route::_('index.php?option=com_activitystream&view=activities&client=' . $client, false));
 			}
 			else
 			{
-				$this->setRedirect(JRoute::_('index.php?option=com_activitystream&view=activities', false));
+				$this->setRedirect(Route::_('index.php?option=com_activitystream&view=activities', false));
 			}
 		}
 	}

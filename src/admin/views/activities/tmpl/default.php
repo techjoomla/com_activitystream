@@ -8,17 +8,21 @@
 
 // No direct access to this file
 defined('_JEXEC') or die;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Layout\LayoutHelper;
+use Joomla\CMS\Language\Text;
 
-JHtml::_('formbehavior.chosen', 'select');
+HTMLHelper::_('formbehavior.chosen', 'select');
 $sortFields = $this->getSortFields();
 $listOrder  = $this->escape($this->state->get('list.ordering'));
 $listDirn   = $this->escape($this->state->get('list.direction'));
 ?>
-<form action="<?php echo JRoute::_('index.php?option=com_activitystream&view=activities&client=' . $this->input->get('client', '', 'STRING')); ?>" method="post" id="adminForm" name="adminForm">
+<form action="<?php echo Route::_('index.php?option=com_activitystream&view=activities&client=' . $this->input->get('client', '', 'STRING')); ?>" method="post" id="adminForm" name="adminForm">
 	<div class="row-fluid">
 		<div class="span12">
 			<?php
-				echo JLayoutHelper::render('joomla.searchtools.default', array('view' => $this));
+				echo LayoutHelper::render('joomla.searchtools.default', array('view' => $this));
 			?>
 		</div>
 	</div>
@@ -28,22 +32,22 @@ $listDirn   = $this->escape($this->state->get('list.direction'));
 			<tr>
 				<th width="1%" class="hidden-phone">
 					<input type="checkbox" name="checkall-toggle" value=""
-					title="<?php echo JText::_('JGLOBAL_CHECK_ALL'); ?>" onclick="Joomla.checkAll(this)"/>
+					title="<?php echo Text::_('JGLOBAL_CHECK_ALL'); ?>" onclick="Joomla.checkAll(this)"/>
 				</th>
 				<th width="5%">
-					<?php echo JHtml::_('searchtools.sort', JText::_('COM_ACTIVITYSTREAM_ACTIVITY_STATE'), 'state', $listDirn, $listOrder); ?>
+					<?php echo HTMLHelper::_('searchtools.sort', Text::_('COM_ACTIVITYSTREAM_ACTIVITY_STATE'), 'state', $listDirn, $listOrder); ?>
 				</th>
 				<th width="5%">
-					<?php echo JHtml::_('searchtools.sort', JText::_('COM_ACTIVITYSTREAM_ACTIVITY_TYPE'), 'type', $listDirn, $listOrder);?>
+					<?php echo HTMLHelper::_('searchtools.sort', Text::_('COM_ACTIVITYSTREAM_ACTIVITY_TYPE'), 'type', $listDirn, $listOrder);?>
 				</th>
 				<th width="5%">
-					<?php echo JHtml::_('searchtools.sort', JText::_('COM_ACTIVITYSTREAM_ACTIVITY_CREATED_DATE'), 'created_date', $listDirn, $listOrder);?>
+					<?php echo HTMLHelper::_('searchtools.sort', Text::_('COM_ACTIVITYSTREAM_ACTIVITY_CREATED_DATE'), 'created_date', $listDirn, $listOrder);?>
 				</th>
 				<th width="5%">
-					<?php echo JHtml::_('searchtools.sort', JText::_('COM_ACTIVITYSTREAM_ACTIVITY_UPDATED_DATE'), 'updated_date', $listDirn, $listOrder);?>
+					<?php echo HTMLHelper::_('searchtools.sort', Text::_('COM_ACTIVITYSTREAM_ACTIVITY_UPDATED_DATE'), 'updated_date', $listDirn, $listOrder);?>
 				</th>
 				<th width="2%">
-					<?php echo JHtml::_('searchtools.sort', JText::_('COM_ACTIVITYSTREAM_ACTIVITY_ID'), 'id', $listDirn, $listOrder); ?>
+					<?php echo HTMLHelper::_('searchtools.sort', Text::_('COM_ACTIVITYSTREAM_ACTIVITY_ID'), 'id', $listDirn, $listOrder); ?>
 				</th>
 			</tr>
 		<?php endif;?>
@@ -59,14 +63,14 @@ $listDirn   = $this->escape($this->state->get('list.direction'));
 		<tbody>
 			<?php if (!empty($this->items) && empty($this->items['error'])) : ?>
 				<?php foreach ($this->items as $i => $row) :
-					$link = JRoute::_('index.php?option=com_activitystream&task=activity.edit&id=' . $row->id);
+					$link = Route::_('index.php?option=com_activitystream&task=activity.edit&id=' . $row->id);
 				?>
 					<tr>
 						<td>
-							<?php echo JHtml::_('grid.id', $i, $row->id); ?>
+							<?php echo HTMLHelper::_('grid.id', $i, $row->id); ?>
 						</td>
 						<td align="center">
-							<?php echo JHtml::_('jgrid.published', $row->state, $i, 'activities.', true, 'cb'); ?>
+							<?php echo HTMLHelper::_('jgrid.published', $row->state, $i, 'activities.', true, 'cb'); ?>
 						</td>
 						<td>
 							<?php echo $row->type; ?>
@@ -78,7 +82,7 @@ $listDirn   = $this->escape($this->state->get('list.direction'));
 							<?php echo $row->updated_date; ?>
 						</td>
 						<td align="center">
-							<a href="<?php echo $link; ?>" title="<?php echo JText::_('type'); ?>">
+							<a href="<?php echo $link; ?>" title="<?php echo Text::_('type'); ?>">
 								<?php echo $row->id; ?>
 							</a>
 						</td>
@@ -101,6 +105,6 @@ $listDirn   = $this->escape($this->state->get('list.direction'));
 	</table>
 	<input type="hidden" name="task" value=""/>
 	<input type="hidden" name="boxchecked" value="0"/>
-	<?php echo JHtml::_('form.token'); ?>
+	<?php echo HTMLHelper::_('form.token'); ?>
 </form>
 

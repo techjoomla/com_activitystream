@@ -9,13 +9,16 @@
 
 // No direct access to this file
 defined('_JEXEC') or die;
+use Joomla\CMS\MVC\View\HtmlView;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
 
 /**
  * Activity Stream View
  *
  * @since  0.0.1
  */
-class ActivityStreamViewActivity extends JViewLegacy
+class ActivityStreamViewActivity extends HtmlView
 {
 	/**
 	 * View form
@@ -65,7 +68,7 @@ class ActivityStreamViewActivity extends JViewLegacy
 	 */
 	protected function addToolBar()
 	{
-		$input = JFactory::getApplication()->input;
+		$input = Factory::getApplication()->input;
 
 		// Hide com_activitystream Main menu
 		$input->set('hidemainmenu', true);
@@ -74,11 +77,11 @@ class ActivityStreamViewActivity extends JViewLegacy
 
 		if ($isNew)
 		{
-			$title = JText::_('New');
+			$title = Text::_('New');
 		}
 		else
 		{
-			$title = JText::_('Edit');
+			$title = Text::_('Edit');
 		}
 
 		JToolBarHelper::title($title, 'Activity');

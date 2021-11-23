@@ -9,6 +9,7 @@
 
 // No direct access
 defined('_JEXEC') or die;
+use Joomla\CMS\Component\Router\RouterBase;
 
 JLoader::registerPrefix('Activitystream', JPATH_SITE . '/components/com_activitystream/');
 
@@ -17,7 +18,7 @@ JLoader::registerPrefix('Activitystream', JPATH_SITE . '/components/com_activity
  *
  * @since  3.3
  */
-class ActivitystreamRouter extends JComponentRouterBase
+class ActivitystreamRouter extends RouterBase
 {
 	/**
 	 * Build method for URLs
