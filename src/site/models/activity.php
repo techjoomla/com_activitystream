@@ -9,13 +9,16 @@
 
 // No direct access to this file
 defined('_JEXEC') or die;
+use Joomla\CMS\MVC\Model\AdminModel;
+use Joomla\CMS\Table\Table;
+use Joomla\CMS\Factory;
 
 /**
  * ActivityStream Model
  *
  * @since  0.0.1
  */
-class ActivityStreamModelActivity extends JModelAdmin
+class ActivityStreamModelActivity extends AdminModel
 {
 	/**
 	 * Method to get a table object, load it if necessary.
@@ -30,7 +33,7 @@ class ActivityStreamModelActivity extends JModelAdmin
 	 */
 	public function getTable($type = 'activity', $prefix = 'ActivityStreamTable', $config = array())
 	{
-		return JTable::getInstance($type, $prefix, $config);
+		return Table::getInstance($type, $prefix, $config);
 	}
 
 	/**
@@ -73,7 +76,7 @@ class ActivityStreamModelActivity extends JModelAdmin
 	protected function loadFormData()
 	{
 		// Check the session for previously entered form data.
-		$data = JFactory::getApplication()->getUserState(
+		$data = Factory::getApplication()->getUserState(
 			'com_activitystream.edit.activity.data',
 			array()
 		);
@@ -97,7 +100,7 @@ class ActivityStreamModelActivity extends JModelAdmin
 	 */
 	public function save($data)
 	{
-		$cdate = JFactory::getDate('now');
+		$cdate = Factory::getDate('now');
 
 		if (empty($data['id']) && empty($data['created_date']))
 		{

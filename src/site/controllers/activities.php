@@ -8,13 +8,17 @@
  */
 // No direct access to this file
 defined('_JEXEC') or die;
+use Joomla\CMS\MVC\Controller\AdminController;
+use Joomla\CMS\Table\Table;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
 
 /**
  * HelloWorlds Controller
  *
  * @since  0.0.1
  */
-class ActivityStreamControllerActivities extends JControllerAdmin
+class ActivityStreamControllerActivities extends AdminController
 {
 	/**
 	 * Proxy for getModel.
@@ -44,7 +48,7 @@ class ActivityStreamControllerActivities extends JControllerAdmin
 	public function getActivities()
 	{
 		// Load component tables
-		JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_activitystream/tables');
+		Table::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_activitystream/tables');
 
 		// Variable to store activity data fetched
 		$result = array();
@@ -54,14 +58,14 @@ class ActivityStreamControllerActivities extends JControllerAdmin
 
 		$ActivityStreamModelActivities = $this->getModel('Activities');
 
-		$jinput = JFactory::getApplication()->input;
+		$jinput = Factory::getApplication()->input;
 		$type = $jinput->get("type", '', 'STRING');
 
 		// Return result related to specified activity type
 		if (empty($type))
 		{
 			$result_arr['success'] = false;
-			$result_arr['message'] = JText::_("COM_ACTIVITYSTREAM_ERROR_ACTIVITY_TYPE");
+			$result_arr['message'] = Text::_("COM_ACTIVITYSTREAM_ERROR_ACTIVITY_TYPE");
 
 			echo json_encode($result_arr);
 
@@ -94,7 +98,7 @@ class ActivityStreamControllerActivities extends JControllerAdmin
 		if (empty($result['results']))
 		{
 			$result_arr['success'] = false;
-			$result_arr['message'] = JText::_("COM_ACTIVITYSTREAM_NO_ACTIVITY");
+			$result_arr['message'] = Text::_("COM_ACTIVITYSTREAM_NO_ACTIVITY");
 		}
 		else
 		{

@@ -9,11 +9,11 @@
 // No direct access to this file
 defined('_JEXEC') or die;
 
-use Joomla\CMS\Factory;
-use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\Model\ListModel;
+use Joomla\CMS\Factory;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\Language\Text;
 
 /**
  * ActivityStreamList Model
@@ -192,7 +192,7 @@ class ActivityStreamModelActivities extends ListModel
 				// Get date in local time zone
 				$item->created_date = HTMLHelper::date($item->created_date, 'Y-m-d h:i:s');
 				$item->updated_date = HTMLHelper::date($item->updated_date, 'Y-m-d h:i:s');
-				$item->root         = Uri::root();
+				$item->root = Uri::root();
 
 				// Get extra date info
 				$items[$k]->created_day        = Factory::getDate($item->created_date)->Format(Text::_('COM_ACTIVITYSTREAM_CREATED_DAY'), false, true);

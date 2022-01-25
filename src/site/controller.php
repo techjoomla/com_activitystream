@@ -9,6 +9,8 @@
 
 // No direct access
 defined('_JEXEC') or die;
+use Joomla\CMS\MVC\Controller\BaseController;
+use Joomla\CMS\Factory;
 
 jimport('joomla.application.component.controller');
 
@@ -17,7 +19,7 @@ jimport('joomla.application.component.controller');
  *
  * @since  1.6
  */
-class ActivitystreamController extends JControllerLegacy
+class ActivitystreamController extends BaseController
 {
 	/**
 	 * Method to display a view.
@@ -31,7 +33,7 @@ class ActivitystreamController extends JControllerLegacy
 	 */
 	public function display($cachable = false, $urlparams = false)
 	{
-		$app  = JFactory::getApplication();
+		$app  = Factory::getApplication();
 		$view = $app->input->getCmd('view', 'items');
 		$app->input->set('view', $view);
 
