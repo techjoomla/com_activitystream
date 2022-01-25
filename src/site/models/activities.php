@@ -8,10 +8,12 @@
  */
 // No direct access to this file
 defined('_JEXEC') or die;
+
 use Joomla\CMS\MVC\Model\ListModel;
 use Joomla\CMS\Factory;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\Language\Text;
 
 /**
  * ActivityStreamList Model
@@ -86,10 +88,10 @@ class ActivityStreamModelActivities extends ListModel
 			$query->where('state = ' . (int) $published);
 		}
 
-		$type = $this->getState('type');
-		$from_date = $this->getState('from_date');
-		$limit = $this->getState('list.limit');
-		$start = $this->getState('list.start');
+		$type             = $this->getState('type');
+		$from_date        = $this->getState('from_date');
+		$limit            = $this->getState('list.limit');
+		$start            = $this->getState('list.start');
 		$filter_condition = $this->getState('filter_condition');
 
 		$result_arr = array();
@@ -129,7 +131,7 @@ class ActivityStreamModelActivities extends ListModel
 
 				if (!empty($filterValue) && $filter != 'type')
 				{
-					$filterValue = $this->activityStreamActivitiesHelper->buildActivityFilterQuery($filterValue);
+					$filterValue      = $this->activityStreamActivitiesHelper->buildActivityFilterQuery($filterValue);
 					$conditionFilters = array('target_id', 'object_id', 'actor_id');
 
 					if (!in_array($filter, $conditionFilters))
@@ -163,7 +165,7 @@ class ActivityStreamModelActivities extends ListModel
 		}
 
 		// Add the list ordering clause.
-		$orderCol = $this->state->get('list.ordering', 'created_date');
+		$orderCol  = $this->state->get('list.ordering', 'created_date');
 		$orderDirn = $this->state->get('list.direction', 'desc');
 
 		$query->order($db->escape($orderCol) . ' ' . $db->escape($orderDirn));
@@ -181,7 +183,6 @@ class ActivityStreamModelActivities extends ListModel
 	public function getItems()
 	{
 		$items = parent::getItems();
-
 		$activities = array();
 
 		if (!empty($items))
@@ -194,8 +195,8 @@ class ActivityStreamModelActivities extends ListModel
 				$item->root = Uri::root();
 
 				// Get extra date info
-				$items[$k]->created_day = date_format(date_create($item->created_date), "D");
-				$items[$k]->created_date_month = date_format(date_create($item->created_date), "d, M");
+				$items[$k]->created_day        = Factory::getDate($item->created_date)->Format(Text::_('COM_ACTIVITYSTREAM_CREATED_DAY'), false, true);
+				$items[$k]->created_date_month = Factory::getDate($item->created_date)->Format(Text::_('COM_ACTIVITYSTREAM_CREATED_DATE_MONTH'), false, true);
 
 				// Convert item data into array
 				$itemArray = (array) $item;
