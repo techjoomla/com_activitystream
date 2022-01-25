@@ -10,11 +10,11 @@
 
 // No direct access.
 defined('_JEXEC') or die();
-use Joomla\CMS\User\User;
-use Joomla\CMS\Table\User;
-jimport('joomla.application.component.model');
 
+use Joomla\CMS\User\User;
+use Joomla\CMS\Table\User as UserTable;
 use Joomla\CMS\Factory;
+
 JLoader::register('PrivacyPlugin', JPATH_ADMINISTRATOR . '/components/com_privacy/helpers/plugin.php');
 JLoader::register('PrivacyRemovalStatus', JPATH_ADMINISTRATOR . '/components/com_privacy/helpers/removal/status.php');
 
@@ -64,7 +64,7 @@ class PlgPrivacyActivitystream extends PrivacyPlugin
 		}
 
 		/** @var JTableUser $userTable */
-		$userTable = User::getTable();
+		$userTable = UserTable::getTable();
 		$userTable->load($user->id);
 
 		$domains = array();
@@ -84,7 +84,7 @@ class PlgPrivacyActivitystream extends PrivacyPlugin
 	 *
 	 * @since   1.0.0
 	 */
-	private function createActivityStreamDomain(User $user)
+	private function createActivityStreamDomain(UserTable $user)
 	{
 		$domain = $this->createDomain('ActivityStream', 'ActivityStream data');
 		$db = Factory::getDbo();
