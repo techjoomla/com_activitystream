@@ -153,11 +153,11 @@ $version = array(
 		'major'      => $versionSubParts[0],
 		'minor'      => $versionSubParts[1],
 		'patch'      => $versionSubParts[2],
-		'extra'      => (!empty($versionParts[1]) ? $versionParts[1] : '') .
-						(!empty($versionParts[2]) ? (!empty($versionParts[1]) ? '-' : '') . $versionParts[2] : ''),
+		'extra'      => (!empty($versionParts[1]) ? $versionParts[1] : '') . !empty($versionParts[2]) ?
+		(!empty($versionParts[1]) ? '-' : '') . $versionParts[2] : ''),
 		'release'    => $versionSubParts[0] . '.' . $versionSubParts[1] . '.' . $versionSubParts[2],
-		'dev_devel'  => $versionSubParts[2] . (!empty($versionParts[1]) ? '-' .
-						$versionParts[1] : '') . (!empty($versionParts[2]) ? '-' . $versionParts[2] : ''),
+		'dev_devel'  => $versionSubParts[2] . (!empty($versionParts[1]) ? '-' . $versionParts[1] : '')
+		. (!empty($versionParts[2]) ? '-' . $versionParts[2] : ''),
 		'dev_status' => $dev_status,
 		'build'      => '',
 		'reldate'    => date('j-F-Y'),
@@ -249,33 +249,33 @@ foreach ($coreXmlFiles as $coreXmlFile)
 
 		$fileContents = file_get_contents($rootPath . $coreXmlFile);
 
-		$fileContents = preg_replace('#<version>[^<]*</version>#', '<version>' . $version['main'] .
-		'.' . $version['dev_devel'] . '</version>', $fileContents
+		$fileContents = preg_replace('#<version>[^<]*</version>#',
+		'<version>' . $version['main'] . '.' . $version['dev_devel'] . '</version>', $fileContents
 		);
 
-		$fileContents = preg_replace('#<creationDate>[^<]*</creationDate>#', '<creationDate>' .
-		$version['credate'] . '</creationDate>', $fileContents
+		$fileContents = preg_replace('#<creationDate>[^<]*</creationDate>#',
+		'<creationDate>' . $version['credate'] . '</creationDate>', $fileContents
 		);
 
 		// + TJ - chanages
-		$fileContents = preg_replace('#<author>[^<]*</author>#', '<author>' .
-		$author . '</author>', $fileContents
+		$fileContents = preg_replace('#<author>[^<]*</author>#',
+		'<author>' . $author . '</author>', $fileContents
 		);
 
-		$fileContents = preg_replace('#<authorEmail>[^<]*</authorEmail>#', '<authorEmail>' .
-		$authorEmail . '</authorEmail>', $fileContents
+		$fileContents = preg_replace('#<authorEmail>[^<]*</authorEmail>#',
+		'<authorEmail>' . $authorEmail . '</authorEmail>', $fileContents
 		);
 
-		$fileContents = preg_replace('#<authorUrl>[^<]*</authorUrl>#', '<authorUrl>' .
-		$authorUrl . '</authorUrl>', $fileContents
+		$fileContents = preg_replace('#<authorUrl>[^<]*</authorUrl>#',
+		'<authorUrl>' . $authorUrl . '</authorUrl>', $fileContents
 		);
 
-		$fileContents = preg_replace('#<license>[^<]*</license>#', '<license>' .
-		$license . '</license>', $fileContents
+		$fileContents = preg_replace('#<license>[^<]*</license>#',
+		'<license>' . $license . '</license>', $fileContents
 		);
 
-		$fileContents = preg_replace('#<copyright>[^<]*</copyright>#', '<copyright>' .
-		$copyright . '</copyright>', $fileContents
+		$fileContents = preg_replace('#<copyright>[^<]*</copyright>#',
+		'<copyright>' . $copyright . '</copyright>', $fileContents
 		);
 
 		// + TJ - chanages - end
@@ -288,8 +288,8 @@ foreach ($coreXmlFiles as $coreXmlFile)
 if (file_exists($rootPath . $antJobFile))
 {
 	$fileContents = file_get_contents($rootPath . $antJobFile);
-	$fileContents = preg_replace('#<arg value="Joomla! CMS [^ ]* API" />#', '<arg value="Joomla! CMS ' .
-		$version['main'] . ' API" />', $fileContents
+	$fileContents = preg_replace('#<arg value="Joomla! CMS [^ ]* API" />#',
+	'<arg value="Joomla! CMS ' . $version['main'] . ' API" />', $fileContents
 		);
 	file_put_contents($rootPath . $antJobFile, $fileContents);
 }
@@ -357,8 +357,8 @@ foreach ($iterator as $file)
 				&& !preg_match('#2016\s+-\s+' . $year . '\s+Techjoomla.\s+All\s+rights#', $fileContents))
 			{
 				$changeCopyrightDate = true;
-				$fileContents = preg_replace('#2016\s+-\s+[0-9]{4}\s+Techjoomla.\s+All\s+rights#', '2016 - ' .
-				$year . ' Techjoomla. All rights', $fileContents
+				$fileContents = preg_replace('#2016\s+-\s+[0-9]{4}\s+Techjoomla.\s+All\s+rights#',
+				'2016 - ' . $year . ' Techjoomla. All rights', $fileContents
 				);
 				$changedFilesCopyrightDate++;
 			}
