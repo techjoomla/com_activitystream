@@ -85,6 +85,7 @@ class ActivityStreamViewActivities extends JViewLegacy
 		JToolBarHelper::publish('activity.publish');
 		JToolBarHelper::unpublish('activity.publish');
 		JToolBarHelper::deleteList('', 'activities.delete');
+		JToolBarHelper::preferences('com_activitystream');
 	}
 
 	/**
