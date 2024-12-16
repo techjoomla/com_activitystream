@@ -16,6 +16,7 @@
 	getActivities = function(){
 		let widgetNumber = 0;
 
+		/* To load list of activities*/
 		techjoomla.jQuery('[tj-activitystream-widget]').each(function(){
 			widgetNumber++;
 			techjoomla.jQuery(this).attr('id',"tj-activitystream" + widgetNumber);
@@ -23,7 +24,38 @@
 			techjoomla.jQuery(this).attr('start',0);
 			techjoomla.jQuery(this).html("<a id='load-more-activity-button"+techjoomla.jQuery(this).attr('id')+"'></a>");
 
-			initActivities(this);
+			var activity = initActivities(this);
+		});
+
+		/* To load single activity*/
+		jQuery('[tj-activitystream-single-activity-widget]').each(function(){
+			let ele = this;
+			let activityData = techjoomla.jQuery(ele).attr("tj-activitystream-single-activity-data");
+			let view = techjoomla.jQuery(ele).attr("tj-activitystream-bs");
+			activityData = jQuery.parseJSON(activityData);
+			let templatePath = Joomla.getOptions('system.paths').root+"/media/"+activityData.client+"/themes/"+activityData.default_theme+"/templates/"+view+"/"+activityData.template;
+			var html = "";
+
+			jQuery.ajax({
+				method: 'GET',
+				url: templatePath,
+				async:false,
+				success: function(res,stat,xhr)
+					{
+						if (!activityData.template)
+						{
+							var formatted_text = Mustache.render(activityData.formatted_text, {actor : activityData.actor, object: activityData.object, target: activityData.target});
+							activityData.formatted_text = formatted_text;
+							html = Mustache.render(res, activityData);
+						}
+						else
+						{
+							html = Mustache.render(res, activityData);
+						}
+					}
+				}).done( function(){
+					jQuery(ele).after(html);
+				});
 		});
 	}
 
