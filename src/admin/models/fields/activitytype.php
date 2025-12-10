@@ -9,15 +9,18 @@
 
 // No direct access.
 defined('_JEXEC') or die();
-
-JFormHelper::loadFieldClass('list');
+use Joomla\CMS\Form\FormHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Form\Field\ListField;
 
 /**
  * Supports an HTML select list of courses
  *
  * @since  1.0.1
  */
-class JFormFieldActivityType extends JFormFieldList
+class ActivitytypeField extends ListField
 {
 	/**
 	 * The form field type.
@@ -38,33 +41,33 @@ class JFormFieldActivityType extends JFormFieldList
 	/**
 	 * Method to get a list of options for a list input.
 	 *
-	 * @return	array		An array of JHtml options.
+	 * @return	array		An array of HTMLHelper options.
 	 *
 	 * @since   1.0.1
 	 */
 	protected function getOptions()
 	{
-		$db     = JFactory::getDbo();
-		$client = JFactory::getApplication()->input->get('client', '', 'STRING');
+		$db     = Factory::getContainer()->get(\Joomla\Database\DatabaseInterface::class);
+		$client = Factory::getApplication()->input->get('client', '', 'STRING');
 		$query  = $db->getQuery(true);
 
 		$query->select('distinct l.type')
-				->from($db->quoteName('#__tj_activities') . 'as l')
+				->from($db->quoteName('#__tj_activities', 'l'))
 				->where($db->quoteName('client') . ' = ' . $db->quote($client));
-		$query->order($db->escape('l.type ASC'));
+		$query->order($db->escape('l.type') . ' ASC');
 		$db->setQuery($query);
 
 		// Send filter values
 		$activityType = $db->loadObjectList();
 		$options      = array();
-		$options[]    = JHtml::_('select.option', 'all', JText::_('COM_ACTIVITYSTREAM_SEARCH_FILTER'));
+		$options[]    = HTMLHelper::_('select.option', 'all', Text::_('COM_ACTIVITYSTREAM_SEARCH_FILTER'));
 
 		foreach ($activityType as $type)
 		{
 			$temp        = implode("_", explode('.', $type->type));
 			$filterValue = $client . '_activity_type_' . $temp;
 			$filterText  = strtoupper($filterValue);
-			$options[]   = JHtml::_('select.option', $type->type, JText::_($filterText));
+			$options[]   = HTMLHelper::_('select.option', $type->type, Text::_($filterText));
 		}
 
 		return $options;

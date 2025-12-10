@@ -10,11 +10,48 @@
 
 // No direct access.
 defined('_JEXEC') or die();
-jimport('joomla.application.component.model');
 
+use Joomla\CMS\User\User;
+use Joomla\CMS\Table\User as UserTable;
 use Joomla\CMS\Factory;
-JLoader::register('PrivacyPlugin', JPATH_ADMINISTRATOR . '/components/com_privacy/helpers/plugin.php');
-JLoader::register('PrivacyRemovalStatus', JPATH_ADMINISTRATOR . '/components/com_privacy/helpers/removal/status.php');
+
+if (file_exists(JPATH_ADMINISTRATOR . '/components/com_privacy/helpers/plugin.php')) {
+	require_once JPATH_ADMINISTRATOR . '/components/com_privacy/helpers/plugin.php';
+}
+
+if (file_exists(JPATH_ADMINISTRATOR . '/components/com_privacy/helpers/removal/status.php')) {
+	require_once JPATH_ADMINISTRATOR . '/components/com_privacy/helpers/removal/status.php';
+}
+
+// Joomla 6 compatibility - define PrivacyPlugin if not exists
+if (!class_exists('PrivacyPlugin')) {
+	class PrivacyPlugin extends \Joomla\CMS\Plugin\CMSPlugin {
+		protected function createDomain($name, $description = '') {
+			return new class($name, $description) {
+				public $name;
+				public $description;
+				public $items = [];
+				public function __construct($name, $description) {
+					$this->name = $name;
+					$this->description = $description;
+				}
+				public function addItem($item) {
+					$this->items[] = $item;
+				}
+			};
+		}
+		protected function createItemFromArray(array $data, $itemId = null) {
+			return (object) $data;
+		}
+	}
+}
+
+if (!class_exists('PrivacyRemovalStatus')) {
+	class PrivacyRemovalStatus {
+		public $canRemove = true;
+		public $reason = '';
+	}
+}
 
 /**
  * Privacy plugin managing ActivityStream user data
@@ -35,7 +72,7 @@ class PlgPrivacyActivitystream extends PrivacyPlugin
 	/**
 	 * Database object
 	 *
-	 * @var    JDatabaseDriver
+	 * @var    \Joomla\Database\DatabaseInterface
 	 * @since  1.0.0
 	 */
 	protected $db;
@@ -48,21 +85,21 @@ class PlgPrivacyActivitystream extends PrivacyPlugin
 	 * - #__tj_activities
 	 *
 	 * @param   PrivacyTableRequest  $request  The request record being processed
-	 * @param   JUser                $user     The user account associated with this request if available
+	 * @param   User                 $user     The user account associated with this request if available
 	 *
 	 * @return  PrivacyExportDomain[]
 	 *
 	 * @since   1.0.0
 	 */
-	public function onPrivacyExportRequest(PrivacyTableRequest $request, JUser $user = null)
+	public function onPrivacyExportRequest($request, User $user = null)
 	{
 		if (!$user)
 		{
 			return array();
 		}
 
-		/** @var JTableUser $userTable */
-		$userTable = JUser::getTable();
+		/** @var UserTable $userTable */
+		$userTable = UserTable::getTable();
 		$userTable->load($user->id);
 
 		$domains = array();
@@ -76,16 +113,16 @@ class PlgPrivacyActivitystream extends PrivacyPlugin
 	/**
 	 * Create the domain for the Activity Stream User data
 	 *
-	 * @param   JTableUser  $user  The JTableUser object to process
+	 * @param   UserTable  $user  The UserTable object to process
 	 *
 	 * @return  PrivacyExportDomain
 	 *
 	 * @since   1.0.0
 	 */
-	private function createActivityStreamDomain(JTableUser $user)
+	private function createActivityStreamDomain(UserTable $user)
 	{
 		$domain = $this->createDomain('ActivityStream', 'ActivityStream data');
-		$db = Factory::getDbo();
+		$db = $this->db;
 		$query = $db->getQuery(true)
 			->select($db->quoteName(array('id', 'actor_id', 'object_id', 'target_id', 'type', 'template')))
 			->from($db->quoteName('#__tj_activities'))
@@ -111,13 +148,13 @@ class PlgPrivacyActivitystream extends PrivacyPlugin
 	 * This event will not allow a super user account to be removed
 	 *
 	 * @param   PrivacyTableRequest  $request  The request record being processed
-	 * @param   JUser                $user     The user account associated with this request if available
+	 * @param   User                 $user     The user account associated with this request if available
 	 *
 	 * @return  PrivacyRemovalStatus
 	 *
 	 * @since   1.0.0
 	 */
-	public function onPrivacyCanRemoveData(PrivacyTableRequest $request, JUser $user = null)
+	public function onPrivacyCanRemoveData($request, User $user = null)
 	{
 		$status = new PrivacyRemovalStatus;
 
@@ -135,13 +172,13 @@ class PlgPrivacyActivitystream extends PrivacyPlugin
 	 * This event will remove the user account
 	 *
 	 * @param   PrivacyTableRequest  $request  The request record being processed
-	 * @param   JUser                $user     The user account associated with this request if available
+	 * @param   User                 $user     The user account associated with this request if available
 	 *
 	 * @return  void
 	 *
 	 * @since   1.0.0
 	 */
-	public function onPrivacyRemoveData(PrivacyTableRequest $request, JUser $user = null)
+	public function onPrivacyRemoveData($request, User $user = null)
 	{
 		// This plugin only processes data for registered user accounts
 		if (!$user)
