@@ -9,6 +9,7 @@
 
 // No direct access
 defined('_JEXEC') or die();
+use Joomla\CMS\Factory;
 
 /**
  * Products helper for quick2cart backend.
@@ -87,7 +88,7 @@ class ActivityStreamHelperActivities
 	 */
 	public function buildActivityFilterQuery($filterString)
 	{
-		$db = JFactory::getDbo();
+		$db = Factory::getContainer()->get(\Joomla\Database\DatabaseInterface::class);
 
 		// Check if $filterString is comma separated string.
 		if ((strpos($filterString, ',') !== false))

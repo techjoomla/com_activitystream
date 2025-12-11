@@ -9,13 +9,17 @@
 
 // No direct access to this file
 defined('_JEXEC') or die;
+use Joomla\CMS\MVC\View\HtmlView;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Toolbar\ToolbarHelper;
 
 /**
  * Activity Stream View
  *
  * @since  0.0.1
  */
-class ActivityStreamViewActivity extends JViewLegacy
+class ActivityStreamViewActivity extends HtmlView
 {
 	/**
 	 * View form
@@ -40,9 +44,7 @@ class ActivityStreamViewActivity extends JViewLegacy
 		// Check for errors.
 		if (count($errors = $this->get('Errors')))
 		{
-			JError::raiseError(500, implode('<br />', $errors));
-
-			return false;
+			throw new \RuntimeException(implode('<br />', $errors), 500);
 		}
 
 		// Assign the Data
@@ -50,7 +52,7 @@ class ActivityStreamViewActivity extends JViewLegacy
 		$this->item = $item;
 
 		// Set the toolbar
-		$this->addToolBar();
+		$this->addToolbar();
 
 		// Display the template
 		parent::display($tpl);
@@ -63,9 +65,9 @@ class ActivityStreamViewActivity extends JViewLegacy
 	 *
 	 * @since   1.6
 	 */
-	protected function addToolBar()
+	protected function addToolbar()
 	{
-		$input = JFactory::getApplication()->input;
+		$input = Factory::getApplication()->input;
 
 		// Hide com_activitystream Main menu
 		$input->set('hidemainmenu', true);
@@ -74,19 +76,19 @@ class ActivityStreamViewActivity extends JViewLegacy
 
 		if ($isNew)
 		{
-			$title = JText::_('New');
+			$title = Text::_('New');
 		}
 		else
 		{
-			$title = JText::_('Edit');
+			$title = Text::_('Edit');
 		}
 
-		JToolBarHelper::title($title, 'Activity');
-		JToolBarHelper::apply('activity.apply');
-		JToolBarHelper::save('activity.save');
-		JToolBarHelper::save2new('activity.save2new');
+		ToolbarHelper::title($title, 'Activity');
+		ToolbarHelper::apply('activity.apply');
+		ToolbarHelper::save('activity.save');
+		ToolbarHelper::save2new('activity.save2new');
 
-		JToolBarHelper::cancel(
+		ToolbarHelper::cancel(
 			'activity.cancel',
 			$isNew ? 'JTOOLBAR_CANCEL' : 'JTOOLBAR_CLOSE'
 		);

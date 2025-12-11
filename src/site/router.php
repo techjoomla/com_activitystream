@@ -9,15 +9,24 @@
 
 // No direct access
 defined('_JEXEC') or die;
+use Joomla\CMS\Component\Router\RouterBase;
+use Joomla\CMS\Factory;
 
-JLoader::registerPrefix('Activitystream', JPATH_SITE . '/components/com_activitystream/');
+spl_autoload_register(function ($class) {
+	if (strpos($class, 'Activitystream') === 0) {
+		$path = JPATH_SITE . '/components/com_activitystream/' . str_replace('Activitystream', '', $class) . '.php';
+		if (file_exists($path)) {
+			require_once $path;
+		}
+	}
+});
 
 /**
  * Class ActivitystreamRouter
  *
  * @since  3.3
  */
-class ActivitystreamRouter extends JComponentRouterBase
+class ActivitystreamRouter extends RouterBase
 {
 	/**
 	 * Build method for URLs

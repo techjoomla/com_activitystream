@@ -9,6 +9,12 @@
 
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
+use Joomla\CMS\Factory;
+use Joomla\CMS\Installer\Installer;
+use Joomla\CMS\Installer\InstallerAdapter;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Log\Log;
+use Joomla\Database\DatabaseInterface;
 
 /**
  * Script file of activitystream component
@@ -17,6 +23,13 @@ defined('_JEXEC') or die('Restricted access');
  */
 class Com_ActivityStreamInstallerScript
 {
+	/**
+	 * Database driver
+	 *
+	 * @var DatabaseInterface
+	 */
+	private $db;
+
 	/** @var array The list of extra modules and plugins to install */
 	private $queue = array(
 		// Plugins => { (folder) => { (element) => (published) }* }*
@@ -31,28 +44,34 @@ class Com_ActivityStreamInstallerScript
 	);
 
 	/**
+	 * Constructor
+	 */
+	public function __construct()
+	{
+		$this->db = Factory::getContainer()->get(DatabaseInterface::class);
+	}
+
+	/**
 	 * method to install the component
 	 *
-	 * @param   STRING  $parent  parent
+	 * @param   InstallerAdapter  $parent  parent
 	 *
 	 * @return void
 	 */
-	public function install($parent)
+	public function install(InstallerAdapter $parent): void
 	{
 	}
 
 	/**
 	 * method to uninstall the component
 	 *
-	 * @param   STRING  $parent  parent
+	 * @param   InstallerAdapter  $parent  parent
 	 *
-	 * @return object
+	 * @return void
 	 */
-	public function uninstall($parent)
+	public function uninstall(InstallerAdapter $parent): void
 	{
-		jimport('joomla.installer.installer');
-		$db              = JFactory::getDbo();
-		$status          = new JObject;
+		$status          = new \stdClass;
 		$status->plugins = array();
 
 		// Plugins uninstallation
@@ -64,18 +83,19 @@ class Com_ActivityStreamInstallerScript
 				{
 					foreach ($plugins as $plugin => $published)
 					{
-						$sql = $db->getQuery(true)->select($db->qn('extension_id'))
-						->from($db->qn('#__extensions'))
-						->where($db->qn('type') . ' = ' . $db->q('plugin'))
-						->where($db->qn('element') . ' = ' . $db->q($plugin))
-						->where($db->qn('folder') . ' = ' . $db->q($folder));
-						$db->setQuery($sql);
+						$sql = $this->db->getQuery(true)->select($this->db->quoteName('extension_id'))
+						->from($this->db->quoteName('#__extensions'))
+						->where($this->db->quoteName('type') . ' = ' . $this->db->quote('plugin'))
+						->where($this->db->quoteName('element') . ' = ' . $this->db->quote($plugin))
+						->where($this->db->quoteName('folder') . ' = ' . $this->db->quote($folder));
+						$this->db->setQuery($sql);
 
-						$id = $db->loadResult();
+						$id = (int) ($this->db->loadResult() ?? null);
 
 						if ($id)
 						{
-							$installer         = new JInstaller;
+							$installer         = new Installer();
+							$installer->setDatabase($this->db);
 							$result            = $installer->uninstall('plugin', $id);
 							$status->plugins[] = array(
 								'name' => 'plg_' . $plugin,
@@ -87,18 +107,16 @@ class Com_ActivityStreamInstallerScript
 				}
 			}
 		}
-
-		return $status;
 	}
 
 	/**
 	 * method to update the component
 	 *
-	 * @param   STRING  $parent  parent
+	 * @param   InstallerAdapter  $parent  parent
 	 *
 	 * @return void
 	 */
-	public function update($parent)
+	public function update(InstallerAdapter $parent): void
 	{
 		$this->installSqlFiles($parent);
 	}
@@ -106,28 +124,27 @@ class Com_ActivityStreamInstallerScript
 	/**
 	 * method to run before an install/update/uninstall method
 	 *
-	 * @param   STRING  $type    type
-	 * @param   STRING  $parent  parent
+	 * @param   string            $type    type
+	 * @param   InstallerAdapter  $parent  parent
 	 *
 	 * @return void
 	 */
-	public function preflight($type, $parent)
+	public function preflight(string $type, InstallerAdapter $parent): void
 	{
 	}
 
 	/**
 	 * method to run after an install/update/uninstall method
 	 *
-	 * @param   STRING  $type    type
-	 * @param   STRING  $parent  parent
+	 * @param   string            $type    type
+	 * @param   InstallerAdapter  $parent  parent
 	 *
 	 * @return void
 	 */
-	public function postflight($type, $parent)
+	public function postflight(string $type, InstallerAdapter $parent): void
 	{
 		$src = $parent->getParent()->getPath('source');
- 		$db = JFactory::getDbo();
- 		$status = new JObject;
+ 		$status = new \stdClass;
  		$status->plugins = array();
 
 		// Plugins installation
@@ -162,28 +179,29 @@ class Com_ActivityStreamInstallerScript
  						}
 
  						// Was the plugin already installed?
- 						$query = $db->getQuery(true)
+ 						$query = $this->db->getQuery(true)
  							->select('COUNT(*)')
- 							->from($db->qn('#__extensions'))
- 							->where($db->qn('element') . ' = ' . $db->q($plugin))
- 							->where($db->qn('folder') . ' = ' . $db->q($folder));
- 						$db->setQuery($query);
- 						$count = $db->loadResult();
+ 							->from($this->db->quoteName('#__extensions'))
+ 							->where($this->db->quoteName('element') . ' = ' . $this->db->quote($plugin))
+ 							->where($this->db->quoteName('folder') . ' = ' . $this->db->quote($folder));
+ 						$this->db->setQuery($query);
+ 						$count = (int) ($this->db->loadResult() ?? 0);
 
- 						$installer = new JInstaller;
+ 						$installer = new Installer();
+ 						$installer->setDatabase($this->db);
  						$result = $installer->install($path);
 
 						$status->plugins[] = array('name' => 'plg_' . $plugin, 'group' => $folder, 'result' => $result);
 
  						if ($published && !$count)
  						{
- 							$query = $db->getQuery(true)
- 								->update($db->qn('#__extensions'))
- 								->set($db->qn('enabled') . ' = ' . $db->q('1'))
- 								->where($db->qn('element') . ' = ' . $db->q($plugin))
- 								->where($db->qn('folder') . ' = ' . $db->q($folder));
- 							$db->setQuery($query);
- 							$db->execute();
+ 							$query = $this->db->getQuery(true)
+ 								->update($this->db->quoteName('#__extensions'))
+ 								->set($this->db->quoteName('enabled') . ' = ' . $this->db->quote('1'))
+ 								->where($this->db->quoteName('element') . ' = ' . $this->db->quote($plugin))
+ 								->where($this->db->quoteName('folder') . ' = ' . $this->db->quote($folder));
+ 							$this->db->setQuery($query);
+ 							$this->db->execute();
  						}
 
 					}
@@ -199,14 +217,12 @@ class Com_ActivityStreamInstallerScript
 	/**
 	 * installSqlFiles
 	 *
-	 * @param   JInstaller  $parent  parent
+	 * @param   InstallerAdapter  $parent  parent
 	 *
-	 * @return  void
+	 * @return  bool
 	 */
-	public function installSqlFiles($parent)
+	public function installSqlFiles(InstallerAdapter $parent): bool
 	{
-		$db = JFactory::getDBO();
-
 		// Obviously you may have to change the path and name if your installation SQL file ;)
 		if (method_exists($parent, 'extension_root'))
 		{
@@ -222,8 +238,7 @@ class Com_ActivityStreamInstallerScript
 
 		if ($buffer !== false)
 		{
-			jimport('joomla.installer.helper');
-			$queries = JInstallerHelper::splitSql($buffer);
+			$queries = $this->db->splitSql($buffer);
 
 			if (count($queries) != 0)
 			{
@@ -233,11 +248,19 @@ class Com_ActivityStreamInstallerScript
 
 					if ($query != '' && $query[0] != '#')
 					{
-						$db->setQuery($query);
+						$this->db->setQuery($query);
 
-						if (!$db->query())
+						try
 						{
-							JError::raiseWarning(1, JText::sprintf('JLIB_INSTALLER_ERROR_SQL_ERROR', $db->stderr(true)));
+							$this->db->execute();
+						}
+						catch (\RuntimeException $e)
+						{
+							Log::add(
+								Text::sprintf('JLIB_INSTALLER_ERROR_SQL_ERROR', $e->getMessage()),
+								Log::WARNING,
+								'jerror'
+							);
 
 							return false;
 						}
@@ -245,5 +268,7 @@ class Com_ActivityStreamInstallerScript
 				}
 			}
 		}
+
+		return true;
 	}
 }

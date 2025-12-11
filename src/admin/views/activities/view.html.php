@@ -8,13 +8,17 @@
 
 // No direct access to this file
 defined('_JEXEC') or die;
+use Joomla\CMS\MVC\View\HtmlView;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Toolbar\ToolbarHelper;
 
 /**
  * ActivityStream View
  *
  * @since  0.0.1
  */
-class ActivityStreamViewActivities extends JViewLegacy
+class ActivityStreamViewActivities extends HtmlView
 {
 	protected $input;
 
@@ -31,7 +35,7 @@ class ActivityStreamViewActivities extends JViewLegacy
 		// To show all types of activity in list view
 		$activitiesModel     = $this->getModel();
 		$activitiesModel->setState("type", 'all');
-		$this->input         = JFactory::getApplication()->input;
+		$this->input         = Factory::getApplication()->input;
 		$this->items         = $this->get('Items');
 		$this->pagination    = $this->get('Pagination');
 		$this->state         = $this->get('State');
@@ -41,13 +45,11 @@ class ActivityStreamViewActivities extends JViewLegacy
 		// Check for errors.
 		if (count($errors = $this->get('Errors')))
 		{
-			JError::raiseError(500, implode('<br />', $errors));
-
-			return false;
+			throw new \RuntimeException(implode('<br />', $errors), 500);
 		}
 
 		// Set the tool-bar and number of found items
-		$this->addToolBar();
+		$this->addToolbar();
 
 		// Display the template
 		parent::display($tpl);
@@ -60,11 +62,11 @@ class ActivityStreamViewActivities extends JViewLegacy
 	 *
 	 * @since   1.6
 	 */
-	protected function addToolBar()
+	protected function addToolbar()
 	{
-		$title        = JText::_('Activity Stream');
-		$languageFile = JFactory::getLanguage();
-		$extension    = JFactory::getApplication()->input->get('client', '', 'STRING');
+		$title        = Text::_('Activity Stream');
+		$languageFile = Factory::getLanguage();
+		$extension    = Factory::getApplication()->input->get('client', '', 'STRING');
 		$base_dir     = JPATH_BASE;
 
 		// Load the language file for particular extension
@@ -79,12 +81,12 @@ class ActivityStreamViewActivities extends JViewLegacy
 			$title .= "<span style='font-size: 0.5em; vertical-align: middle;'>(" . $this->pagination->total . ")</span>";
 		}*/
 
-		JToolBarHelper::title($title, 'list');
-		JToolBarHelper::addNew('activity.add');
-		JToolBarHelper::editList('activity.edit');
-		JToolBarHelper::publish('activity.publish');
-		JToolBarHelper::unpublish('activity.publish');
-		JToolBarHelper::deleteList('', 'activities.delete');
+		ToolbarHelper::title($title, 'list');
+		ToolbarHelper::addNew('activity.add');
+		ToolbarHelper::editList('activity.edit');
+		ToolbarHelper::publish('activity.publish');
+		ToolbarHelper::unpublish('activity.publish');
+		ToolbarHelper::deleteList('', 'activities.delete');
 	}
 
 	/**
@@ -95,11 +97,11 @@ class ActivityStreamViewActivities extends JViewLegacy
 	protected function getSortFields()
 	{
 		return array(
-			'id'           => JText::_('COM_ACTIVITYSTREAM_ACTIVITY_ID'),
-			'state'        => JText::_('COM_ACTIVITYSTREAM_ACTIVITY_STATE'),
-			'type'         => JText::_('COM_ACTIVITYSTREAM_ACTIVITY_TYPE'),
-			'created_date' => JText::_('COM_ACTIVITYSTREAM_ACTIVITY_CREATED_DATE'),
-			'updated_date' => JText::_('COM_ACTIVITYSTREAM_ACTIVITY_UPDATED_DATE')
+			'id'           => Text::_('COM_ACTIVITYSTREAM_ACTIVITY_ID'),
+			'state'        => Text::_('COM_ACTIVITYSTREAM_ACTIVITY_STATE'),
+			'type'         => Text::_('COM_ACTIVITYSTREAM_ACTIVITY_TYPE'),
+			'created_date' => Text::_('COM_ACTIVITYSTREAM_ACTIVITY_CREATED_DATE'),
+			'updated_date' => Text::_('COM_ACTIVITYSTREAM_ACTIVITY_UPDATED_DATE')
 		);
 	}
 }
